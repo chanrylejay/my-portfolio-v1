@@ -37,7 +37,7 @@
 
         <style>
             /* ========================================
-       CSS CUSTOM PROPERTIES (Official Anthropic Brand Guidelines)
+       CSS CUSTOM PROPERTIES (Official Anthropic Brand Guidelines + Brittany Chiang Spacing)
        ======================================== */
             :root {
                 /* Background colors - Official Anthropic Dark Palette */
@@ -66,8 +66,19 @@
                 --font-serif: "Lora", "Georgia", "Times New Roman", serif;
                 --font-mono: "JetBrains Mono", "SF Mono", monospace;
 
+                /* Typography Scale (variables.js) */
+                --fz-xxs: 12px;
+                --fz-xs: 13px;
+                --fz-sm: 14px;
+                --fz-md: 16px;
+                --fz-lg: 18px;
+                --fz-xl: 20px;
+                --fz-xxl: 22px;
+                --fz-heading: 32px;
+
                 /* Spacing & Navs */
-                --nav-height: 80px;
+                --nav-height: 100px;
+                --nav-scroll-height: 70px;
                 --section-padding: 100px;
 
                 /* Transitions */
@@ -166,8 +177,45 @@
                 }
             }
 
+            /* Global element spacing (GlobalStyle.js) */
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6 {
+                margin: 0 0 10px 0;
+            }
+
+            p {
+                margin: 0 0 15px 0;
+            }
+
+            p:last-child {
+                margin-bottom: 0;
+            }
+
+            .big-heading {
+                margin: 0;
+                font-size: clamp(40px, 8vw, 80px);
+            }
+
+            .medium-heading {
+                margin: 0;
+                font-size: clamp(40px, 8vw, 60px);
+            }
+
+            .numbered-heading {
+                margin: 10px 0 40px;
+            }
+
+            ul.fancy-list li {
+                padding-left: 30px;
+                margin-bottom: 10px;
+            }
+
             /* ========================================
-       NAVIGATION (Centering Alignment)
+       NAVIGATION (Gatsby / StyledHeader Alignment)
        ======================================== */
             .nav {
                 position: fixed;
@@ -181,7 +229,8 @@
                 z-index: 1000;
                 transition:
                     transform var(--transition-base),
-                    box-shadow var(--transition-base);
+                    box-shadow var(--transition-base),
+                    height var(--transition-base);
                 border-bottom: 1px solid rgba(217, 119, 87, 0.08);
             }
 
@@ -191,6 +240,7 @@
 
             .nav.scrolled {
                 box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+                height: var(--nav-scroll-height);
             }
 
             .nav__inner {
@@ -198,9 +248,14 @@
                 justify-content: space-between;
                 align-items: center;
                 height: 100%;
-                max-width: 1000px; /* Aligned precisely with centered content blocks */
-                margin: 0 auto;
-                padding: 0 40px;
+                width: 100%;
+                padding: 0 50px;
+            }
+
+            @media (max-width: 1080px) {
+                .nav__inner {
+                    padding: 0 40px;
+                }
             }
 
             @media (max-width: 768px) {
@@ -232,15 +287,18 @@
             .nav__links {
                 display: flex;
                 align-items: center;
-                gap: 10px;
+            }
+
+            .nav__links li {
+                margin: 0 5px;
             }
 
             .nav__link {
                 position: relative;
-                padding: 10px 15px;
+                padding: 10px;
                 font-family: var(--font-sans);
                 font-weight: 500;
-                font-size: 14px;
+                font-size: var(--fz-sm);
                 color: var(--text-secondary);
                 transition: color var(--transition-fast);
             }
@@ -249,7 +307,7 @@
                 content: "";
                 position: absolute;
                 bottom: 0;
-                left: 15px;
+                left: 10px;
                 width: 0;
                 height: 2px;
                 background-color: var(--accent-primary);
@@ -258,7 +316,7 @@
 
             .nav__link:hover::after,
             .nav__link.active::after {
-                width: calc(100% - 30px);
+                width: calc(100% - 20px);
             }
 
             .nav__link:hover {
@@ -267,14 +325,15 @@
 
             .nav__resume {
                 margin-left: 15px;
-                padding: 9px 18px;
+                padding: 0.75rem 1rem;
                 border: 1.5px solid var(--accent-primary);
-                border-radius: 6px;
-                font-family: var(--font-sans);
+                border-radius: 4px;
+                font-family: var(--font-mono);
                 font-weight: 500;
-                font-size: 14px;
+                font-size: var(--fz-xs);
                 color: var(--accent-primary);
                 transition: all var(--transition-fast);
+                line-height: 1;
             }
 
             .nav__resume:hover {
@@ -351,27 +410,66 @@
             }
 
             /* ========================================
-       SOCIAL SIDEBARS (Clean margins)
+       SIDE ELEMENTS (fixed side.js)
        ======================================== */
             .sidebar-left {
                 position: fixed;
                 bottom: 0;
                 left: 40px;
+                width: 40px;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-                gap: 20px;
                 z-index: 10;
             }
 
             .sidebar-left::after {
                 content: "";
+                display: block;
                 width: 1px;
                 height: 90px;
-                background-color: var(--border-color);
+                background-color: var(--text-muted);
+                margin-top: 20px;
+            }
+
+            .email-link {
+                writing-mode: vertical-rl;
+                font-family: var(--font-mono);
+                font-size: var(--fz-xxs);
+                letter-spacing: 0.1em;
+                color: var(--text-muted);
+                padding: 10px;
+                transition: all var(--transition-fast);
+            }
+
+            .email-link:hover {
+                color: var(--accent-primary);
+                transform: translateY(-3px);
+            }
+
+            .sidebar-right {
+                position: fixed;
+                bottom: 0;
+                right: 40px;
+                width: 40px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                z-index: 10;
+            }
+
+            .sidebar-right::after {
+                content: "";
+                display: block;
+                width: 1px;
+                height: 90px;
+                background-color: var(--text-muted);
+                margin-top: 20px;
             }
 
             .social-link {
+                display: inline-block;
+                padding: 10px;
                 color: var(--text-muted);
                 transition: all var(--transition-fast);
             }
@@ -384,67 +482,73 @@
             .social-link svg {
                 width: 20px;
                 height: 20px;
+                display: block;
             }
 
-            .sidebar-right {
-                position: fixed;
-                bottom: 0;
-                right: 40px;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 20px;
-                z-index: 10;
+            @media (max-width: 1080px) {
+                .sidebar-left {
+                    left: 20px;
+                }
+                .sidebar-right {
+                    right: 20px;
+                }
             }
 
-            .sidebar-right::after {
-                content: "";
-                width: 1px;
-                height: 90px;
-                background-color: var(--border-color);
-            }
-
-            .email-link {
-                writing-mode: vertical-rl;
-                font-family: var(--font-mono);
-                font-size: 13px;
-                letter-spacing: 0.1em;
-                color: var(--text-muted);
-                transition: all var(--transition-fast);
-            }
-
-            .email-link:hover {
-                color: var(--accent-primary);
-                transform: translateY(-3px);
-            }
-
-            @media (max-width: 1140px) {
+            @media (max-width: 768px) {
                 .sidebar-left,
                 .sidebar-right {
-                    display: none;
+                    display: none !important;
                 }
             }
 
             /* ========================================
-       MAIN CONTAINER
+       MAIN CONTAINER (GlobalStyle.js spacing)
        ======================================== */
             main {
                 width: 100%;
                 overflow-x: hidden;
+                padding: 200px 150px;
+                max-width: 1600px;
+                min-height: 100vh;
+                margin: 0 auto;
+            }
+
+            @media (max-width: 1080px) {
+                main {
+                    padding: 200px 100px;
+                }
+            }
+
+            @media (max-width: 768px) {
+                main {
+                    padding: 150px 50px;
+                }
+            }
+
+            @media (max-width: 480px) {
+                main {
+                    padding: 125px 25px;
+                }
             }
 
             /* ========================================
-       SECTION STYLES (Dynamic Symmetric Centering)
+       SECTION STYLES (Gatsby / StyledSection spacing)
        ======================================== */
             section {
-                max-width: 1000px;
                 margin: 0 auto;
-                padding: var(--section-padding) 40px;
+                padding: 100px 0;
+                max-width: 1000px;
             }
 
             @media (max-width: 768px) {
                 section {
-                    padding: 60px 25px;
+                    padding: 80px 0;
+                }
+            }
+
+            @media (max-width: 480px) {
+                section {
+                    padding: 60px 0;
                 }
             }
 
@@ -452,9 +556,9 @@
                 display: flex;
                 align-items: center;
                 gap: 10px;
-                margin-bottom: 40px;
+                margin: 10px 0 40px; /* Aligned with .numbered-heading */
                 font-family: var(--font-sans);
-                font-size: clamp(24px, 5vw, 32px);
+                font-size: clamp(24px, 5vw, var(--fz-heading));
                 font-weight: 600;
                 color: var(--text-primary);
                 white-space: nowrap;
@@ -510,39 +614,45 @@
             }
 
             /* ========================================
-       HERO SECTION (Anthropic Editorial Vibe)
+       HERO SECTION (Gatsby / StyledHero spacing)
        ======================================== */
             .hero {
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
+                align-items: flex-start;
                 min-height: 100vh;
-                padding-top: var(--nav-height);
+                height: 100vh;
+                padding: 0;
+            }
+
+            @media (max-height: 700px) and (min-width: 700px), (max-width: 360px) {
+                .hero {
+                    height: auto;
+                    padding-top: var(--nav-height);
+                }
             }
 
             .hero__greeting {
                 font-family: var(--font-mono);
                 font-size: clamp(14px, 3vw, 16px);
                 color: var(--accent-primary);
-                margin-bottom: 20px;
+                margin: 0 0 30px 4px;
             }
 
             .hero__name {
                 font-family: var(--font-sans);
-                font-size: clamp(40px, 8vw, 80px);
                 font-weight: 700;
                 color: var(--text-primary);
                 line-height: 1.1;
-                margin-bottom: 10px;
             }
 
             .hero__tagline {
                 font-family: var(--font-sans);
-                font-size: clamp(28px, 6vw, 64px);
                 font-weight: 600;
                 color: var(--text-muted);
-                line-height: 1.2;
-                margin-bottom: 25px;
+                line-height: 1.1;
+                margin-top: 5px;
             }
 
             .typewriter {
@@ -571,23 +681,25 @@
             }
 
             .hero__description {
-                max-width: 560px;
+                margin: 20px 0 0;
+                max-width: 540px;
                 font-size: 18px;
                 line-height: 1.8;
                 color: var(--text-secondary);
-                margin-bottom: 50px;
             }
 
             .hero__cta {
                 display: inline-flex !important;
-                padding: 18px 28px;
+                margin-top: 50px;
+                padding: 1.25rem 1.75rem;
                 border: 1.5px solid var(--accent-primary);
-                border-radius: 6px;
-                font-family: var(--font-sans);
+                border-radius: 4px;
+                font-family: var(--font-mono);
                 font-weight: 500;
-                font-size: 15px;
+                font-size: var(--fz-sm);
                 color: var(--accent-primary);
                 transition: all var(--transition-fast);
+                line-height: 1;
             }
 
             .hero__cta:hover {
@@ -825,7 +937,7 @@
             .experience__duty {
                 position: relative;
                 padding-left: 30px;
-                margin-bottom: 15px;
+                margin-bottom: 10px; /* Matched ul.fancy-list li margin-bottom */
                 color: var(--text-secondary);
                 font-size: 15px;
                 line-height: 1.7;
@@ -1129,12 +1241,12 @@
             }
 
             /* ========================================
-       CONTACT SECTION (Symmetric Fix)
+       CONTACT SECTION
        ======================================== */
             #contact {
                 text-align: center;
                 max-width: 600px;
-                margin: 0 auto; /* Overrides default margin to ensure centering */
+                margin: 0 auto;
                 padding-bottom: 150px;
             }
 
@@ -1301,8 +1413,9 @@
                     <li><a href="#projects" class="nav__link">Work</a></li>
                     <li><a href="#contact" class="nav__link">Contact</a></li>
                     <li>
+                        <!-- REPLACE_WITH_YOUR_RESUME_PATH -->
                         <a
-                            href="https://drive.google.com/file/d/1_resume_link_here/view"
+                            href="/resume.pdf"
                             class="nav__resume"
                             target="_blank"
                             rel="noopener noreferrer"
@@ -1313,8 +1426,16 @@
             </div>
         </nav>
 
-        <!-- Social Sidebar (Left) -->
+        <!-- Email Sidebar (Left) -->
         <aside class="sidebar-left">
+            <a href="mailto:chanrylecagara@gmail.com" class="email-link"
+                >chanrylecagara@gmail.com</a
+            >
+        </aside>
+
+        <!-- Social Sidebar (Right) -->
+        <aside class="sidebar-right">
+            <!-- YOUR_GITHUB_URL -->
             <a
                 href="https://github.com/chanrylejay"
                 target="_blank"
@@ -1322,8 +1443,22 @@
                 class="social-link"
                 aria-label="GitHub"
             >
-                <i data-lucide="github"></i>
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <title>GitHub</title>
+                    <path
+                        d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+                    ></path>
+                </svg>
             </a>
+            <!-- YOUR_LINKEDIN_URL -->
             <a
                 href="https://www.linkedin.com/in/chanrylejay/"
                 target="_blank"
@@ -1331,8 +1466,24 @@
                 class="social-link"
                 aria-label="LinkedIn"
             >
-                <i data-lucide="linkedin"></i>
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <title>LinkedIn</title>
+                    <path
+                        d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"
+                    ></path>
+                    <rect x="2" y="9" width="4" height="12"></rect>
+                    <circle cx="4" cy="4" r="2"></circle>
+                </svg>
             </a>
+            <!-- YOUR_FACEBOOK_URL -->
             <a
                 href="https://facebook.com/chanrylejay"
                 target="_blank"
@@ -1340,33 +1491,21 @@
                 class="social-link"
                 aria-label="Facebook"
             >
-                <i data-lucide="facebook"></i>
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <title>Facebook</title>
+                    <path
+                        d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"
+                    ></path>
+                </svg>
             </a>
-            <a
-                href="https://instagram.com/chanrylejay"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="social-link"
-                aria-label="Instagram"
-            >
-                <i data-lucide="instagram"></i>
-            </a>
-            <a
-                href="https://codepen.io/chanrylejay"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="social-link"
-                aria-label="CodePen"
-            >
-                <i data-lucide="codepen"></i>
-            </a>
-        </aside>
-
-        <!-- Email Sidebar (Right) -->
-        <aside class="sidebar-right">
-            <a href="mailto:chanrylecagara@gmail.com" class="email-link"
-                >chanrylecagara@gmail.com</a
-            >
         </aside>
 
         <!-- Main Content -->
@@ -1374,8 +1513,8 @@
             <!-- Hero Section -->
             <section class="hero" id="hero">
                 <p class="hero__greeting fade-in">Hi, my name is</p>
-                <h1 class="hero__name fade-in">Chanryle Jay Cagara.</h1>
-                <h2 class="hero__tagline fade-in">
+                <h1 class="hero__name big-heading fade-in">Chanryle Jay Cagara.</h1>
+                <h2 class="hero__tagline big-heading fade-in">
                     <span class="typewriter" id="typewriter"></span>
                 </h2>
                 <p class="hero__description fade-in">
@@ -1428,8 +1567,9 @@
                     </div>
                     <div class="about__image-wrapper fade-in">
                         <div class="about__image">
+                            <!-- REPLACE THIS IMAGE: Chanryle Jay Cagara - Professional Headshot -->
                             <img
-                                src="https://images.unsplash.com/photo-1633356122544-f134324ef6db?w=400&h=400&fit=crop&crop=face"
+                                src="https://placehold.co/400x400?text=Chanryle+Jay+Cagara"
                                 alt="Chanryle Jay Cagara"
                                 loading="lazy"
                                 width="400"
@@ -1549,8 +1689,9 @@
                             target="_blank"
                             rel="noopener noreferrer"
                         >
+                            <!-- REPLACE THIS IMAGE: Shiny Gmail Automation Project Showcase -->
                             <img
-                                src="https://images.unsplash.com/photo-1526374965328-7f5ae4e8290f?w=800&h=500&fit=crop"
+                                src="https://placehold.co/800x500?text=Shiny+Gmail+Automation"
                                 alt="Shiny Gmail Automation"
                                 loading="lazy"
                                 width="800"
@@ -1589,7 +1730,20 @@
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
-                                    <i data-lucide="github"></i>
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    >
+                                        <title>GitHub</title>
+                                        <path
+                                            d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+                                        ></path>
+                                    </svg>
                                 </a>
                             </div>
                         </div>
@@ -1603,8 +1757,9 @@
                             target="_blank"
                             rel="noopener noreferrer"
                         >
+                            <!-- REPLACE THIS IMAGE: Supervisor V1 Lean Project Showcase -->
                             <img
-                                src="https://images.unsplash.com/photo-1551033406-611cf9a28f67?w=800&h=500&fit=crop"
+                                src="https://placehold.co/800x500?text=Supervisor+V1+Lean"
                                 alt="Supervisor V1 Lean"
                                 loading="lazy"
                                 width="800"
@@ -1644,7 +1799,20 @@
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
-                                    <i data-lucide="github"></i>
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    >
+                                        <title>GitHub</title>
+                                        <path
+                                            d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+                                        ></path>
+                                    </svg>
                                 </a>
                             </div>
                         </div>
