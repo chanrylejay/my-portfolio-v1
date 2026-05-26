@@ -100,7 +100,7 @@
 
             html {
                 scroll-behavior: smooth;
-                scroll-padding-top: var(--nav-height);
+                scroll-padding-top: 80px; /* Adjusted to support sticky header heights with buffer */
             }
 
             body {
@@ -234,6 +234,7 @@
                 border-bottom: 1px solid rgba(217, 119, 87, 0.08);
             }
 
+            /* Hides navigation element on programmatic demand if needed */
             .nav.hidden {
                 transform: translateY(-100%);
             }
@@ -503,11 +504,11 @@
 
             /* ========================================
        MAIN CONTAINER (GlobalStyle.js spacing)
-       ======================================== */
+       ======================================= */
             main {
                 width: 100%;
                 overflow-x: hidden;
-                padding: 200px 150px;
+                padding: 0 150px; /* FIX: Changed vertical padding from 200px to 0px to center the hero properly */
                 max-width: 1600px;
                 min-height: 100vh;
                 margin: 0 auto;
@@ -515,19 +516,19 @@
 
             @media (max-width: 1080px) {
                 main {
-                    padding: 200px 100px;
+                    padding: 0 100px; /* FIX: Changed vertical padding from 200px to 0px */
                 }
             }
 
             @media (max-width: 768px) {
                 main {
-                    padding: 150px 50px;
+                    padding: 0 50px; /* FIX: Changed vertical padding from 150px to 0px */
                 }
             }
 
             @media (max-width: 480px) {
                 main {
-                    padding: 125px 25px;
+                    padding: 0 25px; /* FIX: Changed vertical padding from 125px to 0px */
                 }
             }
 
@@ -653,6 +654,13 @@
                 color: var(--text-muted);
                 line-height: 1.1;
                 margin-top: 5px;
+                min-height: clamp(
+                    48px,
+                    9.6vw,
+                    96px
+                ); /* FIX: Solves the Cumulative Layout Shift (CLS) when typing starts */
+                display: flex;
+                align-items: center;
             }
 
             .typewriter {
@@ -1435,7 +1443,7 @@
 
         <!-- Social Sidebar (Right) -->
         <aside class="sidebar-right">
-            <!-- YOUR_GITHUB_URL -->
+            <!-- https://github.com/chanrylejay -->
             <a
                 href="https://github.com/chanrylejay"
                 target="_blank"
@@ -1567,9 +1575,9 @@
                     </div>
                     <div class="about__image-wrapper fade-in">
                         <div class="about__image">
-                            <!-- REPLACE THIS IMAGE: Chanryle Jay Cagara - Professional Headshot -->
+                            <!-- Image source updated to relative asset path directory -->
                             <img
-                                src="https://placehold.co/400x400?text=Chanryle+Jay+Cagara"
+                                src="./assets/chanryle-jay-cagara.jpg"
                                 alt="Chanryle Jay Cagara"
                                 loading="lazy"
                                 width="400"
@@ -1689,9 +1697,9 @@
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            <!-- REPLACE THIS IMAGE: Shiny Gmail Automation Project Showcase -->
+                            <!-- Image source updated to relative asset path directory -->
                             <img
-                                src="https://placehold.co/800x500?text=Shiny+Gmail+Automation"
+                                src="./assets/shiny-gmail-automation.jpg"
                                 alt="Shiny Gmail Automation"
                                 loading="lazy"
                                 width="800"
@@ -1757,9 +1765,9 @@
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            <!-- REPLACE THIS IMAGE: Supervisor V1 Lean Project Showcase -->
+                            <!-- Image source updated to relative asset path directory -->
                             <img
-                                src="https://placehold.co/800x500?text=Supervisor+V1+Lean"
+                                src="./assets/supervisor-v1-lean.jpg"
                                 alt="Supervisor V1 Lean"
                                 loading="lazy"
                                 width="800"
@@ -2118,29 +2126,21 @@
 
             setTimeout(startTypewriter, 1200);
 
-            // ========================================
-            // NAVIGATION SCROLL BEHAVIOR
-            // ========================================
+            // =========================================================================
+            // STICKY NAVBAR BEHAVIOR (FIX: Always visible on scroll down, subtle on scroll)
+            // =========================================================================
             const nav = document.getElementById("nav");
-            let lastScrollY = window.scrollY;
             let ticking = false;
 
             function updateNav() {
                 const currentScrollY = window.scrollY;
 
-                if (currentScrollY > 100) {
+                if (currentScrollY > 50) {
                     nav.classList.add("scrolled");
                 } else {
                     nav.classList.remove("scrolled");
                 }
 
-                if (currentScrollY > lastScrollY && currentScrollY > 150) {
-                    nav.classList.add("hidden");
-                } else {
-                    nav.classList.remove("hidden");
-                }
-
-                lastScrollY = currentScrollY;
                 ticking = false;
             }
 
@@ -2246,18 +2246,32 @@
                 fadeInObserver.observe(el);
             });
 
-            // ========================================
-            // SMOOTH SCROLL FOR ANCHOR LINKS
-            // ========================================
+            // =========================================================================
+            // SMOOTH SCROLL FOR ANCHOR LINKS & LOGO (FIX: Catches syntax errors on "#")
+            // =========================================================================
             document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
                 anchor.addEventListener("click", function (e) {
                     e.preventDefault();
-                    const target = document.querySelector(this.getAttribute("href"));
-                    if (target) {
-                        target.scrollIntoView({
+                    const href = this.getAttribute("href");
+
+                    if (href === "#") {
+                        window.scrollTo({
+                            top: 0,
                             behavior: "smooth",
-                            block: "start",
                         });
+                        return;
+                    }
+
+                    try {
+                        const target = document.querySelector(href);
+                        if (target) {
+                            target.scrollIntoView({
+                                behavior: "smooth",
+                                block: "start",
+                            });
+                        }
+                    } catch (err) {
+                        console.warn("Invalid selector encountered: ", href);
                     }
                 });
             });
