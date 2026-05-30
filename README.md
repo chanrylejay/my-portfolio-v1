@@ -36,21 +36,26 @@ Engineered a **zero-cost, 48-node error monitoring system** that replaced a $1.4
 
 ## 🚀 Featured Projects
 
-### 1. **Supervisor Error Handling Workflow**
+### 1. **n8n Project Calculator**
+**AI-Powered Project Cost Estimator**
+- Estimates build cost, hosting, and complexity for n8n projects
+- Two modes: Quick Estimate (dropdowns) + AI Estimate (plain English)
+- The only tool like this that exists
+- [→ Live App](https://n8n-project-calculator.vercel.app) | [→ Repository](https://github.com/chanrylejay/n8n-project-calculator)
+
+### 2. **Supervisor Error Handling Workflow**
 **Production Monitoring Done Right — Zero Cost**
 - 3 integrated workflows with 48 strategic nodes
 - 22 audit rounds for bulletproof reliability
 - $0/month infrastructure cost
-- [→ View Repository](https://github.com/chanrylejay)
+- [→ View Repository](https://github.com/chanrylejay/supervisor-error-handling-workflow)
 
-### 2. **Shiny Gmail Automation**
+### 3. **Shiny Gmail Automation**
 **Intelligent Email Management Meets Telegram**
-- AI-powered email categorization and responses
-- Native Telegram bot interface for on-the-go management
-- Reduces email processing time by ~80%
+- AI-powered email categorization with Gemini
+- Native Telegram bot interface for rule management
+- 3 workflows, 60 nodes, 7 smart labels
 - [→ View Repository](https://github.com/chanrylejay/shiny-gmail-automation)
-
----
 
 ## 📸 Portfolio Preview
 
