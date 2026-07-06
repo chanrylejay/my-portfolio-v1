@@ -3,26 +3,45 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Chanryle Jay Cagara | AI Automation & Workflow Systems Specialist</title>
+        <title>Chanryle Jay Cagara | AI-Native Systems Developer</title>
         <meta
             name="description"
-            content="AI-native systems developer — sole developer of a live production scheduling-intelligence platform for a US home-care agency. Full-stack (Next.js, TypeScript, Supabase), healthcare CRM API integration, AI pipelines, SMS automation, n8n. Open to full-time roles and freelance projects."
+            content="AI-native systems developer — sole developer of a live scheduling platform for a US home-care agency. Full-stack, AI pipelines, CRM integration, automation."
         />
         <meta
             name="keywords"
-            content="AI Engineer, Automation, n8n, Python, Machine Learning, Portfolio"
+            content="Systems Developer, AI Engineer, Automation, n8n, Next.js, TypeScript, Supabase, Portfolio"
         />
         <meta name="author" content="Chanryle Jay Cagara" />
         <meta name="theme-color" content="#D97757" />
         <meta
             property="og:title"
-            content="Chanryle Jay Cagara | AI Automation & Workflow Systems Specialist"
+            content="Chanryle Jay Cagara | AI-Native Systems Developer"
         />
         <meta
             property="og:description"
-            content="AI-native systems developer — sole developer of a live production scheduling-intelligence platform for a US home-care agency. Full-stack (Next.js, TypeScript, Supabase), healthcare CRM API integration, AI pipelines, SMS automation, n8n. Open to full-time roles and freelance projects."
+            content="AI-native systems developer — sole developer of a live scheduling platform for a US home-care agency. Full-stack, AI pipelines, CRM integration, automation."
         />
         <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://chanryle-cagara.vercel.app/" />
+        <meta
+            property="og:image"
+            content="https://chanryle-cagara.vercel.app/images/portfolio-preview.png"
+        />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+            name="twitter:title"
+            content="Chanryle Jay Cagara | AI-Native Systems Developer"
+        />
+        <meta
+            name="twitter:description"
+            content="AI-native systems developer — sole developer of a live scheduling platform for a US home-care agency. Full-stack, AI pipelines, CRM integration, automation."
+        />
+        <meta
+            name="twitter:image"
+            content="https://chanryle-cagara.vercel.app/images/portfolio-preview.png"
+        />
+        <link rel="canonical" href="https://chanryle-cagara.vercel.app/" />
         <link rel="icon" type="image/x-icon" href="favicon.ico" />
         <!-- Google Fonts - Anthropic Pairing (Poppins + Lora) -->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -33,7 +52,7 @@
         />
 
         <!-- Lucide Icons CDN -->
-        <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+        <script defer src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
 
         <style>
             /* ========================================
@@ -411,6 +430,52 @@
                 .nav__resume {
                     margin-left: 0;
                 }
+
+                .nav__backdrop.open {
+                    display: block;
+                    opacity: 1;
+                }
+            }
+
+            .nav__backdrop {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background-color: rgba(0, 0, 0, 0.6);
+                z-index: 998;
+                opacity: 0;
+                transition: opacity var(--transition-base);
+            }
+
+            .skip-link {
+                position: absolute;
+                top: -100px;
+                left: 10px;
+                z-index: 1100;
+                padding: 10px 16px;
+                background-color: var(--accent-primary);
+                color: var(--bg-primary);
+                font-family: var(--font-mono);
+                font-size: var(--fz-sm);
+                font-weight: 500;
+                border-radius: 4px;
+                transition: top var(--transition-fast);
+            }
+
+            .skip-link:focus {
+                top: 10px;
+            }
+
+            .sr-only {
+                position: absolute;
+                width: 1px;
+                height: 1px;
+                padding: 0;
+                margin: -1px;
+                overflow: hidden;
+                clip: rect(0, 0, 0, 0);
+                white-space: nowrap;
+                border: 0;
             }
 
             /* ========================================
@@ -647,6 +712,7 @@
             .hero__name {
                 font-family: var(--font-sans);
                 font-weight: 700;
+                font-size: clamp(36px, 6.5vw, 72px);
                 color: var(--text-primary);
                 line-height: 1.1;
             }
@@ -654,13 +720,14 @@
             .hero__tagline {
                 font-family: var(--font-sans);
                 font-weight: 600;
+                font-size: clamp(26px, 4.5vw, 52px);
                 color: var(--text-muted);
                 line-height: 1.1;
                 margin-top: 5px;
                 min-height: clamp(
-                    38px,
-                    6vw,
-                    76px
+                    32px,
+                    5.5vw,
+                    58px
                 ); /* Scaled down layout bounds to match smaller text */
                 display: flex;
                 align-items: center;
@@ -1252,6 +1319,99 @@
             }
 
             /* ========================================
+       OTHER NOTEWORTHY SYSTEMS (system-card)
+       ======================================== */
+            .system-card {
+                background: var(--bg-card);
+                border: 1px solid var(--border-color);
+                border-radius: 8px;
+                padding: 1.25rem;
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .system-card__row {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .system-card__label {
+                display: flex;
+                align-items: center;
+                gap: 7px;
+            }
+
+            .system-card__label-text {
+                font-size: 10px;
+                font-weight: 500;
+                color: var(--text-muted);
+                letter-spacing: 0.09em;
+                text-transform: uppercase;
+            }
+
+            .system-card__title {
+                font-size: 15px;
+                font-weight: 500;
+                margin: 0 0 5px;
+                color: var(--text-primary);
+            }
+
+            .system-card__desc {
+                font-size: 12.5px;
+                color: var(--text-secondary);
+                margin: 0;
+                line-height: 1.65;
+            }
+
+            /* Solid pill: reserved for objective, measured stats only */
+            .system-card__stat {
+                align-self: flex-start;
+                font-size: 11px;
+                font-weight: 500;
+                padding: 3px 9px;
+                border-radius: 4px;
+            }
+
+            .system-card__stat--blue {
+                background: rgba(59, 130, 246, 0.1);
+                color: #3b82f6;
+            }
+
+            .system-card__stat--orange {
+                background: rgba(245, 158, 11, 0.1);
+                color: #f59e0b;
+            }
+
+            /* Outline/muted pill: honest, non-scored status — no self-grading */
+            .system-card__note {
+                align-self: flex-start;
+                font-size: 11px;
+                font-weight: 500;
+                padding: 3px 9px;
+                border-radius: 4px;
+                border: 1px solid var(--border-hover);
+                color: var(--text-muted);
+                background: transparent;
+            }
+
+            .system-card__tags {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 5px;
+                padding-top: 2px;
+            }
+
+            .system-card__tag {
+                font-size: 11px;
+                color: var(--text-secondary);
+                background: var(--bg-secondary);
+                padding: 3px 8px;
+                border-radius: 99px;
+            }
+
+            /* ========================================
        CONTACT SECTION
        ======================================== */
             #contact {
@@ -1523,11 +1683,21 @@
         </div>
 
         <!-- Navigation -->
+        <a href="#hero" class="skip-link">Skip to main content</a>
+
+        <div class="nav__backdrop" id="navBackdrop"></div>
+
         <nav class="nav" id="nav">
             <div class="nav__inner">
                 <a href="#" class="nav__logo">C</a>
 
-                <button class="nav__menu-btn" id="menuBtn" aria-label="Toggle menu">
+                <button
+                    class="nav__menu-btn"
+                    id="menuBtn"
+                    aria-label="Toggle menu"
+                    aria-expanded="false"
+                    aria-controls="navLinks"
+                >
                     <span></span>
                     <span></span>
                     <span></span>
@@ -1539,7 +1709,6 @@
                     <li><a href="#projects" class="nav__link">Work</a></li>
                     <li><a href="#contact" class="nav__link">Contact</a></li>
                     <li>
-                        <!-- REPLACE_WITH_YOUR_RESUME_PATH -->
                         <a
                             href="/resume.pdf"
                             class="nav__resume"
@@ -1584,7 +1753,6 @@
                     ></path>
                 </svg>
             </a>
-            <!-- YOUR_LINKEDIN_URL -->
             <a
                 href="https://www.linkedin.com/in/chanrylejay/"
                 target="_blank"
@@ -1632,7 +1800,6 @@
                     <path d="M15 9h.01"></path>
                 </svg>
             </a>
-            <!-- YOUR_FACEBOOK_URL -->
             <a
                 href="https://facebook.com/chanrylejay"
                 target="_blank"
@@ -1748,22 +1915,65 @@
                 <h2 class="section-heading fade-in">Where I've Worked</h2>
                 <div class="experience__tabs fade-in">
                     <div class="experience__tab-list" role="tablist">
-                        <button class="experience__tab-btn active" role="tab" data-tab="0">
+                        <button
+                            class="experience__tab-btn active"
+                            role="tab"
+                            id="tab-0"
+                            aria-controls="panel-0"
+                            aria-selected="true"
+                            data-tab="0"
+                        >
                             Devoted Care
                         </button>
-                        <button class="experience__tab-btn" role="tab" data-tab="1">
+                        <button
+                            class="experience__tab-btn"
+                            role="tab"
+                            id="tab-1"
+                            aria-controls="panel-1"
+                            aria-selected="false"
+                            data-tab="1"
+                        >
                             Accenture (2025)
                         </button>
-                        <button class="experience__tab-btn" role="tab" data-tab="2">
-                            Accenture (2021)
-                        </button>
-                        <button class="experience__tab-btn" role="tab" data-tab="3">
+                        <button
+                            class="experience__tab-btn"
+                            role="tab"
+                            id="tab-2"
+                            aria-controls="panel-2"
+                            aria-selected="false"
+                            data-tab="2"
+                        >
                             Teletech
                         </button>
-                        <button class="experience__tab-btn" role="tab" data-tab="4">Alorica</button>
+                        <button
+                            class="experience__tab-btn"
+                            role="tab"
+                            id="tab-3"
+                            aria-controls="panel-3"
+                            aria-selected="false"
+                            data-tab="3"
+                        >
+                            Alorica
+                        </button>
+                        <button
+                            class="experience__tab-btn"
+                            role="tab"
+                            id="tab-4"
+                            aria-controls="panel-4"
+                            aria-selected="false"
+                            data-tab="4"
+                        >
+                            Accenture (2021)
+                        </button>
                     </div>
                     <div class="experience__panels">
-                        <div class="experience__panel active" data-panel="0">
+                        <div
+                            class="experience__panel active"
+                            role="tabpanel"
+                            id="panel-0"
+                            aria-labelledby="tab-0"
+                            data-panel="0"
+                        >
                             <h3 class="experience__title">
                                 Systems Developer
                                 <span>@ Devoted Care Services (California, US)</span>
@@ -1793,7 +2003,13 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="experience__panel" data-panel="1">
+                        <div
+                            class="experience__panel"
+                            role="tabpanel"
+                            id="panel-1"
+                            aria-labelledby="tab-1"
+                            data-panel="1"
+                        >
                             <h3 class="experience__title">
                                 Content Operations Specialist
                                 <span
@@ -1818,46 +2034,15 @@
                                     Earned Top Performer recognition for 6 consecutive months by
                                     exceeding daily productivity benchmarks
                                 </li>
-                                <li class="experience__duty">
-                                    Apply compliance auditing and app review workflows to support
-                                    high-volume digital operations with consistent quality control
-                                </li>
                             </ul>
                         </div>
-                        <div class="experience__panel" data-panel="2">
-                            <h3 class="experience__title">
-                                Administrative & Recruitment Coordinator
-                                <span
-                                    >@
-                                    <a href="https://accenture.com" target="_blank"
-                                        >Accenture</a
-                                    ></span
-                                >
-                            </h3>
-                            <p class="experience__date">Mar 2021 – Dec 2021</p>
-                            <ul class="experience__duties">
-                                <li class="experience__duty">
-                                    Coordinated end-to-end recruitment pipelines for 200+ global
-                                    candidates, including panel interview scheduling and onboarding
-                                    logistics.
-                                </li>
-                                <li class="experience__duty">
-                                    Organized compliance documentation, verified background check
-                                    results, and generated weekly recruitment reports for hiring
-                                    stakeholders.
-                                </li>
-                                <li class="experience__duty">
-                                    Maintained cross-referenced candidate and compliance data across
-                                    multiple HR databases to support internal audit readiness.
-                                </li>
-                                <li class="experience__duty">
-                                    Streamlined administrative coordination across scheduling,
-                                    documentation, and reporting workflows for global recruitment
-                                    operations.
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="experience__panel" data-panel="3">
+                        <div
+                            class="experience__panel"
+                            role="tabpanel"
+                            id="panel-2"
+                            aria-labelledby="tab-2"
+                            data-panel="2"
+                        >
                             <h3 class="experience__title">
                                 Customer Support Representative
                                 <span
@@ -1882,13 +2067,15 @@
                                     Improved response templates and troubleshooting documentation,
                                     increasing workflow efficiency by 15%
                                 </li>
-                                <li class="experience__duty">
-                                    Managed customer interactions and ticket resolution using CRM
-                                    tools with accurate case documentation
-                                </li>
                             </ul>
                         </div>
-                        <div class="experience__panel" data-panel="4">
+                        <div
+                            class="experience__panel"
+                            role="tabpanel"
+                            id="panel-3"
+                            aria-labelledby="tab-3"
+                            data-panel="3"
+                        >
                             <h3 class="experience__title">
                                 Customer Support Associate
                                 <span
@@ -1899,20 +2086,43 @@
                             <p class="experience__date">Jul 2022 – Jan 2023</p>
                             <ul class="experience__duties">
                                 <li class="experience__duty">
-                                    Resolved customer inquiries across phone and chat channels,
-                                    covering connectivity, account security, and billing support
+                                    Resolved customer inquiries across phone and chat channels —
+                                    connectivity, account security, and billing support — logging
+                                    every interaction in CRM tools with accurate case documentation
                                 </li>
                                 <li class="experience__duty">
-                                    Logged customer interactions in CRM tools and tracked active
-                                    service tickets for timely resolution
+                                    Tracked and escalated unresolved service tickets through proper
+                                    channels for timely resolution
+                                </li>
+                            </ul>
+                        </div>
+                        <div
+                            class="experience__panel"
+                            role="tabpanel"
+                            id="panel-4"
+                            aria-labelledby="tab-4"
+                            data-panel="4"
+                        >
+                            <h3 class="experience__title">
+                                Administrative & Recruitment Coordinator
+                                <span
+                                    >@
+                                    <a href="https://accenture.com" target="_blank"
+                                        >Accenture</a
+                                    ></span
+                                >
+                            </h3>
+                            <p class="experience__date">Mar 2021 – Dec 2021</p>
+                            <ul class="experience__duties">
+                                <li class="experience__duty">
+                                    Coordinated end-to-end recruitment pipelines for 200+ global
+                                    candidates, including panel interview scheduling and onboarding
+                                    logistics
                                 </li>
                                 <li class="experience__duty">
-                                    Maintained accurate case documentation and escalated unresolved
-                                    issues through proper channels
-                                </li>
-                                <li class="experience__duty">
-                                    Supported operational efficiency by following standardized
-                                    troubleshooting protocols
+                                    Organized and cross-referenced compliance documentation and
+                                    background-check records across multiple HR databases, generating
+                                    weekly recruitment reports for hiring stakeholders
                                 </li>
                             </ul>
                         </div>
@@ -2230,11 +2440,10 @@
                             </h3>
                             <div class="project-featured__description">
                                 <p>
-                                    An intelligent inbox-cleaning system that automatically sorts
-                                    Gmail messages using AI, applies smart labels, and sends you a
-                                    Telegram summary. Built on n8n with Gemini AI for email
-                                    classification. No monthly fees, no complicated dashboard—just
-                                    pure automation running while you sleep.
+                                    Sorts incoming Gmail into 7 labels using Gemini AI and pushes a
+                                    summary to Telegram — 3 n8n workflows, 60 nodes, hardened through
+                                    11 rounds of adversarial code review. Runs on n8n and a Postgres
+                                    rules store at zero recurring cost.
                                 </p>
                             </div>
                             <ul class="project-featured__tech">
@@ -2299,11 +2508,11 @@
                             </h3>
                             <div class="project-featured__description">
                                 <p>
-                                    A self-hosted error monitoring system for n8n workflows that
-                                    catches failures, classifies severity, sends Telegram alerts
-                                    with probable causes, and auto-retries transient errors. Runs
-                                    entirely on your infrastructure using n8n, PostgreSQL free tier,
-                                    and Healthchecks.io—no AI costs, full control.
+                                    Self-hosted error monitor for n8n workflows — catches failures,
+                                    classifies severity, sends Telegram alerts with probable causes,
+                                    and auto-retries transient errors. A 48-node rebuild that replaced
+                                    a $1.40/month AI-powered predecessor with an equally capable
+                                    zero-cost system on n8n, PostgreSQL, and Healthchecks.io.
                                 </p>
                             </div>
                             <ul class="project-featured__tech">
@@ -2350,40 +2559,14 @@
 
                 <div class="projects__grid">
                     <!-- System Card 1: Multi-agent prompt system -->
-                    <div
-                        class="project-card fade-in"
-                        style="
-                            background: var(--bg-card);
-                            border: 1px solid var(--border-color);
-                            border-radius: 8px;
-                            padding: 1.25rem;
-                            display: flex;
-                            flex-direction: column;
-                            gap: 10px;
-                        "
-                    >
-                        <div
-                            style="
-                                display: flex;
-                                justify-content: space-between;
-                                align-items: center;
-                            "
-                        >
-                            <div style="display: flex; align-items: center; gap: 7px">
+                    <div class="project-card system-card fade-in">
+                        <div class="system-card__row">
+                            <div class="system-card__label">
                                 <i
                                     data-lucide="cpu"
                                     style="font-size: 18px; color: var(--text-secondary)"
                                 ></i>
-                                <span
-                                    style="
-                                        font-size: 10px;
-                                        font-weight: 500;
-                                        color: var(--text-muted);
-                                        letter-spacing: 0.09em;
-                                        text-transform: uppercase;
-                                    "
-                                    >Prompt system</span
-                                >
+                                <span class="system-card__label-text">Prompt system</span>
                             </div>
                             <i
                                 data-lucide="lock"
@@ -2391,110 +2574,30 @@
                             ></i>
                         </div>
                         <div>
-                            <p
-                                style="
-                                    font-size: 15px;
-                                    font-weight: 500;
-                                    margin: 0 0 5px;
-                                    color: var(--text-primary);
-                                "
-                            >
-                                Multi-agent prompt system
-                            </p>
-                            <p
-                                style="
-                                    font-size: 12.5px;
-                                    color: var(--text-secondary);
-                                    margin: 0;
-                                    line-height: 1.65;
-                                "
-                            >
+                            <p class="system-card__title">Multi-agent prompt system</p>
+                            <p class="system-card__desc">
                                 Three hidden specialist agents — Architect, PM, Auditor —
                                 collaborate silently before synthesizing output through one expert
                                 voice. Tested across a 20-variation natural language suite.
                             </p>
                         </div>
-                        <span
-                            style="
-                                align-self: flex-start;
-                                background: rgba(34, 197, 94, 0.1);
-                                color: #22c55e;
-                                font-size: 11px;
-                                font-weight: 500;
-                                padding: 3px 9px;
-                                border-radius: 4px;
-                            "
-                            >10/10 on both platforms</span
-                        >
-                        <div style="display: flex; flex-wrap: wrap; gap: 5px; padding-top: 2px">
-                            <span
-                                style="
-                                    font-size: 11px;
-                                    color: var(--text-secondary);
-                                    background: var(--bg-secondary);
-                                    padding: 3px 8px;
-                                    border-radius: 99px;
-                                "
-                                >DeepSeek R1</span
-                            >
-                            <span
-                                style="
-                                    font-size: 11px;
-                                    color: var(--text-secondary);
-                                    background: var(--bg-secondary);
-                                    padding: 3px 8px;
-                                    border-radius: 99px;
-                                "
-                                >Gemini Flash</span
-                            >
-                            <span
-                                style="
-                                    font-size: 11px;
-                                    color: var(--text-secondary);
-                                    background: var(--bg-secondary);
-                                    padding: 3px 8px;
-                                    border-radius: 99px;
-                                "
-                                >Multi-agent</span
-                            >
+                        <span class="system-card__note">Personal project — not published</span>
+                        <div class="system-card__tags">
+                            <span class="system-card__tag">DeepSeek R1</span>
+                            <span class="system-card__tag">Gemini Flash</span>
+                            <span class="system-card__tag">Multi-agent</span>
                         </div>
                     </div>
 
                     <!-- System Card 2: n8n diagnostic AI -->
-                    <div
-                        class="project-card fade-in"
-                        style="
-                            background: var(--bg-card);
-                            border: 1px solid var(--border-color);
-                            border-radius: 8px;
-                            padding: 1.25rem;
-                            display: flex;
-                            flex-direction: column;
-                            gap: 10px;
-                        "
-                    >
-                        <div
-                            style="
-                                display: flex;
-                                justify-content: space-between;
-                                align-items: center;
-                            "
-                        >
-                            <div style="display: flex; align-items: center; gap: 7px">
+                    <div class="project-card system-card fade-in">
+                        <div class="system-card__row">
+                            <div class="system-card__label">
                                 <i
                                     data-lucide="alert-triangle"
                                     style="font-size: 18px; color: var(--text-secondary)"
                                 ></i>
-                                <span
-                                    style="
-                                        font-size: 10px;
-                                        font-weight: 500;
-                                        color: var(--text-muted);
-                                        letter-spacing: 0.09em;
-                                        text-transform: uppercase;
-                                    "
-                                    >AI diagnostic</span
-                                >
+                                <span class="system-card__label-text">AI diagnostic</span>
                             </div>
                             <i
                                 data-lucide="lock"
@@ -2502,110 +2605,32 @@
                             ></i>
                         </div>
                         <div>
-                            <p
-                                style="
-                                    font-size: 15px;
-                                    font-weight: 500;
-                                    margin: 0 0 5px;
-                                    color: var(--text-primary);
-                                "
-                            >
-                                n8n diagnostic AI
-                            </p>
-                            <p
-                                style="
-                                    font-size: 12.5px;
-                                    color: var(--text-secondary);
-                                    margin: 0;
-                                    line-height: 1.65;
-                                "
-                            >
+                            <p class="system-card__title">n8n diagnostic AI</p>
+                            <p class="system-card__desc">
                                 AI-powered workflow diagnostician with Universal Evidence Gate,
                                 LangChain diagnostic mode, version-locked knowledge base, and 60+
                                 shadow test validations. Live on Upwork.
                             </p>
                         </div>
-                        <span
-                            style="
-                                align-self: flex-start;
-                                background: rgba(59, 130, 246, 0.1);
-                                color: #3b82f6;
-                                font-size: 11px;
-                                font-weight: 500;
-                                padding: 3px 9px;
-                                border-radius: 4px;
-                            "
+                        <span class="system-card__stat system-card__stat--blue"
                             >88.7% pass rate · 60+ tests</span
                         >
-                        <div style="display: flex; flex-wrap: wrap; gap: 5px; padding-top: 2px">
-                            <span
-                                style="
-                                    font-size: 11px;
-                                    color: var(--text-secondary);
-                                    background: var(--bg-secondary);
-                                    padding: 3px 8px;
-                                    border-radius: 99px;
-                                "
-                                >DeepSeek R1</span
-                            >
-                            <span
-                                style="
-                                    font-size: 11px;
-                                    color: var(--text-secondary);
-                                    background: var(--bg-secondary);
-                                    padding: 3px 8px;
-                                    border-radius: 99px;
-                                "
-                                >n8n</span
-                            >
-                            <span
-                                style="
-                                    font-size: 11px;
-                                    color: var(--text-secondary);
-                                    background: var(--bg-secondary);
-                                    padding: 3px 8px;
-                                    border-radius: 99px;
-                                "
-                                >AI diagnostics</span
-                            >
+                        <div class="system-card__tags">
+                            <span class="system-card__tag">DeepSeek R1</span>
+                            <span class="system-card__tag">n8n</span>
+                            <span class="system-card__tag">AI diagnostics</span>
                         </div>
                     </div>
 
                     <!-- System Card 3: AI research team -->
-                    <div
-                        class="project-card fade-in"
-                        style="
-                            background: var(--bg-card);
-                            border: 1px solid var(--border-color);
-                            border-radius: 8px;
-                            padding: 1.25rem;
-                            display: flex;
-                            flex-direction: column;
-                            gap: 10px;
-                        "
-                    >
-                        <div
-                            style="
-                                display: flex;
-                                justify-content: space-between;
-                                align-items: center;
-                            "
-                        >
-                            <div style="display: flex; align-items: center; gap: 7px">
+                    <div class="project-card system-card fade-in">
+                        <div class="system-card__row">
+                            <div class="system-card__label">
                                 <i
                                     data-lucide="search"
                                     style="font-size: 18px; color: var(--text-secondary)"
                                 ></i>
-                                <span
-                                    style="
-                                        font-size: 10px;
-                                        font-weight: 500;
-                                        color: var(--text-muted);
-                                        letter-spacing: 0.09em;
-                                        text-transform: uppercase;
-                                    "
-                                    >Research system</span
-                                >
+                                <span class="system-card__label-text">Research system</span>
                             </div>
                             <i
                                 data-lucide="lock"
@@ -2613,101 +2638,30 @@
                             ></i>
                         </div>
                         <div>
-                            <p
-                                style="
-                                    font-size: 15px;
-                                    font-weight: 500;
-                                    margin: 0 0 5px;
-                                    color: var(--text-primary);
-                                "
-                            >
-                                AI research team
-                            </p>
-                            <p
-                                style="
-                                    font-size: 12.5px;
-                                    color: var(--text-secondary);
-                                    margin: 0;
-                                    line-height: 1.65;
-                                "
-                            >
+                            <p class="system-card__title">AI research team</p>
+                            <p class="system-card__desc">
                                 Multi-trigger research system with pre-retrieval processing,
                                 entity-level hallucination mitigation, query classification, and
                                 zero-result locking. Handles mixed-query isolation and cross-turn
                                 domain locks.
                             </p>
                         </div>
-                        <span
-                            style="
-                                align-self: flex-start;
-                                background: rgba(34, 197, 94, 0.1);
-                                color: #22c55e;
-                                font-size: 11px;
-                                font-weight: 500;
-                                padding: 3px 9px;
-                                border-radius: 4px;
-                            "
-                            >10/10 design & execution</span
-                        >
-                        <div style="display: flex; flex-wrap: wrap; gap: 5px; padding-top: 2px">
-                            <span
-                                style="
-                                    font-size: 11px;
-                                    color: var(--text-secondary);
-                                    background: var(--bg-secondary);
-                                    padding: 3px 8px;
-                                    border-radius: 99px;
-                                "
-                                >Gemini Flash</span
-                            >
-                            <span
-                                style="
-                                    font-size: 11px;
-                                    color: var(--text-secondary);
-                                    background: var(--bg-secondary);
-                                    padding: 3px 8px;
-                                    border-radius: 99px;
-                                "
-                                >Research automation</span
-                            >
+                        <span class="system-card__note">Personal project — not published</span>
+                        <div class="system-card__tags">
+                            <span class="system-card__tag">Gemini Flash</span>
+                            <span class="system-card__tag">Research automation</span>
                         </div>
                     </div>
 
                     <!-- System Card 4: AI project manager -->
-                    <div
-                        class="project-card fade-in"
-                        style="
-                            background: var(--bg-card);
-                            border: 1px solid var(--border-color);
-                            border-radius: 8px;
-                            padding: 1.25rem;
-                            display: flex;
-                            flex-direction: column;
-                            gap: 10px;
-                        "
-                    >
-                        <div
-                            style="
-                                display: flex;
-                                justify-content: space-between;
-                                align-items: center;
-                            "
-                        >
-                            <div style="display: flex; align-items: center; gap: 7px">
+                    <div class="project-card system-card fade-in">
+                        <div class="system-card__row">
+                            <div class="system-card__label">
                                 <i
                                     data-lucide="clipboard-list"
                                     style="font-size: 18px; color: var(--text-secondary)"
                                 ></i>
-                                <span
-                                    style="
-                                        font-size: 10px;
-                                        font-weight: 500;
-                                        color: var(--text-muted);
-                                        letter-spacing: 0.09em;
-                                        text-transform: uppercase;
-                                    "
-                                    >Project AI</span
-                                >
+                                <span class="system-card__label-text">Project AI</span>
                             </div>
                             <i
                                 data-lucide="lock"
@@ -2715,101 +2669,30 @@
                             ></i>
                         </div>
                         <div>
-                            <p
-                                style="
-                                    font-size: 15px;
-                                    font-weight: 500;
-                                    margin: 0 0 5px;
-                                    color: var(--text-primary);
-                                "
-                            >
-                                AI project manager
-                            </p>
-                            <p
-                                style="
-                                    font-size: 12.5px;
-                                    color: var(--text-secondary);
-                                    margin: 0;
-                                    line-height: 1.65;
-                                "
-                            >
+                            <p class="system-card__title">AI project manager</p>
+                            <p class="system-card__desc">
                                 Five-phase project management AI (Discover → Setup → Build → Deploy
                                 → Maintain) with phase locking, dependency mapping, non-technical
                                 translation layer, and session resumption. Used to manage all
                                 current AI builds.
                             </p>
                         </div>
-                        <span
-                            style="
-                                align-self: flex-start;
-                                background: rgba(34, 197, 94, 0.1);
-                                color: #22c55e;
-                                font-size: 11px;
-                                font-weight: 500;
-                                padding: 3px 9px;
-                                border-radius: 4px;
-                            "
-                            >10/10 design & execution</span
-                        >
-                        <div style="display: flex; flex-wrap: wrap; gap: 5px; padding-top: 2px">
-                            <span
-                                style="
-                                    font-size: 11px;
-                                    color: var(--text-secondary);
-                                    background: var(--bg-secondary);
-                                    padding: 3px 8px;
-                                    border-radius: 99px;
-                                "
-                                >DeepSeek R1</span
-                            >
-                            <span
-                                style="
-                                    font-size: 11px;
-                                    color: var(--text-secondary);
-                                    background: var(--bg-secondary);
-                                    padding: 3px 8px;
-                                    border-radius: 99px;
-                                "
-                                >Prompt engineering</span
-                            >
+                        <span class="system-card__note">Personal project — in active use</span>
+                        <div class="system-card__tags">
+                            <span class="system-card__tag">DeepSeek R1</span>
+                            <span class="system-card__tag">Prompt engineering</span>
                         </div>
                     </div>
 
                     <!-- System Card 5: AI freelance advisor -->
-                    <div
-                        class="project-card fade-in"
-                        style="
-                            background: var(--bg-card);
-                            border: 1px solid var(--border-color);
-                            border-radius: 8px;
-                            padding: 1.25rem;
-                            display: flex;
-                            flex-direction: column;
-                            gap: 10px;
-                        "
-                    >
-                        <div
-                            style="
-                                display: flex;
-                                justify-content: space-between;
-                                align-items: center;
-                            "
-                        >
-                            <div style="display: flex; align-items: center; gap: 7px">
+                    <div class="project-card system-card fade-in">
+                        <div class="system-card__row">
+                            <div class="system-card__label">
                                 <i
                                     data-lucide="eye"
                                     style="font-size: 18px; color: var(--text-secondary)"
                                 ></i>
-                                <span
-                                    style="
-                                        font-size: 10px;
-                                        font-weight: 500;
-                                        color: var(--text-muted);
-                                        letter-spacing: 0.09em;
-                                        text-transform: uppercase;
-                                    "
-                                    >Freelance advisor</span
-                                >
+                                <span class="system-card__label-text">Freelance advisor</span>
                             </div>
                             <i
                                 data-lucide="lock"
@@ -2817,63 +2700,20 @@
                             ></i>
                         </div>
                         <div>
-                            <p
-                                style="
-                                    font-size: 15px;
-                                    font-weight: 500;
-                                    margin: 0 0 5px;
-                                    color: var(--text-primary);
-                                "
-                            >
-                                AI freelance advisor
-                            </p>
-                            <p
-                                style="
-                                    font-size: 12.5px;
-                                    color: var(--text-secondary);
-                                    margin: 0;
-                                    line-height: 1.65;
-                                "
-                            >
+                            <p class="system-card__title">AI freelance advisor</p>
+                            <p class="system-card__desc">
                                 Real-time Upwork advisor with automatic prompt generation for
                                 diagnostic workflows, 4-tier pricing authority, 5 failure paths, and
                                 phase declaration on every response. Built with adversarial
                                 protection.
                             </p>
                         </div>
-                        <span
-                            style="
-                                align-self: flex-start;
-                                background: rgba(245, 158, 11, 0.1);
-                                color: #f59e0b;
-                                font-size: 11px;
-                                font-weight: 500;
-                                padding: 3px 9px;
-                                border-radius: 4px;
-                            "
+                        <span class="system-card__stat system-card__stat--orange"
                             >31 edge cases · 8 categories</span
                         >
-                        <div style="display: flex; flex-wrap: wrap; gap: 5px; padding-top: 2px">
-                            <span
-                                style="
-                                    font-size: 11px;
-                                    color: var(--text-secondary);
-                                    background: var(--bg-secondary);
-                                    padding: 3px 8px;
-                                    border-radius: 99px;
-                                "
-                                >DeepSeek R1</span
-                            >
-                            <span
-                                style="
-                                    font-size: 11px;
-                                    color: var(--text-secondary);
-                                    background: var(--bg-secondary);
-                                    padding: 3px 8px;
-                                    border-radius: 99px;
-                                "
-                                >Freelance automation</span
-                            >
+                        <div class="system-card__tags">
+                            <span class="system-card__tag">DeepSeek R1</span>
+                            <span class="system-card__tag">Freelance automation</span>
                         </div>
                     </div>
                 </div>
@@ -2906,8 +2746,21 @@
                 <div class="contact__form-container fade-in">
                     <h3>Or send a quick message:</h3>
                     <form id="contactForm">
-                        <input type="email" name="email" placeholder="Your email" required />
-                        <textarea name="message" placeholder="Your message..." required></textarea>
+                        <label for="contactEmail" class="sr-only">Your email</label>
+                        <input
+                            type="email"
+                            id="contactEmail"
+                            name="email"
+                            placeholder="Your email"
+                            required
+                        />
+                        <label for="contactMessage" class="sr-only">Your message</label>
+                        <textarea
+                            id="contactMessage"
+                            name="message"
+                            placeholder="Your message..."
+                            required
+                        ></textarea>
                         <button type="submit">Send</button>
                     </form>
                 </div>
@@ -2923,7 +2776,20 @@
                     rel="noopener noreferrer"
                     aria-label="GitHub"
                 >
-                    <i data-lucide="github"></i>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <title>GitHub</title>
+                        <path
+                            d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+                        ></path>
+                    </svg>
                 </a>
                 <a
                     href="https://www.linkedin.com/in/chanrylejay/"
@@ -2931,7 +2797,22 @@
                     rel="noopener noreferrer"
                     aria-label="LinkedIn"
                 >
-                    <i data-lucide="linkedin"></i>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <title>LinkedIn</title>
+                        <path
+                            d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"
+                        ></path>
+                        <rect x="2" y="9" width="4" height="12"></rect>
+                        <circle cx="4" cy="4" r="2"></circle>
+                    </svg>
                 </a>
                 <a
                     href="https://facebook.com/chanrylejay"
@@ -2939,23 +2820,20 @@
                     rel="noopener noreferrer"
                     aria-label="Facebook"
                 >
-                    <i data-lucide="facebook"></i>
-                </a>
-                <a
-                    href="https://instagram.com/chanrylejay"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="Instagram"
-                >
-                    <i data-lucide="instagram"></i>
-                </a>
-                <a
-                    href="https://codepen.io/chanrylejay"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="CodePen"
-                >
-                    <i data-lucide="codepen"></i>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <title>Facebook</title>
+                        <path
+                            d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"
+                        ></path>
+                    </svg>
                 </a>
             </div>
             <p class="footer__credit">
@@ -2970,9 +2848,11 @@
             // ========================================
             // INITIALIZE LUCIDE ICONS
             // ========================================
-            if (window.lucide) {
-                lucide.createIcons();
-            }
+            document.addEventListener("DOMContentLoaded", () => {
+                if (window.lucide) {
+                    lucide.createIcons();
+                }
+            });
 
             // ========================================
             // LOADER
@@ -3043,22 +2923,29 @@
             // ========================================
             const menuBtn = document.getElementById("menuBtn");
             const navLinks = document.getElementById("navLinks");
+            const navBackdrop = document.getElementById("navBackdrop");
+
+            function closeMobileMenu() {
+                menuBtn.classList.remove("active");
+                navLinks.classList.remove("open");
+                navBackdrop.classList.remove("open");
+                menuBtn.setAttribute("aria-expanded", "false");
+                document.body.style.overflow = "";
+            }
 
             if (menuBtn && navLinks) {
                 menuBtn.addEventListener("click", () => {
-                    menuBtn.classList.toggle("active");
-                    navLinks.classList.toggle("open");
-                    document.body.style.overflow = navLinks.classList.contains("open")
-                        ? "hidden"
-                        : "";
+                    const isOpen = navLinks.classList.toggle("open");
+                    menuBtn.classList.toggle("active", isOpen);
+                    navBackdrop.classList.toggle("open", isOpen);
+                    menuBtn.setAttribute("aria-expanded", String(isOpen));
+                    document.body.style.overflow = isOpen ? "hidden" : "";
                 });
 
+                navBackdrop.addEventListener("click", closeMobileMenu);
+
                 navLinks.querySelectorAll("a").forEach((link) => {
-                    link.addEventListener("click", () => {
-                        menuBtn.classList.remove("active");
-                        navLinks.classList.remove("open");
-                        document.body.style.overflow = "";
-                    });
+                    link.addEventListener("click", closeMobileMenu);
                 });
             }
 
@@ -3072,8 +2959,12 @@
                 btn.addEventListener("click", () => {
                     const tabIndex = btn.dataset.tab;
 
-                    tabBtns.forEach((b) => b.classList.remove("active"));
+                    tabBtns.forEach((b) => {
+                        b.classList.remove("active");
+                        b.setAttribute("aria-selected", "false");
+                    });
                     btn.classList.add("active");
+                    btn.setAttribute("aria-selected", "true");
 
                     tabPanels.forEach((panel) => {
                         panel.classList.remove("active");

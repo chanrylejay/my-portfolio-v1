@@ -13,10 +13,9 @@
   .contact { text-align: center; font-size: 9.2pt; color: #444; margin-top: 3pt; }
   .summary { margin-top: 10pt; text-align: justify; }
   h2 { font-family: "Segoe UI", Arial, sans-serif; font-size: 10.5pt; letter-spacing: .5px; margin: 12pt 0 3pt; border-bottom: 1.2px solid #b8c4d4; padding-bottom: 2pt; }
-  .skills td { vertical-align: top; padding: 1pt 0; }
-  .skills td:first-child { font-weight: bold; white-space: nowrap; padding-right: 8pt; font-family: "Segoe UI", Arial, sans-serif; font-size: 9.5pt; }
-  table { border-collapse: collapse; width: 100%; }
-  .job { margin-top: 7pt; }
+  .skills p { padding: 1pt 0; }
+  .skills b { font-family: "Segoe UI", Arial, sans-serif; font-size: 9.5pt; }
+  .job { margin-top: 7pt; break-inside: avoid; page-break-inside: avoid; }
   .job h3 { font-size: 10.5pt; font-weight: bold; }
   .job .meta { font-size: 9.4pt; color: #444; margin: 1pt 0 2pt; }
   ul { margin-left: 14pt; }
@@ -48,21 +47,21 @@ workflow that turns one developer into a full delivery team: design, build, adve
 and verified releases.</p>
 
 <h2>TECHNICAL SKILLS</h2>
-<table class="skills">
-<tr><td>Full-Stack</td><td>Next.js 14 (App Router), React, TypeScript, Tailwind CSS, Node.js, Python, SQL</td></tr>
-<tr><td>Backend &amp; Data</td><td>Supabase (Auth, Row-Level Security, migrations), PostgreSQL, Neon, REST API design, audit-trail architecture, cron/scheduled functions</td></tr>
-<tr><td>API Integration</td><td>OpenAPI 3.1 spec auditing, healthcare CRM (AxisCare) reads + production writes, OpenPhone SMS (10DLC, webhooks), Netlify API, webhook systems</td></tr>
-<tr><td>AI Engineering</td><td>Claude (Code CLI, MCP, multi-agent orchestration), DeepSeek API production pipelines, grounded agents with output validators, prompt-system design</td></tr>
-<tr><td>Automation &amp; QA</td><td>n8n (production workflows, Telegram bots), Playwright end-to-end verification, adversarial code review workflows, Bruno API testing</td></tr>
-<tr><td>Cloud &amp; DevOps</td><td>Netlify, Vercel, GitHub, CI build discipline, deploy debugging, PowerShell/Bash</td></tr>
-<tr><td>Operations &amp; QA</td><td>Content moderation, trust &amp; safety, quality auditing, SOP development, HIPAA-aware data handling</td></tr>
-</table>
+<div class="skills">
+<p><b>Full-Stack:</b> Next.js 14 (App Router), React, TypeScript, Tailwind CSS, Node.js, Python, SQL</p>
+<p><b>Backend &amp; Data:</b> Supabase (Auth, Row-Level Security, migrations), PostgreSQL, Neon, REST API design, audit-trail architecture, cron/scheduled functions</p>
+<p><b>API Integration:</b> OpenAPI 3.1 spec auditing, healthcare CRM (AxisCare) reads + production writes, OpenPhone SMS (10DLC, webhooks), Netlify API, webhook systems</p>
+<p><b>AI Engineering:</b> Claude (Code CLI, MCP, multi-agent orchestration), DeepSeek API production pipelines, grounded agents with output validators, prompt-system design</p>
+<p><b>Automation &amp; QA:</b> n8n (production workflows, Telegram bots), Playwright end-to-end verification, adversarial code review workflows, Bruno API testing</p>
+<p><b>Cloud &amp; DevOps:</b> Netlify, Vercel, GitHub, CI build discipline, deploy debugging, PowerShell/Bash</p>
+<p><b>Operations &amp; QA:</b> Content moderation, trust &amp; safety, quality auditing, SOP development, HIPAA-aware data handling</p>
+</div>
 
 <h2>PROFESSIONAL EXPERIENCE</h2>
 
 <div class="job">
-<h3>Devoted Care Services LLC (California, US — remote) | Systems Developer</h3>
-<p class="meta">Jun 2026 – Present | Sole developer of the agency's operations platform</p>
+<h3>Devoted Care Services LLC | Systems Developer</h3>
+<p class="meta">Jun 2026 – Present | California, US — Remote</p>
 <ul>
 <li>Designed, built, and shipped a production scheduling-intelligence platform for a home-care agency
 (≈120 caregivers, 4 schedulers) as the sole developer: coverage command center, caregiver–client matching
@@ -77,7 +76,7 @@ healthcare-adjacent data.</li>
 reply webhooks feeding scheduler dashboards.</li>
 <li>Implemented per-user authentication (Supabase Auth + Row-Level Security) and a system-wide audit trail;
 HIPAA-aware handling with local de-identification before any AI vendor sees data.</li>
-<li>Run a client-approval delivery workflow: interactive HTML previews → per-item sign-off → batched deploys →
+<li>Ran a client-approval delivery workflow: interactive HTML previews → per-item sign-off → batched deploys →
 Playwright-verified releases on production.</li>
 </ul>
 </div>
@@ -90,7 +89,6 @@ Playwright-verified releases on production.</li>
 copyright law, and corporate policy.</li>
 <li>Maintained 100% accuracy metrics and exceeded productivity benchmarks — Top Performer recognition for
 6 consecutive months.</li>
-<li>Audited policy findings, documented risk indicators, and escalated high-risk tickets with precise reporting.</li>
 </ul>
 </div>
 
@@ -108,8 +106,10 @@ templates and documentation, raising workflow efficiency by 15%.</li>
 <h3>Alorica | Customer Support Associate</h3>
 <p class="meta">Jul 2022 – Jan 2023 | Philippines</p>
 <ul>
-<li>Resolved high-volume inquiries across voice and chat; technical troubleshooting and billing support within
-quality metrics.</li>
+<li>Resolved customer inquiries across voice and chat channels — technical troubleshooting, account security,
+and billing support.</li>
+<li>Logged interactions and tracked service tickets in CRM tools, maintaining accurate case documentation for
+quality and audit review.</li>
 </ul>
 </div>
 
@@ -130,8 +130,8 @@ background verification, and weekly stakeholder reporting.</li>
 <p class="links">Live: ma-anoulam.vercel.app | GitHub: github.com/chanrylejay/ano-ulam</p>
 <ul>
 <li>Suggests the cheapest Filipino meals daily from real Department of Agriculture market prices — 47-recipe
-hardcoded cost engine (replaced AI generation; accuracy 6–7/10 → 10/10), automated daily pipeline, zero AI
-calls per visit. Organically viral on Facebook (1,000+ likes, 300+ shares).</li>
+hardcoded cost engine (replaced unreliable AI-generated estimates with verified data), automated daily
+pipeline, zero AI calls per visit. Organically viral on Facebook (1,000+ likes, 300+ shares).</li>
 </ul>
 </div>
 
@@ -141,7 +141,7 @@ calls per visit. Organically viral on Facebook (1,000+ likes, 300+ shares).</li>
 <p class="links">GitHub: github.com/chanrylejay/shiny-gmail-automation</p>
 <ul>
 <li>3 workflows / 60 nodes / $0 per month — classifies email into 7 labels and surfaces rules via Telegram;
-hardened through 11 audit rounds to a 9.75/10 production rating.</li>
+hardened through 11 rounds of adversarial code review.</li>
 </ul>
 </div>
 
