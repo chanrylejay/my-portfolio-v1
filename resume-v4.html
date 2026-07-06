@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Chanryle Jay Cagara — Resume v4 (print to PDF)</title>
+<style>
+  /* Print-ready A4. Open this file → Ctrl+P → Save as PDF → replace resume.pdf */
+  @page { size: A4; margin: 14mm 16mm; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: Georgia, "Times New Roman", serif; color: #1a1a1a; font-size: 10.3pt; line-height: 1.42; }
+  .name { text-align: center; font-family: "Segoe UI", Arial, sans-serif; font-size: 22pt; font-weight: 800; letter-spacing: .5px; }
+  .title { text-align: center; font-family: "Segoe UI", Arial, sans-serif; color: #D2691E; font-weight: 700; font-size: 11pt; margin-top: 2pt; letter-spacing: .3px; }
+  .contact { text-align: center; font-size: 9.2pt; color: #444; margin-top: 3pt; }
+  .summary { margin-top: 10pt; text-align: justify; }
+  h2 { font-family: "Segoe UI", Arial, sans-serif; font-size: 10.5pt; letter-spacing: .5px; margin: 12pt 0 3pt; border-bottom: 1.2px solid #b8c4d4; padding-bottom: 2pt; }
+  .skills td { vertical-align: top; padding: 1pt 0; }
+  .skills td:first-child { font-weight: bold; white-space: nowrap; padding-right: 8pt; font-family: "Segoe UI", Arial, sans-serif; font-size: 9.5pt; }
+  table { border-collapse: collapse; width: 100%; }
+  .job { margin-top: 7pt; }
+  .job h3 { font-size: 10.5pt; font-weight: bold; }
+  .job .meta { font-size: 9.4pt; color: #444; margin: 1pt 0 2pt; }
+  ul { margin-left: 14pt; }
+  li { margin: 1.5pt 0; text-align: justify; }
+  .proj { margin-top: 6pt; }
+  .proj h3 { font-size: 10.2pt; }
+  .proj .stack { font-size: 9pt; color: #555; font-style: italic; }
+  .proj .links { font-size: 9.2pt; color: #333; }
+  .pagebreak { break-before: page; }
+  @media screen { body { max-width: 800px; margin: 24px auto; padding: 0 16px; }
+    .hint { background:#FFF6E5; border:1px solid #E8C98A; padding:8px 12px; font-family:Arial; font-size:12px; margin-bottom:16px; }
+  }
+  @media print { .hint { display:none; } }
+</style>
+</head>
+<body>
+<div class="hint">RESUME v4 (July 6, 2026). To publish: open in a browser → Ctrl+P → "Save as PDF" → save over <b>resume.pdf</b> in this folder → commit + push.</div>
+
+<div class="name">CHANRYLE JAY CAGARA</div>
+<div class="title">AI-NATIVE SYSTEMS DEVELOPER — FULL-STACK, AUTOMATION &amp; AI INTEGRATION</div>
+<div class="contact">Quezon City, Philippines | 0994 783 6988 | chanrylecagara@gmail.com<br>
+linkedin.com/in/chanrylejay | github.com/chanrylejay | chanryle-cagara.vercel.app</div>
+
+<p class="summary">Systems developer who ships production platforms solo. Currently the sole developer of a
+live scheduling-intelligence platform for a US home-care agency — full-stack web application, CRM API
+integration with sanctioned production writes, AI pipelines, and SMS automation, all serving real daily
+operations. Built on 4+ years of operations, QA, and compliance experience, with an AI-assisted development
+workflow that turns one developer into a full delivery team: design, build, adversarial review, deployment,
+and verified releases.</p>
+
+<h2>TECHNICAL SKILLS</h2>
+<table class="skills">
+<tr><td>Full-Stack</td><td>Next.js 14 (App Router), React, TypeScript, Tailwind CSS, Node.js, Python, SQL</td></tr>
+<tr><td>Backend &amp; Data</td><td>Supabase (Auth, Row-Level Security, migrations), PostgreSQL, Neon, REST API design, audit-trail architecture, cron/scheduled functions</td></tr>
+<tr><td>API Integration</td><td>OpenAPI 3.1 spec auditing, healthcare CRM (AxisCare) reads + production writes, OpenPhone SMS (10DLC, webhooks), Netlify API, webhook systems</td></tr>
+<tr><td>AI Engineering</td><td>Claude (Code CLI, MCP, multi-agent orchestration), DeepSeek API production pipelines, grounded agents with output validators, prompt-system design</td></tr>
+<tr><td>Automation &amp; QA</td><td>n8n (production workflows, Telegram bots), Playwright end-to-end verification, adversarial code review workflows, Bruno API testing</td></tr>
+<tr><td>Cloud &amp; DevOps</td><td>Netlify, Vercel, GitHub, CI build discipline, deploy debugging, PowerShell/Bash</td></tr>
+<tr><td>Operations &amp; QA</td><td>Content moderation, trust &amp; safety, quality auditing, SOP development, HIPAA-aware data handling</td></tr>
+</table>
+
+<h2>PROFESSIONAL EXPERIENCE</h2>
+
+<div class="job">
+<h3>Devoted Care Services LLC (California, US — remote) | Operations Systems Coordinator / Systems Developer</h3>
+<p class="meta">Jun 2026 – Present | Sole developer of the agency's operations platform</p>
+<ul>
+<li>Designed, built, and shipped a production scheduling-intelligence platform for a home-care agency
+(≈120 caregivers, 4 schedulers) as the sole developer: coverage command center, caregiver–client matching
+engine, availability calendars, open-shift tracking, reports, and print-ready care forms.</li>
+<li>Integrated the agency's CRM (AxisCare) end-to-end from a 12,500-line OpenAPI specification — high-volume
+live reads plus the agency's first sanctioned production writes, shipped behind fail-closed kill switches,
+empirically verified on disposable data, and fully audit-logged.</li>
+<li>Built production AI pipelines: automated care-note risk triage (DeepSeek) on a 30-minute schedule, and a
+grounded AI assistant where every fact is tool-sourced and validator-checked — a zero-fabrication design for
+healthcare-adjacent data.</li>
+<li>Shipped SMS automation on OpenPhone with 10DLC registration: automated shift offers by text with inbound
+reply webhooks feeding scheduler dashboards.</li>
+<li>Implemented per-user authentication (Supabase Auth + Row-Level Security) and a system-wide audit trail;
+HIPAA-aware handling with local de-identification before any AI vendor sees data.</li>
+<li>Run a client-approval delivery workflow: interactive HTML previews → per-item sign-off → batched deploys →
+Playwright-verified releases on production.</li>
+</ul>
+</div>
+
+<div class="job">
+<h3>Accenture | Content Operations Specialist (App Review)</h3>
+<p class="meta">May 2025 – Jun 2026 | Philippines</p>
+<ul>
+<li>Evaluated 100+ complex digital application submissions daily against platform compliance standards,
+copyright law, and corporate policy.</li>
+<li>Maintained 100% accuracy metrics and exceeded productivity benchmarks — Top Performer recognition for
+6 consecutive months.</li>
+<li>Audited policy findings, documented risk indicators, and escalated high-risk tickets with precise reporting.</li>
+</ul>
+</div>
+
+<div class="job">
+<h3>Teletech Inc. | Customer Support Representative</h3>
+<p class="meta">Aug 2023 – Sep 2024 | Philippines</p>
+<ul>
+<li>Delivered technical troubleshooting and operational support, sustaining a 95%+ customer satisfaction rating.</li>
+<li>De-escalated complex account and system issues, reducing client complaints by 20%; improved response
+templates and documentation, raising workflow efficiency by 15%.</li>
+</ul>
+</div>
+
+<div class="job">
+<h3>Alorica | Customer Support Associate</h3>
+<p class="meta">Jul 2022 – Jan 2023 | Philippines</p>
+<ul>
+<li>Resolved high-volume inquiries across voice and chat; technical troubleshooting and billing support within
+quality metrics.</li>
+</ul>
+</div>
+
+<div class="job">
+<h3>Accenture | Administrative &amp; Recruitment Coordinator</h3>
+<p class="meta">Mar 2021 – Dec 2021 | Philippines</p>
+<ul>
+<li>Coordinated end-to-end recruitment pipelines for 200+ global candidates; compliance documentation,
+background verification, and weekly stakeholder reporting.</li>
+</ul>
+</div>
+
+<h2>FEATURED PERSONAL PROJECTS</h2>
+
+<div class="proj">
+<h3>ma, Ano Ulam? — Filipino Meal Suggestion Engine</h3>
+<p class="stack">Next.js 14, TypeScript, Tailwind, Neon PostgreSQL, DeepSeek API, Vercel Cron, pdf-parse</p>
+<p class="links">Live: ma-anoulam.vercel.app | GitHub: github.com/chanrylejay/ano-ulam</p>
+<ul>
+<li>Suggests the cheapest Filipino meals daily from real Department of Agriculture market prices — 47-recipe
+hardcoded cost engine (replaced AI generation; accuracy 6–7/10 → 10/10), automated daily pipeline, zero AI
+calls per visit. Organically viral on Facebook (1,000+ likes, 300+ shares).</li>
+</ul>
+</div>
+
+<div class="proj">
+<h3>Shiny Gmail Automation — AI-Powered Email Classification</h3>
+<p class="stack">n8n, Gemini API, Neon PostgreSQL, Telegram Bot API</p>
+<p class="links">GitHub: github.com/chanrylejay/shiny-gmail-automation</p>
+<ul>
+<li>3 workflows / 60 nodes / $0 per month — classifies email into 7 labels and surfaces rules via Telegram;
+hardened through 11 audit rounds to a 9.75/10 production rating.</li>
+</ul>
+</div>
+
+<div class="proj">
+<h3>n8n Project Calculator — Instant Pricing Estimator</h3>
+<p class="stack">React, TypeScript, Vite, Tailwind CSS, Vercel</p>
+<p class="links">Live: n8n-project-calculator.vercel.app | GitHub: github.com/chanrylejay/n8n-project-calculator</p>
+<ul>
+<li>Client-facing sales tool generating instant automation project estimates; built and deployed in one session
+with an AI-first workflow.</li>
+</ul>
+</div>
+
+<h2>EDUCATION</h2>
+<p><b>Bachelor of Science in Information Technology</b><br>
+Quezon City University | Quezon City, Philippines | Graduated Jun 2020</p>
+
+</body>
+</html>
