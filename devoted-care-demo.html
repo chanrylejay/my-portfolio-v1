@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<!--
+  DEVOTED CARE — SCHEDULING INTELLIGENCE PLATFORM · PORTFOLIO DEMO
+  A working, clickable copy of the caregiver module from a production system I built
+  and run as sole developer for a US home-care agency (Next.js 14 + TypeScript +
+  Supabase + AxisCare CRM API + OpenPhone SMS + DeepSeek AI, deployed on Netlify).
+  This demo is a self-contained HTML file: ALL NAMES AND DATA ARE FICTIONAL.
+  The real system is private (client data); a walkthrough is available on request.
+  — Chanryle Jay Cagara · chanryle-cagara.vercel.app
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Devoted Care — Scheduling Intelligence (Interactive Demo)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ── the client template v2 tokens — pixel-matched to the live system ── */
+:root{
+  --brand:#1E40AF; --brand-deep:#1E3A8A; --brand-soft:#EDF2FE;
+  --ink:#0B1330; --ink-soft:#5A6478; --ink-faint:#8A93A6;
+  --sidebar-dark:#020F2E;
+  --bg:#FBFBFD; --panel-head:#F1F3F9;
+  --line:#E6E9F2; --line-soft:#EEF1F6; --line-strong:#D5DBE7;
+  --good:#15803D; --good-bg:#E4F3EA; --good-tx:#135E31;
+  --soon:#B45309; --soon-bg:#FDF0DC; --soon-tx:#8A4207;
+  --crit:#DC2626; --crit-bg:#FCE7E5; --crit-tx:#9B1C1C;
+  --note:#5B21B6; --note-bg:#EAE4F7;
+  --teal:#0B7A70; --teal-bg:#D7F0ED;
+  --pink:#C2569A; --pink-bg:#F8E9F2;
+  --r:12px; --shadow:0 1px 2px rgba(16,24,40,.05);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:14px}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:13px;color:var(--ink);border:1px solid var(--line-strong);border-radius:8px;padding:8px 11px;outline:none;background:#fff}
+input:focus,select:focus,textarea:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(30,64,175,.12)}
+
+.pv-bar{background:#FFF8E7;border-bottom:1px solid #F3DEB8;color:#8A4207;font-size:12px;font-weight:600;padding:8px 18px;display:flex;align-items:center;gap:8px}
+.pv-bar b{font-weight:800}
+
+/* ── App shell (live sidebar) ── */
+.shell{display:flex;min-height:100vh}
+.rail{width:212px;flex:0 0 212px;background:var(--sidebar-dark);color:#fff;padding:16px 12px;display:flex;flex-direction:column;gap:2px}
+.rail-brand{display:flex;align-items:center;gap:10px;padding:4px 8px 16px;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:10px}
+.rail-logo{width:34px;height:34px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:17px}
+.rail-brand .t{font-size:9.5px;font-weight:800;letter-spacing:.14em;color:#9DB6FF}
+.rail-brand .s{font-size:15px;font-weight:800}
+.rail a{display:flex;align-items:center;gap:10px;color:rgba(255,255,255,.72);text-decoration:none;font-size:13px;font-weight:600;padding:9px 12px;border-radius:9px}
+.rail a.on{background:var(--brand);color:#fff}
+.rail a.dim{opacity:.38;cursor:default}
+.rail .bdg{margin-left:auto;background:var(--crit);color:#fff;font-size:10.5px;font-weight:800;border-radius:10px;padding:1px 7px}
+.rail .bdg.n{background:rgba(255,255,255,.16)}
+.rail .soon{margin-left:auto;background:rgba(255,255,255,.14);color:rgba(255,255,255,.75);font-size:9px;font-weight:800;letter-spacing:.06em;border-radius:8px;padding:2px 7px}
+.main{flex:1;min-width:0;padding:22px 28px 90px;max-width:1240px}
+
+/* ── TopBar (live: shows on PROFILE, hidden on roster) ── */
+.topbar h1{font-size:28px;font-weight:800;letter-spacing:-.01em}
+.topbar .date{font-size:15px;color:var(--ink-soft);margin-top:2px}
+.topbar .upd{display:flex;align-items:center;gap:12px;font-size:13px;color:var(--ink-soft);margin:6px 0 18px}
+.topbar .upd .rf{color:var(--brand);font-weight:700;background:none;border:none;display:inline-flex;gap:6px;align-items:center}
+
+/* ── Roster (headerless — live) ── */
+.searchrow{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.search{display:inline-flex;align-items:center;gap:8px;flex:1;min-width:200px;max-width:380px;background:#fff;border:1px solid var(--line-strong);border-radius:8px;padding:0 12px;color:var(--ink-faint)}
+.search input{border:none;box-shadow:none;padding:9px 0;flex:1;background:transparent}
+.statussel{font-weight:700;min-width:190px;cursor:pointer;padding:9px 12px}
+.listhead{font-size:13px;font-weight:800;margin:4px 2px 10px;display:flex;align-items:center;gap:8px}
+.listhead .n{background:var(--brand);color:#fff;border-radius:11px;font-size:11px;padding:1px 9px}
+.cgrow{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:15px 18px;cursor:pointer;box-shadow:var(--shadow);margin-bottom:9px}
+.cgrow:hover{border-color:var(--brand);box-shadow:0 1px 0 var(--brand)}
+.av{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#fff;flex:0 0 auto}
+.av.nophoto{background:#fff;border:1.5px dashed var(--line-strong);color:var(--ink-faint);font-size:16px}
+.cgmain{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.cgname{font-size:15.5px;font-weight:700;color:var(--brand)}
+.cgrow:hover .cgname{text-decoration:underline}
+.cgmeta{font-size:12px;color:var(--ink-faint);font-weight:500}
+.cgright{margin-left:auto;display:flex;align-items:center;gap:8px;flex:0 0 auto;max-width:46%}
+.updline{font-size:12px;font-weight:600;color:var(--good);font-style:italic;white-space:nowrap}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap}
+.pill .dot{width:7px;height:7px;border-radius:50%}
+.pill.inactive{background:#F1F3F9;color:#5A6478}.pill.inactive .dot{background:#8A93A6}
+.chev{color:var(--ink-faint);font-size:16px}
+
+/* ── Profile (live: 13px root, single-column card stack) ── */
+.cgws{font-size:13px;line-height:1.4}
+.back{display:inline-flex;align-items:center;gap:6px;background:none;border:none;color:var(--brand);font-size:13px;font-weight:700;padding:0;margin-bottom:14px}
+.hero{display:flex;align-items:center;gap:16px;margin-bottom:6px;flex-wrap:wrap}
+.hero .av{width:64px;height:64px;font-size:20px}
+.hero-l{display:flex;flex-direction:column;align-items:center;gap:6px}
+.chgphoto{font-size:11px;font-weight:700;color:var(--ink-soft);background:#fff;border:1px solid var(--line-strong);border-radius:12px;padding:3px 10px}
+.hero .nm{font-size:26px;font-weight:800;letter-spacing:-.01em}
+.hero-acts{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;padding:8px 13px;border-radius:8px;border:1px solid var(--line-strong);background:#fff;color:var(--ink-soft)}
+.btn:hover{border-color:var(--brand);color:var(--brand)}
+.btn.pri{background:var(--brand);color:#fff;border-color:var(--brand)}
+.btn.pri:hover{background:var(--brand-deep)}
+.btn.sm{padding:6px 11px;font-size:12px}
+.btn.ghost{border:none;background:none;color:var(--brand)}
+/* Auto availability-record row (replaces the live Status row — the client) */
+.recrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:10px 0 16px;font-size:12.5px;color:var(--ink-soft)}
+.recrow .ok{display:inline-flex;align-items:center;gap:6px;background:var(--good-bg);color:var(--good-tx);font-weight:800;font-size:11px;border-radius:20px;padding:3px 10px}
+.recrow .ok i{width:7px;height:7px;border-radius:50%;background:var(--good);display:inline-block}
+.recrow .btn{margin-left:auto}
+
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:15px 16px;margin-bottom:14px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;margin-bottom:14px}
+.row2 .card{margin-bottom:0}
+@media(max-width:980px){.row2{grid-template-columns:1fr}}
+.card-h{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.card-h .t{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-faint)}
+.card-h .t.btnlike{background:none;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:7px;padding:0}
+.card-h .t .cv{color:var(--brand);font-size:13px}
+.card.closed .card-h{margin-bottom:0}
+.card.closed .card-b{display:none}
+.card.closed{cursor:pointer}
+.card-h .edit{margin-left:auto;background:none;border:none;color:var(--brand);font-size:12px;font-weight:700;display:inline-flex;gap:5px;align-items:center}
+.card.closed .card-h .edit{display:none}
+.card-h .tag{font-size:9.5px;font-weight:800;background:var(--panel-head);color:var(--ink-faint);border-radius:8px;padding:2px 8px;text-transform:none;letter-spacing:.02em}
+.relpill{font-size:11px;font-weight:800;border-radius:12px;padding:2px 9px}
+.relpill.good{background:var(--good-bg);color:var(--good-tx)}
+
+/* Calendar (live) */
+.cal-top{display:flex;align-items:center;gap:8px}
+.selpill{margin-left:auto;background:var(--brand);color:#fff;border:none;border-radius:14px;font-size:10.5px;font-weight:800;letter-spacing:.04em;padding:6px 13px;text-transform:uppercase}
+.selbar{display:none;background:var(--brand-soft);border:1px solid #C6D6FE;border-radius:9px;padding:9px 13px;margin:11px 0 3px;font-size:12.5px;font-weight:600;color:var(--ink);align-items:center;gap:10px}
+.selbar.show{display:flex}
+.selbar .btn{margin-left:auto}
+.mo-nav{display:flex;align-items:center;justify-content:center;gap:14px;margin:12px 0 6px}
+.mo-nav b{font-size:15px;font-weight:800}
+.mo-nav button{width:30px;height:30px;border-radius:8px;border:1px solid var(--line-strong);background:#fff;font-size:14px;color:var(--ink-soft)}
+.legend{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;font-size:10.5px;color:var(--ink-soft);font-weight:600;margin:4px 0 10px}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.legend i{width:4px;height:11px;border-radius:2px;display:inline-block}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.cal .dow{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-faint);text-align:center;padding:5px 0}
+.cal-cell{min-height:62px;border:1px solid var(--line-soft);border-radius:8px;padding:5px 6px;font-size:11px;color:var(--ink-soft);cursor:pointer;background:#fff}
+.cal-cell:hover{border-color:var(--brand)}
+.cal-cell .d{font-weight:700;font-size:11px}
+.cal-cell.today{outline:2px solid var(--brand);outline-offset:-1px}
+.cal-cell.sel{background:var(--brand-soft);border-color:var(--brand)}
+.cal-cell.blank{background:transparent;border:none;cursor:default}
+.blk{display:flex;align-items:center;gap:5px;margin-top:4px;border-left:3px solid;border-radius:3px;padding:2px 5px;font-size:9px;font-weight:800;letter-spacing:.02em}
+.blk .tm{font-weight:600;color:var(--ink-soft);font-size:9.5px;margin-left:auto;white-space:nowrap}
+.blk.devoted{background:var(--brand-soft);border-color:var(--brand);color:var(--brand)}
+.blk.open{background:var(--good-bg);border-color:var(--good);color:var(--good-tx)}
+.blk.agency{background:var(--note-bg);border-color:var(--note);color:var(--note)}
+.blk.school{background:var(--soon-bg);border-color:var(--soon);color:var(--soon-tx)}
+.blk.childcare{background:var(--pink-bg);border-color:var(--pink);color:var(--pink)}
+.blk.vacation{background:var(--teal-bg);border-color:var(--teal);color:var(--teal)}
+.blk.sick{background:var(--crit-bg);border-color:var(--crit);color:var(--crit-tx)}
+.blk.unavailable{background:#F1F3F9;border-color:#8A93A6;color:#5A6478}
+.blk.oncall{background:#DCE6FB;border-color:var(--brand);color:var(--brand)}
+.blk.needs{background:var(--soon-bg);border-color:var(--soon);color:var(--soon-tx)}
+.cal-foot{font-size:11.5px;color:var(--ink-faint);margin-top:10px}
+
+/* Reliability (live) */
+.att-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:11px}
+.att-tile{background:var(--panel-head);border-radius:10px;padding:14px 10px;text-align:center}
+.att-tile .n{font-size:22px;font-weight:800}
+.att-tile .l{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-faint);margin-top:4px}
+.adjnote{font-size:12px;color:var(--brand);font-weight:600}
+.cohist{background:none;border:none;color:var(--ink-soft);font-size:12px;font-weight:700;padding:0;margin-top:9px}
+
+/* KV rows (Employment Summary — live) */
+.kvrow{display:flex;justify-content:space-between;gap:14px;padding:7px 2px;border-bottom:1px solid var(--line-soft);font-size:12.5px}
+.kvrow:last-of-type{border-bottom:none}
+.kvrow .l{color:var(--ink-faint);font-weight:600}
+.kvrow .v{font-weight:700;text-align:right}
+.cardfoot{font-size:11px;color:var(--ink-faint);margin-top:9px}
+
+/* Assignment Summary (the client's consolidation) */
+.asec{margin-bottom:13px}
+.asec:last-child{margin-bottom:0}
+.asec .ah{font-size:12.5px;font-weight:800;margin-bottom:5px}
+.asec li{list-style:none;font-size:12.5px;color:var(--ink-soft);padding:2px 0 2px 4px;display:flex;gap:7px;align-items:baseline}
+.asec li:before{content:"•";color:var(--ink-faint)}
+
+/* Slide-over day panel (live: 390px fixed right) */
+.scrim{position:fixed;inset:0;background:rgba(11,19,48,.22);z-index:55;display:none}
+.scrim.show{display:block}
+.sp{position:fixed;top:0;right:-410px;width:390px;max-width:95vw;height:100vh;background:#fff;box-shadow:-12px 0 40px rgba(11,19,48,.2);z-index:60;transition:right .22s ease;display:flex;flex-direction:column}
+.sp.show{right:0}
+.sp-h{padding:16px 18px;background:var(--panel-head);border-bottom:1px solid var(--line)}
+.sp-h .wd{font-size:19px;font-weight:800}
+.sp-h .sub{font-size:12px;color:var(--ink-faint);font-weight:600;margin-top:2px}
+.sp-h .x{position:absolute;top:14px;right:14px;background:none;border:none;font-size:18px;color:var(--ink-faint)}
+.sp-b{padding:14px 18px;overflow-y:auto;flex:1}
+.sp-f{display:flex;align-items:center;gap:8px;padding:12px 16px;border-top:1px solid var(--line-soft)}
+.sp-f .note{font-size:11px;color:var(--ink-faint);flex:1;line-height:1.4}
+.sprow{padding:10px 0;border-bottom:1px solid var(--line-soft)}
+.sprow .l{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-faint);display:flex;align-items:center;gap:6px}
+.sprow .src{font-size:8.5px;font-weight:800;background:var(--brand-soft);color:var(--brand);border-radius:6px;padding:1px 6px}
+.sprow .v{font-size:13.5px;font-weight:700;margin-top:4px}
+.sp-status{display:inline-block;font-size:11px;font-weight:800;border-radius:14px;padding:4px 12px;margin-bottom:6px;background:var(--brand-soft);color:var(--brand)}
+.spf{margin-bottom:13px}
+.spf>.l{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-faint);margin-bottom:6px}
+.pills{display:flex;gap:6px;flex-wrap:wrap}
+.pl{border:1px solid var(--line-strong);background:#fff;border-radius:16px;font-size:12px;font-weight:700;padding:6px 13px;color:var(--ink-soft)}
+.pl.on{background:var(--brand);border-color:var(--brand);color:#fff}
+.carrynote{background:var(--panel-head);border-radius:8px;padding:9px 11px;font-size:11.5px;color:var(--ink-soft);font-weight:600;line-height:1.45}
+
+/* Manage lists (Priority / Blocks style, reused in Edit Profile) */
+.mrow{display:flex;align-items:center;gap:9px;padding:8px 2px;border-bottom:1px solid var(--line-soft);font-size:12.5px}
+.mrow:last-of-type{border-bottom:none}
+.mrow .bdge{font-size:9.5px;font-weight:800;border-radius:8px;padding:2px 8px}
+.mrow .bdge.star{background:#FDF3D7;color:#8A6D00}
+.mrow .who{font-weight:700}
+.mrow .meta{color:var(--ink-faint);flex:1}
+.linkbtn{background:none;border:none;color:var(--brand);font-size:12px;font-weight:700;padding:3px 6px}
+.linkbtn.danger{color:var(--crit)}
+.addform{background:var(--panel-head);border:1px solid var(--line);border-radius:9px;padding:12px;margin-top:10px;display:none}
+.addform.show{display:block}
+.addform{position:relative}
+.af-x{position:absolute;top:8px;right:10px;background:none;border:none;font-size:17px;color:var(--ink-faint);cursor:pointer;padding:2px 6px}
+.af-x:hover{color:var(--ink)}
+.addform .fr{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:9px}
+.addform label{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);display:flex;flex-direction:column;gap:4px;flex:1;min-width:140px}
+
+/* Edit Profile (live: FULL-SCREEN mode) */
+.editgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+@media(max-width:1000px){.editgrid{grid-template-columns:1fr}}
+.ecard{background:#fff;border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:15px 16px}
+.ecard.w2{grid-column:1/-1}
+/* Card titles clearly outrank field labels (Chan, Jul 6 — the uppercase labels were reading louder). */
+.ecard .et{font-size:15px;font-weight:800;letter-spacing:-.01em;display:flex;align-items:baseline;gap:8px;margin-bottom:11px}
+.ecard .hint{font-size:11.5px;color:var(--ink-faint);margin-bottom:10px}
+.checks{display:flex;gap:6px;flex-wrap:wrap}
+.chk{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;border:1px solid var(--line-strong);border-radius:16px;padding:5px 11px;cursor:pointer;user-select:none;background:#fff}
+.chk.on{background:var(--brand-soft);border-color:var(--brand);color:var(--brand)}
+.otherrow{display:flex;gap:7px;margin-top:9px}
+.otherrow input{flex:1}
+.ef{display:flex;flex-direction:column;gap:4px;margin-bottom:11px}
+.ef>span{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-faint)}
+.ef>span em{font-weight:600;font-style:normal;text-transform:none;letter-spacing:0;color:var(--ink-faint)}
+.editbar{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.editbar h2{font-size:20px;font-weight:800;flex:1}
+.syncnote{font-size:11.5px;color:var(--ink-faint);font-weight:600;background:var(--panel-head);border-radius:8px;padding:8px 11px;margin-top:8px}
+
+/* Modals */
+.mwrap{position:fixed;inset:0;background:rgba(11,19,48,.5);display:none;align-items:flex-start;justify-content:center;padding:30px 16px;overflow-y:auto;z-index:70}
+.mwrap.show{display:flex}
+.modal{background:#fff;border-radius:var(--r);width:100%;max-width:680px;box-shadow:0 20px 50px rgba(0,0,0,.3)}
+.mh{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--line-soft);font-size:14.5px;font-weight:800}
+.mh button{background:none;border:none;font-size:19px;color:var(--ink-faint)}
+.mb{padding:16px 20px;max-height:64vh;overflow-y:auto}
+.mf{display:flex;justify-content:flex-end;gap:8px;padding:13px 18px;border-top:1px solid var(--line-soft)}
+.resume-prev{border:1px solid var(--line);border-radius:9px;padding:16px;background:#fff}
+.resume-prev .wm{font-size:10px;font-weight:800;letter-spacing:.2em;color:var(--brand);text-transform:uppercase;text-align:center;margin-bottom:10px}
+.resume-prev .rh{display:flex;gap:14px;align-items:center;margin-bottom:10px}
+.resume-prev .ph{width:64px;height:80px;border-radius:8px;background:var(--brand);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px}
+.resume-prev .rn{font-size:16px;font-weight:800}
+.resume-prev .rs{font-size:11px;color:var(--ink-soft);font-weight:600}
+.resume-prev .rq{font-size:11.5px;font-style:italic;color:var(--ink-soft);margin:6px 0}
+.resume-prev .rw{font-size:11.5px;color:var(--ink-soft);line-height:1.5}
+
+/* What changed drawer */
+.wc-fab{position:fixed;right:22px;bottom:22px;z-index:80;background:var(--brand);color:#fff;border:none;border-radius:24px;font-size:13px;font-weight:800;padding:12px 18px;box-shadow:0 8px 24px rgba(30,64,175,.4);display:flex;align-items:center;gap:8px}
+.wc{position:fixed;top:0;right:-440px;width:420px;max-width:94vw;height:100vh;background:#fff;box-shadow:-12px 0 40px rgba(11,19,48,.18);z-index:85;transition:right .25s ease;display:flex;flex-direction:column}
+.wc.show{right:0}
+.wc-h{padding:16px 18px;border-bottom:1px solid var(--line-soft);display:flex;align-items:center;justify-content:space-between}
+.wc-h .t{font-size:15px;font-weight:800}
+.wc-h .s{font-size:11.5px;color:var(--ink-faint);font-weight:600;margin-top:2px}
+.wc-b{padding:14px 18px;overflow-y:auto;flex:1}
+.wc-item{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:10px}
+.wc-item .t{font-size:13px;font-weight:800;display:flex;gap:8px;align-items:baseline}
+.wc-item .d{font-size:12px;color:var(--ink-soft);margin-top:4px;line-height:1.5}
+.wc-item .q{font-size:11.5px;color:var(--ink-faint);font-style:italic;margin-top:6px;border-left:3px solid var(--line-strong);padding-left:9px;line-height:1.45}
+.wc-item.ask{border-color:#F3DEB8;background:#FFFDF6}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--sidebar-dark);color:#fff;font-size:13px;font-weight:600;padding:11px 18px;border-radius:8px;z-index:95;display:none;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.hide{display:none!important}
+</style>
+</head>
+<body>
+
+<div class="pv-bar">🔍 <b>DEMO — Devoted Care · Scheduling Intelligence</b>&nbsp;· A working copy of the caregiver module from a production system built solo. All names and data are fictional. <a href="https://chanryle-cagara.vercel.app" style="color:#BFDBFE">← back to portfolio</a></div>
+
+<div class="shell">
+  <aside class="rail">
+    <div class="rail-brand"><span class="rail-logo">💙</span><div><div class="t">DEVOTED CARE</div><div class="s">Scheduling</div></div></div>
+    <a class="dim">🏠 <span>Today</span></a>
+    <a class="dim">📅 <span>Open Shifts</span><span class="bdg">14</span></a>
+    <a class="dim">🔎 <span>Find Coverage</span></a>
+    <a class="on" onclick="goRoster()">✅ <span>Caregivers</span></a>
+    <a class="dim">👥 <span>Clients</span><span class="soon">SOON</span></a>
+    <a class="dim">📝 <span>Care Note Review</span></a>
+    <a class="dim">↔️ <span>Shift Handoff</span><span class="bdg">2</span></a>
+    <a class="dim">📋 <span>Weekly Tasks</span></a>
+    <a class="dim">📁 <span>Forms &amp; Resources</span></a>
+    <a class="dim">📊 <span>KPIs / Reports</span></a>
+    <a class="dim">📖 <span>Quick Guides</span></a>
+    <a class="dim">✨ <span>AI Assistant</span></a>
+  </aside>
+
+  <main class="main">
+    <!-- ═════════ ROSTER (headerless, as live) ═════════ -->
+    <section id="vRoster">
+      <div class="searchrow">
+        <div class="search">🔍<input id="q" placeholder="Search caregiver name…" oninput="renderRoster()"></div>
+        <select id="filter" class="statussel" onchange="renderRoster()">
+          <option value="active_all">Active — All</option>
+          <option value="active_client">Active — with Client</option>
+          <option value="inactive_all">Inactive — All</option>
+          <option value="inactive_vac">Inactive — Vacation</option>
+          <option value="inactive_oa">Inactive — Other Agency</option>
+        </select>
+        <button class="btn sm" style="margin-left:auto">⚙️ Filters</button>
+      </div>
+      <div class="listhead"><span id="listLabel">Active — All</span><span class="n" id="listCount">0</span></div>
+      <div id="rows"></div>
+    </section>
+
+    <!-- ═════════ PROFILE (live copy + the client's changes) ═════════ -->
+    <section id="vProfile" class="hide cgws">
+      <!-- Page header removed on the profile too (the client: "remove all of this") -->
+      <button class="back" onclick="goRoster()">‹ All caregivers</button>
+
+      <div class="hero">
+        <div class="hero-l"><span class="av" id="pAv"></span><span class="chgphoto">Change photo</span></div>
+        <div class="nm" id="pName"></div>
+        <div class="hero-acts">
+          <button class="btn" onclick="openEdit()">✏️ Edit Profile</button>
+          <button class="btn" onclick="toast('Would dial the caregiver (tel: link) — unchanged from live.')">📞 Call</button>
+          <button class="btn" onclick="openModal('mResume')">📄 Send Resume</button>
+          <!-- Print button REMOVED (the client: Send Resume already prints) · Set status REMOVED (status feature retired) -->
+        </div>
+      </div>
+
+      <!-- Status row REPLACED by the automatic availability record (the client: status feature removed;
+           record stamps itself on every calendar save) -->
+      <div class="recrow">
+        <span class="ok"><i></i>Availability up to date</span>
+        <span id="pAvRec">Updated 5 days ago · by Admin · next update due Aug 4</span>
+        <button class="btn sm" onclick="confirmNoChange()">✓ Mark Availability as Updated</button>
+      </div>
+
+      <!-- AVAILABILITY CALENDAR — live copy -->
+      <div class="card">
+        <div class="card-h cal-top"><span class="t">Availability Calendar</span>
+          <button class="selpill" id="selBtn" onclick="toggleSelectMode()">Select days</button>
+        </div>
+        <div class="card-b">
+          <div class="selbar" id="selBar"><span id="selMsg">Tap days to select, then edit them together</span>
+            <button class="btn sm" onclick="clearSel()">Clear</button>
+            <button class="btn sm pri" id="selEditBtn" onclick="openBulk()" disabled>Edit 0 days</button>
+          </div>
+          <div class="mo-nav"><button onclick="moveMonth(-1)">‹</button><b id="moLabel">July 2026</b><button onclick="moveMonth(1)">›</button></div>
+          <div class="legend">
+            <span><i style="background:var(--brand)"></i> Devoted</span><span><i style="background:var(--good)"></i> Open</span>
+            <span><i style="background:var(--note)"></i> Other agency</span><span><i style="background:var(--soon)"></i> School</span>
+            <span><i style="background:var(--pink)"></i> Childcare</span><span><i style="background:var(--teal)"></i> Vacation</span>
+            <span><i style="background:var(--crit)"></i> Sick</span><span><i style="background:#8A93A6"></i> Unavailable</span>
+            <span><i style="background:var(--soon)"></i> Needs update</span>
+          </div>
+          <div class="cal" id="calGrid"></div>
+
+        </div>
+      </div>
+
+      <!-- AVAILABILITY VERIFICATION card REMOVED (the client: redundant — the record above updates itself;
+           the one-click confirm replaces the 5-step guided workflow) -->
+
+      <!-- RELIABILITY / ATTENDANCE — live copy (unchanged feature; the manual-adjust editor works) -->
+      <div class="card">
+        <div class="card-h"><span class="t">Reliability / Attendance</span><span class="relpill good" id="attRel">100% reliable</span>
+          <button class="edit" id="attPencil" onclick="attEdit()">✏️</button>
+        </div>
+        <div class="card-b">
+          <div class="att-grid" id="attTiles"></div>
+          <div class="adjnote" id="attAdj"></div>
+          <div style="display:flex;gap:14px;align-items:center;margin-top:9px">
+            <button class="cohist" id="attHistBtn" style="margin-top:0" onclick="attHist()">▸ Call-off history (3)</button>
+            <button class="btn sm" onclick="attIssueOpen()">+ Record Attendance Issue</button>
+          </div>
+          <div id="attHistList" class="hide" style="margin-top:8px">
+            <div class="mrow"><span class="who">Jun 30</span><span class="meta">Marta Rivers · covered by Rosa M. <span style="color:var(--ink-faint)">(logged by Sam)</span></span></div>
+            <div class="mrow"><span class="who">Jun 14</span><span class="meta">Faye Whitman · covered by Ana B. <span style="color:var(--ink-faint)">(logged by Sam)</span></span></div>
+            <div class="mrow"><span class="who">May 22</span><span class="meta">Frank Loomis · not yet covered · sick <span style="color:var(--ink-faint)">(logged by Kim)</span></span></div>
+          </div>
+          <!-- Edit mode (live: figures override AxisCare, saved as a stamped override) -->
+          <div class="addform" id="attForm">
+            <div class="fr">
+              <label>Reliability % <input id="afRel" placeholder="100" style="max-width:110px"></label>
+              <label>Call-Off With Notice <input id="af0" placeholder="2"></label>
+              <label>Last-Minute Call-Off <input id="af1" placeholder="1"></label>
+              <label>No-Show <input id="af2" placeholder="0"></label>
+              <label>Late Arrival <input id="af3" placeholder="0"></label>
+            </div>
+            <div class="fr"><label style="flex:2">Note (optional) <input id="afNote" placeholder="e.g. 2 older call-offs outside the 90-day window"></label></div>
+            <div style="display:flex;gap:8px;justify-content:flex-end">
+              <button class="btn sm ghost" onclick="attRevert()">Revert to computed</button>
+              <button class="btn sm" onclick="attCancel()">Cancel</button>
+              <button class="btn sm pri" onclick="attSave()">Save</button>
+            </div>
+          </div>
+          <!-- Record Attendance Issue — the client's sketched flow (her screenshots): issue type → date →
+               reason → reported by → Save; counts + history + reliability update automatically -->
+          <div class="addform" id="attIssue">
+            <button class="af-x" onclick="attIssueCancel()" aria-label="Close">×</button>
+            <div class="ef"><span>Issue Type</span>
+              <div class="pills" id="aiType">
+                <button class="pl on" onclick="pick2(this,'aiType')">Call-Off</button>
+                <button class="pl" onclick="pick2(this,'aiType')">Last-Minute Call-Off</button>
+                <button class="pl" onclick="pick2(this,'aiType')">No Show</button>
+                <button class="pl" onclick="pick2(this,'aiType')">Late Arrival</button>
+              </div>
+            </div>
+            <div class="fr">
+              <label>Date <input type="date" id="aiD" value="2026-07-06"></label>
+              <label>Client
+                <select id="aiC"><option>— pick client —</option><option>Faye Whitman</option><option>Frank Loomis</option><option>Marta Rivers</option><option>Eleanor Price</option></select>
+              </label>
+              <label style="flex:2">Reason (optional) <input id="aiR"></label>
+            </div>
+            <div class="fr"><label>Reported By <input value="You" disabled style="background:var(--panel-head)"></label></div>
+            <div style="display:flex;gap:8px;justify-content:flex-end">
+              <button class="btn sm pri" onclick="attIssueSave()">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Assignment Summary + Employment Summary share ONE row (Chan, Jul 6 — the full-width cards left
+           dead space on the right). Stacks on narrow screens. -->
+      <div class="row2">
+        <!-- ASSIGNMENT SUMMARY — the client's consolidation of Priority Clients · Preferences · Restrictions ·
+             Client Blocks · General Notes into ONE data-only card (sections with no data don't render) -->
+        <div class="card">
+          <div class="card-h"><span class="t">Assignment Summary</span></div>
+          <div class="card-b" id="pAssign"></div>
+        </div>
+
+        <!-- EMPLOYMENT SUMMARY — collapsible; ONLY system-generated fields (the client) -->
+        <div class="card closed" id="cEmp" onclick="if(this.classList.contains('closed'))togCard('cEmp')">
+          <div class="card-h" onclick="event.stopPropagation();togCard('cEmp')"><button class="t btnlike">Employment Summary <span class="cv" id="cvEmp">▾</span></button></div>
+          <div class="card-b">
+            <div class="kvrow"><span class="l">Hire date</span><span class="v">Mar 12, 2024</span></div>
+            <div class="kvrow"><span class="l">Length of employment</span><span class="v">2 yrs 4 mo</span></div>
+            <div class="kvrow"><span class="l">Total hours worked</span><span class="v">3,418</span></div>
+            <div class="kvrow"><span class="l">Scheduled this week</span><span class="v">32 hrs</span></div>
+            <div class="kvrow"><span class="l">Last shift worked</span><span class="v">Jul 3 · 3:30p–10:30p</span></div>
+            <div class="kvrow"><span class="l">Last client served</span><span class="v">Faye Whitman</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═════════ EDIT PROFILE — full-screen mode, exactly like live ═════════ -->
+    <section id="vEdit" class="hide cgws">
+      <div class="editbar">
+        <h2>Editing <span id="eName"></span></h2>
+        <button class="btn" onclick="closeEdit()">Cancel</button>
+        <button class="btn pri" onclick="saveEdit()">✓ Save changes</button>
+      </div>
+      <div class="editgrid">
+        <!-- NEW (the client): Employment & Work Preferences -->
+        <div class="ecard w2">
+          <div class="et">Employment &amp; Work Preferences</div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:11px">
+            <div class="ef" style="flex:1;min-width:150px"><span>Employment Status</span><select><option>Active</option><option>On Leave</option><option>Inactive</option></select></div>
+            <div class="ef" style="flex:1;min-width:150px"><span>Career years of caregiving</span><input value="12"></div>
+            <div class="ef" style="flex:1;min-width:150px"><span>Preferred weekly hours</span><input value="40"></div>
+          </div>
+          <div class="ef"><span>Preferred Shift Length</span>
+            <div class="checks"><span class="chk on" onclick="tog(this)">4 hours</span><span class="chk" onclick="tog(this)">6 hours</span><span class="chk on" onclick="tog(this)">8 hours</span><span class="chk on" onclick="tog(this)">12 hours</span><span class="chk" onclick="tog(this)">Overnight</span><span class="chk" onclick="tog(this)">24 hr / Live-in</span></div></div>
+          <div class="ef"><span>Preferred Shift</span>
+            <div class="checks"><span class="chk on" onclick="tog(this)">Morning</span><span class="chk on" onclick="tog(this)">Afternoon</span><span class="chk on" onclick="tog(this)">Evening</span><span class="chk" onclick="tog(this)">Overnight</span></div></div>
+          <div class="ef"><span>Transportation</span>
+            <div class="checks"><span class="chk on" onclick="tog(this)">Has Own Vehicle</span><span class="chk on" onclick="tog(this)">Can Drive</span><span class="chk on" onclick="tog(this)">Can Transport Clients</span></div></div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap">
+            <div class="ef" style="flex:2;min-width:220px"><span>Preferred Service Areas</span><input value="Camarillo, Oxnard, Ventura"></div>
+            <div class="ef" style="flex:1;min-width:150px"><span>Maximum Travel Distance (miles)</span><input value="20" style="max-width:110px"></div>
+          </div>
+        </div>
+
+        <!-- The 5 resume tag sections — UNCHANGED from live (they build the AI resume) -->
+        <div class="ecard" id="ecPersonality"></div>
+        <div class="ecard" id="ecStyle"></div>
+        <div class="ecard" id="ecExperience"></div>
+        <div class="ecard" id="ecServices"></div>
+        <div class="ecard" id="ecFeedback"></div>
+
+        <!-- Assignments & Notes (single source of truth — feeds the Assignment Summary card) -->
+        <div class="ecard w2">
+          <div class="et">Assignments &amp; Notes</div>
+          <div id="eAssign"></div>
+          <div class="ef" style="margin-top:8px"><span>📝 General Notes</span><textarea rows="2" id="eNotes" placeholder="Add general notes…"></textarea></div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- ═════════ DAY PANEL (slide-over, live copy — Repeat section removed per the client) ═════════ -->
+<div class="scrim" id="scrim" onclick="closePanel()"></div>
+<div class="sp" id="sp">
+  <div class="sp-h" style="position:relative">
+    <div class="wd" id="spTitle">—</div>
+    <div class="sub" id="spSub">—</div>
+    <button class="x" onclick="closePanel()">×</button>
+  </div>
+  <!-- VIEW state -->
+  <div class="sp-b" id="spView">
+    <span class="sp-status" id="spStatus">—</span>
+    <div class="sprow"><div class="l">Devoted shift <span class="src">AXISCARE</span></div><div class="v" id="spDevoted">None</div></div>
+    <div class="sprow"><div class="l">Other agency <span class="src">RULE</span></div><div class="v" id="spAgency">None</div></div>
+    <div class="sprow"><div class="l">Open availability <span class="src">RULE</span></div><div class="v" id="spOpen">None</div></div>
+    <div class="sprow"><div class="l">Notes</div><div class="v" id="spNotes">None</div></div>
+    <!-- "Repeat pattern" row removed (the client) — availability carries over automatically -->
+    <div style="font-size:11.5px;color:var(--ink-faint);margin-top:10px">🕐 Last updated <span id="spUpd">—</span></div>
+  </div>
+  <!-- EDIT state -->
+  <div class="sp-b hide" id="spEdit">
+    <div class="spf"><div class="l">Availability</div>
+      <select id="edStatus" style="width:100%" onchange="edStatusChanged()">
+        <option>Open</option><option>On Call</option><option>Unavailable</option><option>Devoted Shift</option><option>Other Agency</option><option>Vacation</option><option>Sick</option><option>School</option><option>Childcare</option><option>Appointment</option>
+      </select>
+    </div>
+    <div class="spf" id="edWinWrap"><div class="l">Time window</div>
+      <div class="pills" id="edWin">
+        <button class="pl on" onclick="pick(this,'edWin')">Anytime</button><button class="pl" onclick="pick(this,'edWin')">Morning</button><button class="pl" onclick="pick(this,'edWin')">Afternoon</button><button class="pl" onclick="pick(this,'edWin')">Evening</button><button class="pl" onclick="pick(this,'edWin')">Overnight</button><button class="pl" onclick="pick(this,'edWin')">Custom</button>
+      </div>
+      <div id="edCustom" class="hide" style="display:flex;gap:8px;align-items:center;margin-top:8px"><input type="time" value="09:00"> – <input type="time" value="17:00"></div>
+    </div>
+    <div class="spf" id="edThroughWrap"><div class="l">Also apply through</div>
+      <input type="date" id="edThrough">
+    </div>
+    <div class="spf"><div class="l">Notes</div>
+      <textarea rows="2" style="width:100%" placeholder="e.g. Childcare until 3 PM · Doctor appointment · Open for extra hours"></textarea>
+    </div>
+    <!-- REPEAT section (None/Weekly/Biweekly/Monthly/Weekdays/Custom) REMOVED — the client: availability
+         carries over automatically; a change applies to its date(s) only, then the regular schedule resumes -->
+  </div>
+  <div class="sp-f">
+    <span class="note"></span>
+    <button class="btn ghost hide" id="spClear" onclick="clearOverride()">Clear</button>
+    <button class="btn" id="spClose" onclick="closePanel()">Close</button>
+    <button class="btn pri" id="spAction" onclick="panelAction()">✏️</button>
+  </div>
+</div>
+
+<!-- ═════════ SEND RESUME (live copy — Print lives here) ═════════ -->
+<div class="mwrap" id="mResume" onclick="if(event.target===this)closeModal('mResume')">
+  <div class="modal">
+    <div class="mh"><span>Send Resume — <span id="rName"></span></span><button onclick="closeModal('mResume')">×</button></div>
+    <div class="mb">
+      <p style="font-size:12.5px;color:var(--ink-soft);margin-bottom:10px">Auto-generated from this profile by Devo. Choose how to share.</p>
+      <div class="ef" style="max-width:340px"><span>Tailor “Why we recommend” to a client</span>
+        <select><option>General — no specific client</option><option>Faye Whitman</option><option>Frank Loomis</option><option>Eleanor Price</option></select>
+      </div>
+      <div class="resume-prev">
+        <div class="wm">💙 Meet Your Caregiver</div>
+        <div class="rh"><div class="ph" id="rInit">AG</div><div><div class="rn" id="rName2">—</div><div class="rs">12+ Years Professional Caregiving Experience · Devoted Care Since 2024</div><div class="rq">“Caring for people is not my job — it's my calling.”</div></div></div>
+        <div class="rw"><b>Why We Recommend:</b> Reliable, warm, and experienced with memory care — families consistently ask for her by name. <span style="color:var(--ink-faint)">· Services · Experience With · Certifications &amp; Training · Languages</span></div>
+      </div>
+    </div>
+    <div class="mf">
+      <button class="btn" onclick="closeModal('mResume')">Cancel</button>
+      <button class="btn" onclick="toast('Print view opens — print from here (the standalone Print button was removed).')">🖨️ Print Resume</button>
+      <button class="btn" onclick="toast('Choose \'Save as PDF\' in the print dialog.')">⬇️ Download PDF</button>
+      <button class="btn pri" onclick="toast('Opens an email draft with the resume attached.')">✉️ Email Resume</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ══════════ sample data (fictional except the layout — Maria mirrors the live profile) ══════════ */
+const CGS = [
+  { id:1, name:"Maria Santos", color:"#1E40AF", city:"Port Hueneme", langs:"Spanish", driver:true, skills:"Alzheimer's, Hoyer Lift, Hospice", photo:true,
+    bucket:"active", withClient:true, upd:"Updated 5 days ago · by Admin",
+    assign:{ pri:[], pref:[], res:["No male clients"], blk:[], notes:"" } },
+  { id:2, name:"Ana Bautista", color:"#0E7490", city:"Oxnard", langs:"English", driver:true, skills:"Hospice", photo:true,
+    bucket:"active", withClient:false, upd:"Updated 2 days ago · by Sam",
+    assign:{ pri:[], pref:["8–12 hour shifts","Companion care"], res:[], blk:[], notes:"" } },
+  { id:3, name:"Carmen Dizon", color:"#7C3AED", city:"Ventura", langs:"English/Tagalog", driver:false, skills:"Dementia care", photo:true,
+    bucket:"active", withClient:true, upd:"Updated today · by Sam",
+    assign:{ pri:["Frank Loomis","Mary Johnson"], pref:["8–12 hour shifts","Companion care"], res:["No Cats"], blk:["Robert Smith"], notes:"Works with another agency." } },
+  { id:4, name:"Grace Villanueva", color:"#B45309", city:"Camarillo", langs:"English/Spanish", driver:true, skills:"CNA", photo:false,
+    bucket:"active", withClient:true, upd:"Updated 8 days ago · by Sam",
+    assign:{ pri:["Eleanor Price"], pref:["Weekend shifts"], res:[], blk:[], notes:"" } },
+  { id:5, name:"Rosa Mendoza", color:"#15803D", city:"Oxnard", langs:"Spanish", driver:true, skills:"Companion care", photo:true,
+    bucket:"inactive_vac", withClient:false, pillTxt:"Inactive · Vacation until Jul 20",
+    assign:{ pri:[], pref:["Short shifts"], res:[], blk:[], notes:"" } },
+  { id:6, name:"Elena Ramos", color:"#DC2626", city:"Thousand Oaks", langs:"English", driver:false, skills:"Hospice", photo:true,
+    bucket:"inactive_oa", withClient:false, pillTxt:"Inactive · Other agency until Aug 1",
+    assign:{ pri:[], pref:[], res:[], blk:[], notes:"On assignment with another agency through July." } },
+];
+const FILTER_LABEL = { active_all:"Active — All", active_client:"Active — with Client", inactive_all:"Inactive — All", inactive_vac:"Inactive — Vacation", inactive_oa:"Inactive — Other Agency" };
+let current = CGS[0];
+
+/* ══════════ roster ══════════ */
+function initials(n){ return n.split(" ").map(w=>w[0]).slice(0,2).join(""); }
+function match(c, f){
+  if (f==="active_all") return c.bucket==="active";
+  if (f==="active_client") return c.bucket==="active" && c.withClient;
+  if (f==="inactive_all") return c.bucket.startsWith("inactive");
+  return c.bucket===f;
+}
+function renderRoster(){
+  const q = document.getElementById("q").value.trim().toLowerCase();
+  const f = document.getElementById("filter").value;
+  const list = CGS.filter(c => q ? c.name.toLowerCase().includes(q) : match(c, f));
+  document.getElementById("listLabel").textContent = q ? "Search results — all caregivers" : FILTER_LABEL[f];
+  document.getElementById("listCount").textContent = list.length;
+  document.getElementById("rows").innerHTML = list.map(c => `
+    <div class="cgrow" onclick="goProfile(${c.id})">
+      ${c.photo ? `<span class="av" style="background:${c.color}">${initials(c.name)}</span>` : `<span class="av nophoto" title="No photo yet">📷</span>`}
+      <div class="cgmain"><span class="cgname">${c.name}</span><span class="cgmeta">${c.city} · ${c.langs} · ${c.driver ? "Driver" : "No driver"} · ${c.skills}</span></div>
+      <div class="cgright">${c.bucket==="active" ? `<span class="updline">✓ ${c.upd}</span>` : `<span class="pill inactive"><span class="dot"></span>${c.pillTxt}</span>`}</div>
+      <span class="chev">›</span>
+    </div>`).join("");
+}
+
+/* ══════════ profile ══════════ */
+const AS_SECTIONS = [ ["pri","⭐ Priority Clients"], ["pref","👍 Assignment Preferences"], ["res","🚫 Assignment Restrictions"], ["blk","🚫 Blocked Clients"] ];
+function goProfile(id){
+  current = CGS.find(c=>c.id===id) || CGS[0];
+  show("vProfile");
+  document.getElementById("pAv").outerHTML = current.photo
+    ? `<span class="av" id="pAv" style="background:${current.color};width:64px;height:64px;font-size:20px">${initials(current.name)}</span>`
+    : `<span class="av nophoto" id="pAv" style="width:64px;height:64px;font-size:22px">📷</span>`;
+  document.getElementById("pName").textContent = current.name;
+  document.getElementById("pAvRec").textContent = current.upd ? current.upd.replace("Updated","Updated") + " · next update due Aug 4" : "—";
+  document.getElementById("eName").textContent = current.name;
+  document.getElementById("rName").textContent = current.name;
+  document.getElementById("rName2").textContent = current.name;
+  document.getElementById("rInit").textContent = initials(current.name);
+  refreshAssignCard();
+  renderCal();
+  window.scrollTo(0,0);
+}
+function goRoster(){ show("vRoster"); renderRoster(); }
+function show(id){ ["vRoster","vProfile","vEdit"].forEach(v=>document.getElementById(v).classList.toggle("hide", v!==id)); }
+function togCard(id){
+  const c = document.getElementById(id);
+  c.classList.toggle("closed");
+  document.getElementById("cv"+id.slice(1)).textContent = c.classList.contains("closed") ? "▾" : "▴";
+}
+function refreshAssignCard(){
+  const a = current.assign;
+  let html = AS_SECTIONS.filter(([k]) => a[k].length).map(([k, label]) =>
+    `<div class="asec"><div class="ah">${label}</div>${a[k].map(x=>`<li>${x}</li>`).join("")}</div>`).join("");
+  if (a.notes) html += `<div class="asec"><div class="ah">📝 General Notes</div><li>${a.notes}</li></div>`;
+  if (!html) html = `<div style="font-size:12.5px;color:var(--ink-faint);font-weight:600">Nothing on file.</div>`;
+  document.getElementById("pAssign").innerHTML = html;
+}
+
+/* ══════════ calendar — live data model (Maria's real July shape) + carry-over ══════════ */
+/* base weekly pattern (carries over every month): Sun=Unavailable, Mon–Fri=Devoted booking 3:30p–10:30p (AxisCare), Sat=none */
+const MONTHS = [{y:2026,m:6,label:"July 2026"},{y:2026,m:7,label:"August 2026"}];
+let moIdx = 0;
+/* per-date overrides: July vacation 1–4, unavailable Sats/Suns, needs-update 11, Fri different time */
+const JULY = {}; for(let d=1;d<=4;d++) JULY[d]={st:"vacation"};
+[5,12,19,26,18,25].forEach(d=>JULY[d]={st:"unavailable"});
+JULY[11]={st:"needs"};
+let overrides = { 0:{...JULY}, 1:{} }; // per month-index; August empty = pure carry-over
+const bookings = (mi, d, dow) => { // AxisCare Devoted bookings — weekdays, July + August (carry-over demo)
+  if (dow>=1 && dow<=5) return { st:"devoted", tm: dow===5 ? "2:30p–10:30p" : "3:30p–10:30p", who:"Faye Whitman" };
+  return null;
+};
+const CHIP = { devoted:"DEVOTED", open:"OPEN", oncall:"ON CALL", agency:"OTHER AGENCY", school:"SCHOOL", childcare:"CHILDCARE", vacation:"VACATION", sick:"SICK", unavailable:"UNAVAILABLE", needs:"NEEDS UPDATE", appointment:"APPOINTMENT" };
+const ST_KEY = { "Open":"open","On Call":"oncall","Unavailable":"unavailable","Devoted Shift":"devoted","Other Agency":"agency","Vacation":"vacation","Sick":"sick","School":"school","Childcare":"childcare","Appointment":"appointment" };
+let selectMode = false, selected = new Set();
+
+function dayInfo(mi, d){
+  const {y,m} = MONTHS[mi];
+  const dow = new Date(y, m, d).getDay();
+  const ov = overrides[mi][d];
+  if (ov) return { ...ov, ov:true };
+  const bk = bookings(mi, d, dow);
+  if (bk) return bk;
+  return null; // blank day — unconfirmed
+}
+function renderCal(){
+  const {y,m,label} = MONTHS[moIdx];
+  document.getElementById("moLabel").textContent = label;
+  const first = new Date(y, m, 1).getDay();
+  const days = new Date(y, m+1, 0).getDate();
+  let cells = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map(d=>`<div class="dow">${d}</div>`);
+  for (let i=0;i<first;i++) cells.push(`<div class="cal-cell blank"></div>`);
+  for (let d=1;d<=days;d++){
+    const inf = dayInfo(moIdx,d);
+    const today = (moIdx===0 && d===6);
+    const sel = selected.has(moIdx+"-"+d);
+    let blocks = "";
+    if (inf) blocks = `<div class="blk ${inf.st}">${CHIP[inf.st]}${inf.tm?`<span class="tm">${inf.tm}</span>`:""}</div>`;
+    else blocks = `<div class="blk needs">NEEDS UPDATE</div>`;
+    cells.push(`<div class="cal-cell ${today?"today":""} ${sel?"sel":""}" onclick="dayClick(${d})"><span class="d">${d}</span>${blocks}</div>`);
+  }
+  document.getElementById("calGrid").innerHTML = cells.join("");
+}
+function moveMonth(dir){ moIdx = Math.max(0, Math.min(MONTHS.length-1, moIdx+dir)); clearSel(); renderCal(); }
+
+/* select-days mode (live) */
+function toggleSelectMode(){
+  selectMode = !selectMode;
+  document.getElementById("selBtn").textContent = selectMode ? "Done" : "Select days";
+  document.getElementById("selBar").classList.toggle("show", selectMode);
+  if (!selectMode) { selected.clear(); renderCal(); }
+  updateSelBar();
+}
+function clearSel(){ selected.clear(); renderCal(); updateSelBar(); }
+function updateSelBar(){
+  const n = selected.size;
+  document.getElementById("selMsg").textContent = n ? `${n} day${n===1?"":"s"} selected` : "Tap days to select, then edit them together";
+  const b = document.getElementById("selEditBtn");
+  b.textContent = `Edit ${n} day${n===1?"":"s"}`; b.disabled = !n;
+}
+function dayClick(d){
+  if (selectMode){
+    const k = moIdx+"-"+d;
+    selected.has(k) ? selected.delete(k) : selected.add(k);
+    renderCal(); updateSelBar(); return;
+  }
+  openDay(d);
+}
+
+/* ══════════ day panel (live: view for days with data; straight to edit for blank days) ══════════ */
+let panelDay = null, bulk = false;
+const fmtDay = (d) => { const {y,m}=MONTHS[moIdx]; const dt=new Date(y,m,d); return [dt.toLocaleDateString("en-US",{weekday:"long"}), dt.toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"})]; };
+function openDay(d){
+  panelDay = d; bulk = false;
+  const inf = dayInfo(moIdx,d);
+  const [wd, full] = fmtDay(d);
+  document.getElementById("spTitle").textContent = wd;
+  document.getElementById("spSub").textContent = `${full} · ${current.name}`;
+  if (inf && inf.st !== "needs"){ // VIEW state (live: unconfirmed days jump straight to edit)
+    document.getElementById("spStatus").textContent = CHIP[inf.st].charAt(0)+CHIP[inf.st].slice(1).toLowerCase();
+    document.getElementById("spDevoted").textContent = inf.st==="devoted" ? `${inf.who??"Faye Whitman"} · ${inf.tm}` : "None";
+    document.getElementById("spAgency").textContent = inf.st==="agency" ? (inf.tm||"All day") : "None";
+    document.getElementById("spOpen").textContent = inf.st==="open" ? (inf.tm||"Anytime") : (inf.st==="vacation"?"Vacation":inf.st==="unavailable"?"Marked unavailable":"None");
+    document.getElementById("spNotes").textContent = inf.note || "None";
+    document.getElementById("spUpd").textContent = inf.ov ? "Jul 6, 2026 1:10 AM PT by You" : "—";
+    setPanelMode("view");
+  } else { // blank/unconfirmed → straight to EDIT (live behavior)
+    setPanelMode("edit");
+  }
+  document.getElementById("edThroughWrap").style.display = "";
+  document.getElementById("edThrough").value = "";
+  document.getElementById("sp").classList.add("show");
+  document.getElementById("scrim").classList.add("show");
+}
+function openBulk(){
+  if (!selected.size) return;
+  bulk = true; panelDay = null;
+  document.getElementById("edThroughWrap").style.display = "none";
+  document.getElementById("spTitle").textContent = `${selected.size} days selected`;
+  document.getElementById("spSub").textContent = `Editing together · ${current.name}`;
+  setPanelMode("edit");
+  document.getElementById("sp").classList.add("show");
+  document.getElementById("scrim").classList.add("show");
+}
+function setPanelMode(mode){
+  document.getElementById("spView").classList.toggle("hide", mode!=="view");
+  document.getElementById("spEdit").classList.toggle("hide", mode!=="edit");
+  document.getElementById("spAction").textContent = mode==="view" ? "✏️" : "✓ Save";
+  document.getElementById("spClear").classList.toggle("hide", mode!=="edit");
+}
+function panelAction(){
+  if (!document.getElementById("spEdit").classList.contains("hide")){ saveDay(); return; }
+  setPanelMode("edit");
+}
+function saveDay(){
+  const stTxt = document.getElementById("edStatus").value;
+  const st = ST_KEY[stTxt] || "open";
+  const win = document.querySelector("#edWin .pl.on")?.textContent || "Anytime";
+  const tm = st==="open"||st==="oncall" ? (win==="Anytime"?"":win) : "";
+  const entry = { st, tm, ov:true };
+  if (bulk){
+    for (const k of selected){ const d = Number(k.split("-")[1]); overrides[moIdx][d] = {...entry}; }
+    toast(`Updated ${selected.size} days — availability record stamped automatically.`);
+    toggleSelectMode();
+  } else {
+    // Single date — or a date RANGE when "Also apply through" is set (the client: single date or a range).
+    const thru = document.getElementById("edThrough").value;
+    let end = panelDay;
+    if (thru){ const td = new Date(thru + "T12:00"); const {y,m} = MONTHS[moIdx]; if (td.getFullYear()===y && td.getMonth()===m) end = Math.max(panelDay, td.getDate()); }
+    for (let d = panelDay; d <= end; d++) overrides[moIdx][d] = {...entry};
+    toast(end > panelDay
+      ? `Updated ${end - panelDay + 1} days — the regular schedule resumes automatically after.`
+      : "Availability updated — record stamped automatically (no separate verify step).");
+  }
+  stamp("You");
+  closePanel(); renderCal();
+}
+function clearOverride(){
+  if (bulk){ for (const k of selected){ delete overrides[moIdx][Number(k.split("-")[1])]; } toggleSelectMode(); }
+  else if (panelDay) delete overrides[moIdx][panelDay];
+  toast("Override cleared — reverts to the regular schedule / booking.");
+  stamp("You");
+  closePanel(); renderCal();
+}
+function closePanel(){ document.getElementById("sp").classList.remove("show"); document.getElementById("scrim").classList.remove("show"); }
+function edStatusChanged(){
+  const off = ["Unavailable","Vacation","Sick","Other Agency","Devoted Shift","Appointment"].includes(document.getElementById("edStatus").value);
+  document.getElementById("edWinWrap").style.display = off ? "none" : "";
+}
+function pick(el, groupId){
+  [...document.querySelectorAll("#"+groupId+" .pl")].forEach(p=>p.classList.remove("on"));
+  el.classList.add("on");
+  document.getElementById("edCustom").classList.toggle("hide", el.textContent!=="Custom");
+}
+function confirmNoChange(){ stamp("You"); toast("Availability marked as updated — by You, today. Use this after contacting the caregiver when nothing changed."); }
+function stamp(who){ document.getElementById("pAvRec").textContent = `Updated today · by ${who} · next update due Aug 6`; }
+
+/* ══════════ Edit Profile (full-screen, live) ══════════ */
+const RESUME_TAGS = [
+  ["ecPersonality","Personality","How the caregiver comes across.",["Compassionate","Patient","Reliable","Warm","Cheerful","Calm","Attentive","Gentle","Positive","Dependable","Energetic","Flexible"],["Compassionate","Patient","Reliable"]],
+  ["ecStyle","Caregiving Style","How they approach care.",["Safety-focused","Hands-on","Encourages independence","Great listener","Comfort-focused","Takes initiative","Promotes dignity","Routine-oriented"],["Safety-focused","Great listener"]],
+  ["ecExperience","Experience With","Conditions & situations they have cared for.",["Dementia","Alzheimer's","Parkinson's","Stroke Recovery","Hospice","Fall Prevention","Hoyer Lift","Companion Care","Incontinence Care"],["Alzheimer's","Hoyer Lift","Hospice"]],
+  ["ecServices","Services Provided","Hands-on services they perform.",["Personal Care","Bathing","Grooming","Meal Preparation","Medication Reminders","Light Housekeeping","Transportation","Companionship","Transfers"],["Personal Care","Meal Preparation","Companionship"]],
+  ["ecFeedback","Family Feedback / Compliments","What families have said about them.",["Very dependable","Compassionate","Excellent communication","Calm presence","Goes above and beyond","Family requested caregiver again","Great with dementia clients"],["Very dependable","Calm presence"]],
+];
+function renderResumeTags(){
+  // No guide lines, no "N selected" counters (the client/Chan, Jul 6) — just the title and the chips.
+  for (const [id,t,hint,opts,on] of RESUME_TAGS){
+    const el = document.getElementById(id);
+    el.innerHTML = `<div class="et">${t}</div>
+      <div class="checks">${opts.map(o=>`<span class="chk ${on.includes(o)?"on":""}" onclick="tog(this)">${o}</span>`).join("")}</div>
+      <div class="otherrow"><input placeholder="Other…"><button class="btn sm" onclick="addOther('${id}',this)">Add</button></div>`;
+  }
+}
+function addOther(id, btn){
+  const inp = btn.previousElementSibling; const v = inp.value.trim(); if (!v) return;
+  const chip = document.createElement("span"); chip.className="chk on"; chip.textContent=v; chip.onclick=function(){ tog(this); };
+  btn.parentElement.previousElementSibling.appendChild(chip); inp.value="";
+}
+function renderEditAssign(){
+  const a = current.assign;
+  document.getElementById("eAssign").innerHTML = AS_SECTIONS.map(([k, label]) => `
+    <div class="ef"><span>${label}</span>
+      <div class="checks">
+        ${a[k].map((x,i)=>`<span class="chk on" onclick="rmTag('${k}',${i})">${x} <b style="margin-left:2px">×</b></span>`).join("")}
+        <input placeholder="add…" style="max-width:150px;padding:6px 11px;border-radius:16px;font-size:12px" onkeydown="if(event.key==='Enter'){addTag('${k}',this)}">
+      </div>
+    </div>`).join("");
+}
+function rmTag(k,i){ current.assign[k].splice(i,1); renderEditAssign(); refreshAssignCard(); }
+function addTag(k,el){ const v=el.value.trim(); if(!v) return; current.assign[k].push(v); el.value=""; renderEditAssign(); refreshAssignCard(); }
+function openEdit(){ show("vEdit"); renderResumeTags(); renderEditAssign(); document.getElementById("eNotes").value = current.assign.notes; window.scrollTo(0,0); }
+function closeEdit(){ show("vProfile"); window.scrollTo(0,0); }
+function saveEdit(){
+  current.assign.notes = document.getElementById("eNotes").value.trim();
+  refreshAssignCard();
+  show("vProfile"); window.scrollTo(0,0);
+  toast("Profile updated. — recorded who and when, automatically.");
+}
+
+/* ══════════ Reliability / Attendance — live manual-adjust editor ══════════ */
+const ATT_BASE = { rel:"100", tiles:[2,1,0,0], adj:{by:"Sam", date:"Jun 30", note:"Call off Month of May - Marta Rivers (Client)"} };
+let ATT = JSON.parse(JSON.stringify(ATT_BASE));
+const ATT_LABELS = ["Call-Off With Notice","Last-Minute Call-Off","No-Show","Late Arrival"];
+function renderAtt(){
+  document.getElementById("attTiles").innerHTML = ATT.tiles.map((n,i)=>`<div class="att-tile"><div class="n">${n}</div><div class="l">${ATT_LABELS[i]}</div></div>`).join("");
+  document.getElementById("attRel").textContent = ATT.rel + "% reliable";
+  document.getElementById("attAdj").innerHTML = ATT.adj ? `✎ Manually adjusted by ${ATT.adj.by} · ${ATT.adj.date} — “${ATT.adj.note}”` : "";
+}
+function attEdit(){
+  const f = document.getElementById("attForm");
+  f.classList.toggle("show");
+  if (f.classList.contains("show")){
+    document.getElementById("afRel").placeholder = ATT.rel;
+    ATT.tiles.forEach((n,i)=>document.getElementById("af"+i).placeholder = n);
+  }
+}
+function attCancel(){ document.getElementById("attForm").classList.remove("show"); }
+function attSave(){
+  const rel = document.getElementById("afRel").value.trim();
+  if (rel) ATT.rel = rel;
+  ATT.tiles = ATT.tiles.map((n,i)=>{ const v = document.getElementById("af"+i).value.trim(); return v==="" ? n : Number(v); });
+  const note = document.getElementById("afNote").value.trim();
+  ATT.adj = { by:"You", date:"Jul 6", note: note || (ATT.adj ? ATT.adj.note : "") };
+  ["afRel","af0","af1","af2","af3","afNote"].forEach(id=>document.getElementById(id).value="");
+  attCancel(); renderAtt();
+  toast("Saved — hand-set figures win; the rest stay live.");
+}
+function attRevert(){
+  ATT = JSON.parse(JSON.stringify(ATT_BASE)); ATT.adj = null;
+  ["afRel","af0","af1","af2","af3","afNote"].forEach(id=>document.getElementById(id).value="");
+  attCancel(); renderAtt();
+  toast("Reverted — all figures back to the computed AxisCare values.");
+}
+/* Record Attendance Issue — the client's flow: pick type + date (+ reason) → Save → the right count bumps,
+   history gets the row, reliability recalculates. */
+function pick2(el, groupId){ [...document.querySelectorAll("#"+groupId+" .pl")].forEach(p=>p.classList.remove("on")); el.classList.add("on"); }
+function attIssueOpen(){ document.getElementById("attIssue").classList.add("show"); document.getElementById("attForm").classList.remove("show"); }
+function attIssueCancel(){ document.getElementById("attIssue").classList.remove("show"); }
+function attIssueSave(){
+  const type = document.querySelector("#aiType .pl.on").textContent;
+  const d = document.getElementById("aiD").value, c = document.getElementById("aiC").value, r = document.getElementById("aiR").value.trim();
+  if (!d || c === "— pick client —") { toast("Pick a date and client first."); return; }
+  const idx = { "Call-Off":0, "Last-Minute Call-Off":1, "No Show":2, "Late Arrival":3 }[type];
+  ATT.tiles[idx] += 1;
+  const dt = new Date(d + "T12:00").toLocaleDateString("en-US",{month:"short",day:"numeric"});
+  const row = document.createElement("div"); row.className = "mrow";
+  row.innerHTML = `<span class="who">${dt}</span><span class="meta">${c} · ${type.toLowerCase()}${r?` · ${r}`:""} <span style="color:var(--ink-faint)">(reported by You)</span></span>`;
+  const list = document.getElementById("attHistList"); list.appendChild(row);
+  document.getElementById("attHistBtn").textContent = (list.classList.contains("hide")?"▸":"▾") + ` Call-off history (${list.children.length})`;
+  if (idx <= 1) ATT.rel = String(Math.max(0, Number(ATT.rel) - 3));
+  renderAtt(); attIssueCancel();
+  document.getElementById("aiR").value = "";
+  toast(type + " recorded — count is now " + ATT.tiles[idx] + ", attendance history updated, reliability recalculated.");
+}
+function attHist(){
+  const l = document.getElementById("attHistList");
+  l.classList.toggle("hide");
+  document.getElementById("attHistBtn").textContent = (l.classList.contains("hide") ? "▸" : "▾") + " Call-off history (" + l.children.length + ")";
+}
+
+/* ══════════ misc ══════════ */
+function openModal(id){ document.getElementById(id).classList.add("show"); }
+function closeModal(id){ document.getElementById(id).classList.remove("show"); }
+function tog(el){ el.classList.toggle("on"); }
+let toastT;
+function toast(m){ const t=document.getElementById("toast"); t.textContent=m; t.style.display="block"; clearTimeout(toastT); toastT=setTimeout(()=>t.style.display="none", 3400); }
+
+
+
+renderRoster();
+renderAtt();
+</script>
+</body>
+</html>
