@@ -1,0 +1,293 @@
+<!-- SHELL TEMPLATE — every demo page copies this structure exactly.
+     Change ONLY: <title>, the `active` class on one nav link, and the <main> content.
+     impeccable-disable overused-font side-tab — exact replica of production design canon (Inter + left status rail are LOCKED in the source system). -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Find Coverage — Devoted Shift Demo</title>
+<link rel="stylesheet" href="./styles.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%231E40AF%27/%3E%3Ctext x=%2716%27 y=%2722%27 font-family=%27Arial%27 font-size=%2713%27 font-weight=%27bold%27 fill=%27white%27 text-anchor=%27middle%27%3EDS%3C/text%3E%3C/svg%3E">
+<style>
+/* Find Coverage — module styles on top of the shared foundation */
+.cov-grid { display: grid; gap: 12px; grid-template-columns: 2fr 1fr 1fr 1fr; }
+.flab { display: block; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 5px; }
+.rlab { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); }
+.recent-chip { border: 1px solid var(--line-strong); border-radius: 99px; padding: 4px 13px; font-weight: 600; font-size: 13px; color: var(--brand); background: var(--card); }
+.recent-chip:hover { border-color: var(--brand); background: var(--brand-soft); }
+.cov-err { color: var(--crit); font-weight: 600; }
+
+/* Ranked list — equal-size rows, rank circle, grade chip, expandable breakdown */
+.cov-item { padding: 0 14px 0 0; }
+.cov-item.leftbar { padding-left: 11px; }
+.cov-row { display: flex; align-items: center; gap: 12px; width: 100%; padding: 11px 0; text-align: left; }
+.cov-row:hover .cov-name { color: var(--brand); }
+.cov-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.cov-name { font-weight: 700; font-size: 13px; }
+.cov-why { color: var(--ink-soft); font-size: 13px; }
+.cov-caret { color: var(--ink-faint); font-size: 12px; transition: transform .15s; flex: none; }
+.cov-item.open .cov-caret { transform: rotate(90deg); }
+.cov-detail { margin: 0 0 12px 38px; background: var(--surface-2); border: 1px solid var(--line-soft); border-radius: var(--radius-sm); padding: 10px 12px; display: grid; gap: 7px; }
+.cov-detail[hidden] { display: none; }
+.cov-dim { display: grid; grid-template-columns: 118px 1fr; gap: 10px; font-size: 13px; }
+.cov-dim-l { color: var(--ink-soft); font-weight: 700; font-size: 11px; letter-spacing: .05em; text-transform: uppercase; padding-top: 1px; }
+.cov-promise { padding: 10px 14px; border-top: 1px solid var(--line-soft); color: var(--ink-soft); font-size: 13px; text-align: center; }
+
+@media (max-width: 900px) {
+  .cov-grid { grid-template-columns: 1fr 1fr; }
+  .cov-grid > .span2 { grid-column: span 2; }
+}
+</style>
+</head>
+<body>
+<div class="demo-note"><b>Interactive demo.</b> Every name, client, and number on this page is fictional. Built as a sanitized copy of a production home-care operations platform.</div>
+<div class="app">
+  <aside class="rail">
+    <a class="rail-brand" href="./index.html">
+      <span class="logo">DS</span>
+      <span><span class="name">Devoted Shift</span><br><span class="sub">Scheduling Intelligence</span></span>
+    </a>
+    <nav class="nav">
+      <a href="./index.html"><span class="ico">✦</span> Devo</a>
+      <a href="./open-shifts.html"><span class="ico">▦</span> Open Shifts <span class="pill">5</span></a>
+      <a href="./find-coverage.html" class="active"><span class="ico">◎</span> Find Coverage</a>
+      <a href="./caregivers.html"><span class="ico">☺</span> Caregivers</a>
+      <a href="./clients.html"><span class="ico">⌂</span> Clients <span class="soon">SOON</span></a>
+      <a href="./notes-review.html"><span class="ico">✎</span> Care Note Review <span class="pill">2</span></a>
+      <a href="./handoffs.html"><span class="ico">⇄</span> Shift Handoff</a>
+      <a href="./weekly-tasks.html"><span class="ico">☑</span> Weekly Tasks</a>
+      <a href="./forms.html"><span class="ico">🗎</span> Forms &amp; Resources <span class="soon">SOON</span></a>
+      <a href="./reports.html"><span class="ico">▤</span> KPIs / Reports</a>
+      <a href="./guides.html"><span class="ico">?</span> Quick Guides <span class="soon">SOON</span></a>
+    </nav>
+    <div class="rail-foot"><span class="avatar">DS</span> <span>Demo Scheduler<br><span style="color:#8A93A6">Thursday, Jul 23, 2026</span></span></div>
+  </aside>
+  <main class="main">
+
+    <!-- SEARCH — the work itself: pick the client and the shift window -->
+    <div class="card mb">
+      <div class="panel-body">
+        <div class="section-title">Who needs coverage today?</div>
+        <div class="flex mb" style="gap:8px">
+          <span class="rlab">Recent</span>
+          <button class="recent-chip" data-id="1">Eleanor Price</button>
+          <button class="recent-chip" data-id="5">Nadia Osman</button>
+        </div>
+        <div class="cov-grid">
+          <div class="span2">
+            <label class="flab" for="covClient">Client</label>
+            <select id="covClient" class="input">
+              <option value="">Select client…</option>
+            </select>
+          </div>
+          <div>
+            <label class="flab" for="covDate">Date</label>
+            <input type="date" id="covDate" class="input" value="2026-07-23">
+          </div>
+          <div>
+            <label class="flab" for="covStart">Start</label>
+            <input type="time" id="covStart" class="input" value="08:00">
+          </div>
+          <div>
+            <label class="flab" for="covEnd">End</label>
+            <input type="time" id="covEnd" class="input" value="16:00">
+          </div>
+        </div>
+        <div class="flex mt" style="gap:12px">
+          <button class="btn primary" id="rankBtn">Rank caregivers</button>
+          <span class="cov-err" id="formErr" hidden>Select a client first.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESULTS — statbar + the ranked call list -->
+    <div id="covResults" hidden>
+      <div class="statbar" id="covStats"></div>
+      <div class="card">
+        <div class="panel-head">
+          <h2 id="resClient"></h2>
+          <span class="muted" id="resWindow"></span>
+          <span class="chip plain" id="resCare" style="margin-left:auto"></span>
+        </div>
+        <div class="row-list" id="covList"></div>
+        <div class="cov-promise">Weak options are buried, never hidden.</div>
+      </div>
+    </div>
+
+  </main>
+</div>
+<script src="./seed.js"></script>
+<script>
+(function () {
+  var clients = window.DEMO.clients;
+  var sel = document.getElementById("covClient");
+  var dateEl = document.getElementById("covDate");
+  var startEl = document.getElementById("covStart");
+  var endEl = document.getElementById("covEnd");
+  var btn = document.getElementById("rankBtn");
+  var err = document.getElementById("formErr");
+
+  clients.forEach(function (c) {
+    var o = document.createElement("option");
+    o.value = c.id;
+    o.textContent = c.name + " · " + c.city;
+    sel.appendChild(o);
+  });
+
+  // Prefill the shift window from the client's usual shift ("Day 8a-4p" → 08:00-16:00).
+  function to24(h, min, ap) {
+    h = parseInt(h, 10);
+    min = min ? parseInt(min, 10) : 0;
+    if (ap === "p" && h !== 12) h += 12;
+    if (ap === "a" && h === 12) h = 0;
+    return (h < 10 ? "0" : "") + h + ":" + (min < 10 ? "0" : "") + min;
+  }
+  function prefill(c) {
+    var m = c.shift.match(/(\d{1,2})(?::(\d{2}))?([ap])\s*-\s*(\d{1,2})(?::(\d{2}))?([ap])/i);
+    if (m) {
+      startEl.value = to24(m[1], m[2], m[3].toLowerCase());
+      endEl.value = to24(m[4], m[5], m[6].toLowerCase());
+    }
+  }
+  sel.addEventListener("change", function () {
+    err.hidden = true;
+    var c = clients.find(function (x) { return String(x.id) === sel.value; });
+    if (c) prefill(c);
+  });
+
+  function fmt12(t) {
+    var p = t.split(":");
+    var h = parseInt(p[0], 10);
+    var ap = h >= 12 ? "PM" : "AM";
+    var h12 = h % 12; if (h12 === 0) h12 = 12;
+    return h12 + ":" + p[1] + " " + ap;
+  }
+  function niceDate(k) {
+    var p = k.split("-");
+    var d = new Date(Date.UTC(+p[0], +p[1] - 1, +p[2]));
+    return d.toLocaleDateString("en-US", { timeZone: "UTC", weekday: "short", month: "short", day: "numeric" });
+  }
+
+  // Plain-language breakdown per candidate — derived from the seed roster.
+  var BREAKDOWN = {
+    "Marta Rivers": [
+      ["Availability", "Marked available anytime. Covers this whole shift window."],
+      ["History", "4 prior shifts with this client. Knows the routine."],
+      ["Distance", "About 12 minutes from the client's home."],
+      ["Skills on file", "Companionship, meal prep."]
+    ],
+    "Alice Zhang": [
+      ["Availability", "Open for this window. No other visit booked."],
+      ["Skills on file", "Hoyer lift, overnight care, driver — covers what this shift needs."],
+      ["Distance", "About 22 minutes away."],
+      ["History", "First time with this client."]
+    ],
+    "Daniel Osei": [
+      ["Availability", "Free after 4:00 PM only. Covers the tail of the window, not the start."],
+      ["What it takes", "Pair with a second caregiver for the early hours, or split the shift."],
+      ["Distance", "Based in Lakewood. Short drive."],
+      ["This week", "20 hours booked. Room for more without overtime."]
+    ],
+    "Kim Navarro": [
+      ["Conflict", "Booked 10:00 AM to 2:00 PM with Victor Ames."],
+      ["What it takes", "That visit must be moved or covered first. Two changes instead of one."],
+      ["History", "No prior shifts with this client."],
+      ["Distance", "Based in Ashton."]
+    ],
+    "Jordan Blake": [
+      ["Status", "Marked Inactive. Not taking shifts right now."],
+      ["Why still listed", "The ranking never hides anyone. Weak options sink to the bottom with the reason attached."],
+      ["History", "No prior shifts with this client."],
+      ["If needed", "Reactivating takes a manager call first."]
+    ]
+  };
+
+  function rank() {
+    if (!sel.value) { err.hidden = false; return; }
+    err.hidden = true;
+    btn.disabled = true;
+    btn.textContent = "Ranking…";
+    setTimeout(function () {
+      btn.disabled = false;
+      btn.textContent = "Rank caregivers";
+      render();
+    }, 450);
+  }
+
+  function render() {
+    var c = clients.find(function (x) { return String(x.id) === sel.value; });
+    var rows = window.DEMO.match(c.name);
+
+    // Statbar — real counts from the ranked set; zero cells are omitted.
+    var clean = rows.filter(function (r) { return r.grade === "Clean fit"; }).length;
+    var conflicts = rows.filter(function (r) { return r.grade === "Conflict"; }).length;
+    var sb = document.getElementById("covStats");
+    sb.innerHTML = "";
+    [[rows.length, "Candidates ranked", ""], [clean, "Clean fits", "good"], [conflicts, "Conflicts", "warn"]]
+      .forEach(function (s) {
+        if (!s[0]) return;
+        sb.appendChild(el("div", "stat" + (s[2] ? " " + s[2] : ""),
+          '<div class="k">' + s[0] + '</div><div class="l">' + s[1] + "</div>"));
+      });
+
+    // Shift summary head.
+    document.getElementById("resClient").textContent = c.name;
+    document.getElementById("resWindow").textContent =
+      niceDate(dateEl.value) + " · " + fmt12(startEl.value) + "–" + fmt12(endEl.value);
+    document.getElementById("resCare").textContent = c.care;
+
+    // Ranked list — equal-size rows, one breakdown open at a time.
+    var list = document.getElementById("covList");
+    list.innerHTML = "";
+    rows.forEach(function (r) {
+      var item = el("div", "cov-item leftbar " + r.tone);
+      var b = el("button", "cov-row");
+      b.setAttribute("aria-expanded", "false");
+      b.innerHTML =
+        '<span class="rank">' + r.rank + "</span>" +
+        '<span class="cov-main"><span class="cov-name">' + r.name + "</span>" +
+        '<span class="cov-why">' + r.why + "</span></span>" +
+        '<span class="chip ' + r.tone + '">' + r.grade + "</span>" +
+        '<span class="cov-caret">▸</span>';
+      var det = el("div", "cov-detail");
+      det.hidden = true;
+      (BREAKDOWN[r.name] || []).forEach(function (dm) {
+        det.appendChild(el("div", "cov-dim",
+          '<span class="cov-dim-l">' + dm[0] + "</span><span>" + dm[1] + "</span>"));
+      });
+      b.addEventListener("click", function () {
+        var wasOpen = !det.hidden;
+        $$(".cov-item.open", list).forEach(function (it) { it.classList.remove("open"); });
+        $$(".cov-detail", list).forEach(function (d) { d.hidden = true; });
+        $$(".cov-row", list).forEach(function (rb) { rb.setAttribute("aria-expanded", "false"); });
+        if (!wasOpen) {
+          det.hidden = false;
+          item.classList.add("open");
+          b.setAttribute("aria-expanded", "true");
+        }
+      });
+      item.appendChild(b);
+      item.appendChild(det);
+      list.appendChild(item);
+    });
+
+    document.getElementById("covResults").hidden = false;
+  }
+
+  btn.addEventListener("click", rank);
+
+  // Recent quick-picks: select the client, prefill their usual window, rank in one tap.
+  $$(".recent-chip").forEach(function (ch) {
+    ch.addEventListener("click", function () {
+      sel.value = ch.dataset.id;
+      var c = clients.find(function (x) { return String(x.id) === sel.value; });
+      if (c) prefill(c);
+      rank();
+    });
+  });
+})();
+</script>
+</body>
+</html>

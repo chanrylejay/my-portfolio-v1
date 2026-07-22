@@ -1,0 +1,108 @@
+/* Devoted Shift demo — shared foundation. Tokens mirror the production design canon:
+   royal blue #1E40AF is the ONE brand accent (never status), navy rail, Inter 13px floor,
+   status: red=critical, green=good, purple=care notes. */
+:root {
+  --brand: #1E40AF; --brand-hover: #1E3A8A; --brand-soft: #EDF2FE; --brand-deep: #0B1330;
+  --ink: #0B1330; --ink-soft: #5A6478; --ink-faint: #8A93A6;
+  --rail: #020F2E; --rail-hover: #0A1B45; --rail-accent: #9DB6FF;
+  --canvas: #F5F7FC; --surface-2: #F7F8FC; --panel-head: #F1F3F9;
+  --card: #FFFFFF; --line: #E6E9F2; --line-soft: #EEF1F6; --line-strong: #D5DBE7;
+  --crit: #DC2626; --crit-soft: #FDECEC; --good: #15803D; --good-soft: #EAF6EE;
+  --warn: #B45309; --warn-soft: #FDF3E7; --notes: #7C3AED; --notes-soft: #F3EEFC;
+  --shift-day: #B45309; --shift-eve: #1E40AF; --shift-night: #0B1330;
+  --radius: 10px; --radius-sm: 7px;
+  --shadow-card: 0 1px 2px rgba(11,19,48,.05), 0 4px 14px rgba(11,19,48,.06);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 13px; }
+body { font-family: Inter, system-ui, sans-serif; font-size: 13px; color: var(--ink); background: var(--canvas); }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; cursor: pointer; border: none; background: none; }
+
+/* ---- App shell ---- */
+.app { display: flex; min-height: 100vh; }
+.rail { width: 216px; flex: none; background: var(--rail); color: #fff; padding: 14px 10px; display: flex; flex-direction: column; gap: 2px; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+.rail-brand { display: flex; align-items: center; gap: 9px; padding: 6px 10px 14px; }
+.rail-brand .logo { width: 28px; height: 28px; border-radius: 8px; background: var(--brand); display: grid; place-items: center; font-weight: 800; font-size: 13px; color: #fff; }
+.rail-brand .name { font-weight: 700; font-size: 14px; letter-spacing: .01em; }
+.rail-brand .sub { font-size: 10px; color: var(--rail-accent); letter-spacing: .06em; text-transform: uppercase; }
+.nav a { display: flex; align-items: center; gap: 10px; padding: 8px 11px; border-radius: 8px; color: #C7D0E4; font-weight: 500; }
+.nav a:hover { background: var(--rail-hover); color: #fff; }
+.nav a.active { background: var(--brand); color: #fff; font-weight: 600; }
+.nav a .ico { width: 16px; text-align: center; opacity: .9; }
+.nav a .pill { margin-left: auto; background: rgba(255,255,255,.14); border-radius: 99px; padding: 1px 7px; font-size: 11px; }
+.nav a .soon { margin-left: auto; font-size: 9px; letter-spacing: .07em; color: var(--rail-accent); border: 1px solid rgba(157,182,255,.4); border-radius: 99px; padding: 1px 6px; }
+.rail-foot { margin-top: auto; padding: 10px; border-top: 1px solid rgba(255,255,255,.09); display: flex; align-items: center; gap: 9px; font-size: 12px; color: #C7D0E4; }
+.rail-foot .avatar { width: 26px; height: 26px; border-radius: 50%; background: var(--rail-hover); display: grid; place-items: center; font-size: 11px; font-weight: 700; color: var(--rail-accent); }
+.demo-note { background: var(--brand-deep); color: #C7D0E4; font-size: 11px; text-align: center; padding: 6px 10px; }
+.demo-note b { color: #fff; }
+
+.main { flex: 1; min-width: 0; padding: 20px 24px 40px; }
+
+/* ---- Cards & panels ---- */
+.card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-card); }
+.panel-head { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-bottom: 1px solid var(--line); background: var(--panel-head); border-radius: var(--radius) var(--radius) 0 0; }
+.panel-head h2 { font-size: 14px; font-weight: 700; }
+.panel-head .count { color: var(--ink-soft); font-weight: 500; }
+.panel-body { padding: 14px; }
+.section-title { font-size: 15px; font-weight: 700; margin: 0 0 10px; }
+
+/* ---- KPI stat bar ---- */
+.statbar { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+.stat { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 11px 16px; min-width: 128px; box-shadow: var(--shadow-card); }
+.stat .k { font-size: 22px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.stat .l { font-size: 11px; color: var(--ink-soft); letter-spacing: .05em; text-transform: uppercase; margin-top: 2px; }
+.stat.crit .k { color: var(--crit); } .stat.good .k { color: var(--good); } .stat.warn .k { color: var(--warn); } .stat.notes .k { color: var(--notes); }
+
+/* ---- Chips, badges, status ---- */
+.chip { display: inline-flex; align-items: center; gap: 5px; border-radius: 99px; padding: 2px 9px; font-size: 11px; font-weight: 600; border: 1px solid transparent; }
+.chip.crit { background: var(--crit-soft); color: var(--crit); }
+.chip.good { background: var(--good-soft); color: var(--good); }
+.chip.warn { background: var(--warn-soft); color: var(--warn); }
+.chip.notes { background: var(--notes-soft); color: var(--notes); }
+.chip.plain { background: var(--surface-2); color: var(--ink-soft); border-color: var(--line); }
+.chip.ai { background: var(--notes-soft); color: var(--notes); font-style: normal; }
+.dotline { color: var(--ink-soft); }
+.dotline b { color: var(--ink); font-weight: 600; }
+.rank { width: 26px; height: 26px; border-radius: 50%; background: var(--surface-2); border: 1px solid var(--line-strong); display: inline-grid; place-items: center; font-weight: 700; font-size: 12px; }
+
+/* ---- Buttons & inputs ---- */
+.btn { display: inline-flex; align-items: center; gap: 7px; height: 34px; padding: 0 14px; border-radius: 8px; font-weight: 600; font-size: 13px; }
+.btn.primary { background: var(--brand); color: #fff; } .btn.primary:hover { background: var(--brand-hover); }
+.btn.ghost { border: 1px solid var(--line-strong); color: var(--ink); background: var(--card); }
+.btn.ghost:hover { border-color: var(--brand); color: var(--brand); }
+.btn.danger { background: var(--crit); color: #fff; }
+.input, select.input { height: 34px; border: 1px solid var(--line-strong); border-radius: 8px; padding: 0 11px; font: inherit; color: var(--ink); background: var(--card); width: 100%; }
+.input:focus { outline: 2px solid var(--brand-soft); border-color: var(--brand); }
+.seg { display: inline-flex; border: 1px solid var(--line-strong); border-radius: 8px; overflow: hidden; }
+.seg button { height: 32px; padding: 0 14px; font-weight: 600; color: var(--ink-soft); background: var(--card); }
+.seg button.on { background: var(--brand); color: #fff; }
+
+/* ---- Tables & lists ---- */
+table.tbl { width: 100%; border-collapse: collapse; }
+.tbl th { text-align: left; font-size: 11px; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-soft); padding: 9px 12px; border-bottom: 1px solid var(--line-strong); background: var(--panel-head); }
+.tbl td { padding: 10px 12px; border-bottom: 1px solid var(--line-soft); vertical-align: middle; }
+.tbl tr:hover td { background: var(--surface-2); }
+.row-list > * + * { border-top: 1px solid var(--line-soft); }
+.leftbar { border-left: 3px solid var(--line-strong); padding-left: 11px; }
+.leftbar.crit { border-color: var(--crit); } .leftbar.good { border-color: var(--good); }
+.leftbar.warn { border-color: var(--warn); } .leftbar.notes { border-color: var(--notes); }
+
+/* ---- Layout helpers ---- */
+.grid { display: grid; gap: 14px; }
+.g2 { grid-template-columns: 1fr 1fr; } .g3 { grid-template-columns: repeat(3, 1fr); }
+.g-main-side { grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr); }
+.flex { display: flex; align-items: center; gap: 10px; } .between { justify-content: space-between; }
+.muted { color: var(--ink-soft); } .faint-line { border: 0; border-top: 1px solid var(--line-soft); margin: 10px 0; }
+.mb { margin-bottom: 14px; } .mt { margin-top: 14px; }
+.avatar-sm { width: 30px; height: 30px; border-radius: 50%; background: var(--brand-soft); color: var(--brand); font-weight: 700; font-size: 11px; display: inline-grid; place-items: center; flex: none; }
+.empty { text-align: center; color: var(--ink-soft); padding: 28px 10px; }
+.empty .big { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+
+@media (max-width: 900px) {
+  .app { flex-direction: column; }
+  .rail { width: 100%; height: auto; position: static; flex-direction: row; flex-wrap: wrap; align-items: center; }
+  .rail-foot { margin: 0; border: 0; } .nav { display: flex; flex-wrap: wrap; gap: 2px; }
+  .g2, .g3, .g-main-side { grid-template-columns: 1fr; }
+  .main { padding: 14px; }
+}

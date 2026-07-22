@@ -1,0 +1,162 @@
+<!-- SHELL TEMPLATE — every demo page copies this structure exactly.
+     Change ONLY: <title>, the `active` class on one nav link, and the <main> content.
+     impeccable-disable overused-font side-tab — exact replica of production design canon (Inter + left status rail are LOCKED in the source system). -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Open Shifts — Devoted Shift Demo</title>
+<link rel="stylesheet" href="./styles.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%231E40AF%27/%3E%3Ctext x=%2716%27 y=%2722%27 font-family=%27Arial%27 font-size=%2713%27 font-weight=%27bold%27 fill=%27white%27 text-anchor=%27middle%27%3EDS%3C/text%3E%3C/svg%3E">
+<style>
+/* Open Shifts board — tier bands + equal rows with left status rails + per-row expander */
+.tier-h { display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  font-size: 12px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--ink); background: var(--brand-soft); border-radius: 8px; padding: 6px 12px;
+  margin: 18px 0 8px; font-variant-numeric: tabular-nums; }
+#board .tier-h:first-child { margin-top: 0; }
+.tier-h .rng { color: var(--ink-soft); font-weight: 600; letter-spacing: .04em; }
+
+.srow { padding: 10px 14px; }
+.srow-head { display: flex; align-items: center; gap: 12px; cursor: pointer; flex-wrap: wrap; }
+.srow-main { flex: 1 1 220px; min-width: 0; }
+.srow-name { font-weight: 700; font-size: 13px; letter-spacing: -.1px; }
+.srow-meta { color: var(--ink-soft); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.srow-meta .when { font-weight: 600; font-variant-numeric: tabular-nums; }
+.srow-meta .why { font-weight: 400; }
+.srow-open { color: var(--ink-soft); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.srow-open b { color: var(--ink); font-weight: 700; }
+.chev { color: var(--ink-faint); font-size: 12px; transition: transform .12s; flex: none; }
+.chev.open { transform: rotate(180deg); }
+.srow-head:hover .chev { color: var(--ink); }
+.srow-head:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; border-radius: 6px; }
+
+.srow-detail { margin-top: 10px; padding: 11px 13px; background: var(--surface-2);
+  border: 1px solid var(--line-soft); border-radius: 8px; }
+.d-item { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.d-k { font-size: 11px; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-soft); }
+.d-v { color: var(--ink); }
+
+@media (max-width: 720px) {
+  .srow-head .btn { order: 5; }
+  .srow-meta { white-space: normal; }
+}
+</style>
+</head>
+<body>
+<div class="demo-note"><b>Interactive demo.</b> Every name, client, and number on this page is fictional. Built as a sanitized copy of a production home-care operations platform.</div>
+<div class="app">
+  <aside class="rail">
+    <a class="rail-brand" href="./index.html">
+      <span class="logo">DS</span>
+      <span><span class="name">Devoted Shift</span><br><span class="sub">Scheduling Intelligence</span></span>
+    </a>
+    <nav class="nav">
+      <a href="./index.html"><span class="ico">✦</span> Devo</a>
+      <a href="./open-shifts.html" class="active"><span class="ico">▦</span> Open Shifts <span class="pill">5</span></a>
+      <a href="./find-coverage.html"><span class="ico">◎</span> Find Coverage</a>
+      <a href="./caregivers.html"><span class="ico">☺</span> Caregivers</a>
+      <a href="./clients.html"><span class="ico">⌂</span> Clients <span class="soon">SOON</span></a>
+      <a href="./notes-review.html"><span class="ico">✎</span> Care Note Review <span class="pill">2</span></a>
+      <a href="./handoffs.html"><span class="ico">⇄</span> Shift Handoff</a>
+      <a href="./weekly-tasks.html"><span class="ico">☑</span> Weekly Tasks</a>
+      <a href="./forms.html"><span class="ico">🗎</span> Forms &amp; Resources <span class="soon">SOON</span></a>
+      <a href="./reports.html"><span class="ico">▤</span> KPIs / Reports</a>
+      <a href="./guides.html"><span class="ico">?</span> Quick Guides <span class="soon">SOON</span></a>
+    </nav>
+    <div class="rail-foot"><span class="avatar">DS</span> <span>Demo Scheduler<br><span style="color:#8A93A6">Thursday, Jul 23, 2026</span></span></div>
+  </aside>
+  <main class="main">
+    <div class="statbar" id="statbar"></div>
+    <section id="board"></section>
+  </main>
+</div>
+<script src="./seed.js"></script>
+<script>
+(function () {
+  var D = window.DEMO;
+  var TIERS = [
+    { key: "URGENT",    label: "Urgent · Today", rng: "Needs fill",             rail: "crit" },
+    { key: "TONIGHT",   label: "Tonight",        rng: "Starts before 6:00a",    rail: "warn" },
+    { key: "THIS WEEK", label: "This week",      rng: "Jul 20 – Jul 26",        rail: "" },
+    { key: "NEXT WEEK", label: "Next week",      rng: "Jul 27 – Aug 2",         rail: "" }
+  ];
+  var clientByName = {};
+  D.clients.forEach(function (c) { clientByName[c.name] = c; });
+
+  /* KPI statbar — real counts from the seed. Covered-this-week is derived:
+     total active caregiver scheduled hours / 8h standard shift (281 / 8 ≈ 35). */
+  var open = D.openShifts.length;
+  var urgent = D.openShifts.filter(function (s) { return s.tier === "URGENT"; }).length;
+  var activeHours = D.caregivers.reduce(function (a, c) { return a + (c.status === "Active" ? c.hours : 0); }, 0);
+  var covered = Math.round(activeHours / 8);
+  var bar = document.getElementById("statbar");
+  function stat(k, l, cls) {
+    var s = el("div", "stat" + (cls ? " " + cls : ""));
+    s.appendChild(el("div", "k", String(k)));
+    s.appendChild(el("div", "l", l));
+    bar.appendChild(s);
+  }
+  stat(open, "Open shifts");
+  if (urgent) stat(urgent, "Urgent now", "crit");
+  if (covered) stat(covered, "Covered this week", "good");
+
+  /* Tier-grouped board — equal rows, left status rail carries the tier, never a banner. */
+  var board = document.getElementById("board");
+  TIERS.forEach(function (t) {
+    var items = D.openShifts.filter(function (s) { return s.tier === t.key; });
+    if (!items.length) return;
+    board.appendChild(el("div", "tier-h", t.label + (t.rng ? '<span class="rng">' + t.rng + "</span>" : "")));
+    var card = el("div", "card row-list");
+    items.forEach(function (s) { card.appendChild(row(s, t.rail)); });
+    board.appendChild(card);
+  });
+
+  function row(s, rail) {
+    var c = clientByName[s.client] || {};
+    var wrap = el("div", "srow leftbar" + (rail ? " " + rail : ""));
+    var head = el("div", "srow-head");
+    head.setAttribute("role", "button");
+    head.tabIndex = 0;
+    head.setAttribute("aria-expanded", "false");
+    head.innerHTML =
+      '<span class="avatar-sm">' + (c.initials || "–") + "</span>" +
+      '<div class="srow-main"><div class="srow-name">' + s.client + "</div>" +
+      '<div class="srow-meta"><span class="when">' + s.when + '</span><span class="why"> · ' + s.reason + "</span></div></div>" +
+      (s.uncovered ? '<span class="srow-open">Uncovered <b>' + s.uncovered + "</b></span>" : "") +
+      '<a class="btn primary" href="./find-coverage.html?client=' + (c.id || "") + '">Find a fill</a>' +
+      '<span class="chev" aria-hidden="true">▾</span>';
+    var det = el("div", "srow-detail");
+    det.hidden = true;
+    det.innerHTML = '<div class="grid g2">' +
+      dItem("Care plan", c.care) +
+      dItem("Preference", c.pref) +
+      dItem("Location", c.city) +
+      dItem("Usual schedule", c.shift) +
+      "</div>";
+    function toggle() {
+      det.hidden = !det.hidden;
+      head.setAttribute("aria-expanded", String(!det.hidden));
+      head.querySelector(".chev").classList.toggle("open", !det.hidden);
+    }
+    head.addEventListener("click", function (e) {
+      if (e.target.closest("a")) return; /* Find a fill navigates, never toggles */
+      toggle();
+    });
+    head.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); }
+    });
+    wrap.appendChild(head);
+    wrap.appendChild(det);
+    return wrap;
+  }
+
+  function dItem(k, v) {
+    return v ? '<div class="d-item"><span class="d-k">' + k + '</span><span class="d-v">' + v + "</span></div>" : "";
+  }
+})();
+</script>
+</body>
+</html>

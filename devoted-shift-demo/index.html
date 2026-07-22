@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Devo — Devoted Shift Demo</title>
+<link rel="stylesheet" href="./styles.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%231E40AF%27/%3E%3Ctext x=%2716%27 y=%2722%27 font-family=%27Arial%27 font-size=%2713%27 font-weight=%27bold%27 fill=%27white%27 text-anchor=%27middle%27%3EDS%3C/text%3E%3C/svg%3E">
+<style>
+/* Devo home — hero ask bar, suggestion chips, Q&A thread, attention queue */
+.ask-hero { display: flex; align-items: center; gap: 10px; background: var(--card); border: 1.5px solid var(--line-strong); border-radius: 14px; padding: 8px 8px 8px 16px; box-shadow: 0 6px 22px -12px rgba(11,19,48,.22); margin-bottom: 12px; }
+.ask-hero:focus-within { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(30,64,175,.14), 0 6px 22px -12px rgba(11,19,48,.22); }
+.ask-input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font: inherit; font-size: 14px; color: var(--ink); }
+.ask-clear { font-size: 13px; font-weight: 600; color: var(--ink-soft); padding: 0 6px; }
+.ask-clear:hover { color: var(--brand); }
+.chips { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.chipq { font-size: 13px; font-weight: 600; color: var(--ink-soft); background: var(--card); border: 1px solid var(--line-strong); border-radius: 18px; padding: 8px 10px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.chipq:hover:not(:disabled) { background: var(--brand-soft); border-color: var(--brand); color: var(--brand); }
+.chipq:disabled { opacity: .55; cursor: default; }
+.devog { margin-top: 20px; max-width: 94%; }
+.devog-who { display: flex; align-items: center; gap: 6px; margin: 0 2px 5px; font-size: 10px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-soft); }
+.devog-bub { padding: 13px 17px; background: var(--panel-head); border-radius: 12px; font-size: 14px; line-height: 1.55; }
+.thread { display: flex; flex-direction: column; gap: 18px; margin-top: 20px; }
+.q-row { display: flex; align-items: flex-start; gap: 9px; font-size: 14px; font-weight: 700; line-height: 1.4; }
+.q-row .spark { color: var(--brand); flex: none; }
+.a-block { padding-left: 23px; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+.a-block .prose { line-height: 1.55; }
+.thinking { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--brand); background: var(--brand-soft); border: 1px solid var(--line-strong); border-radius: 10px; padding: 8px 13px; }
+.thinking .pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--brand); animation: dv-pulse 1s infinite; }
+@keyframes dv-pulse { 50% { opacity: .3; } }
+.ans-card { width: 100%; }
+.ans-head { padding: 10px 14px; border-bottom: 1px solid var(--line); background: var(--panel-head); border-radius: var(--radius) var(--radius) 0 0; font-weight: 700; font-size: 13px; }
+.ans-row { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; }
+.ans-row .who { min-width: 0; flex: 1; }
+.ans-row .why { color: var(--ink-soft); font-size: 12px; margin-top: 2px; line-height: 1.45; }
+.ans-row .chip, .ans-row .rank { flex: none; margin-top: 1px; }
+.ans-foot { padding: 9px 14px; border-top: 1px solid var(--line-soft); width: 100%; }
+.ans-foot a { color: var(--brand); font-weight: 600; font-size: 12px; }
+.ans-foot a:hover { text-decoration: underline; }
+.q-item { padding: 11px 14px; }
+.q-item .t { font-weight: 600; }
+.q-item .s { color: var(--ink-soft); font-size: 12px; margin-top: 2px; line-height: 1.45; }
+.q-item .act { display: inline-block; margin-top: 6px; color: var(--brand); font-weight: 600; font-size: 12px; }
+.q-item .act:hover { text-decoration: underline; }
+@media (max-width: 1100px) { .chips { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+</style>
+</head>
+<body>
+<div class="demo-note"><b>Interactive demo.</b> Every name, client, and number on this page is fictional. Built as a sanitized copy of a production home-care operations platform.</div>
+<div class="app">
+  <aside class="rail">
+    <a class="rail-brand" href="./index.html">
+      <span class="logo">DS</span>
+      <span><span class="name">Devoted Shift</span><br><span class="sub">Scheduling Intelligence</span></span>
+    </a>
+    <nav class="nav">
+      <a href="./index.html" class="active"><span class="ico">✦</span> Devo</a>
+      <a href="./open-shifts.html"><span class="ico">▦</span> Open Shifts <span class="pill">5</span></a>
+      <a href="./find-coverage.html"><span class="ico">◎</span> Find Coverage</a>
+      <a href="./caregivers.html"><span class="ico">☺</span> Caregivers</a>
+      <a href="./clients.html"><span class="ico">⌂</span> Clients <span class="soon">SOON</span></a>
+      <a href="./notes-review.html"><span class="ico">✎</span> Care Note Review <span class="pill">2</span></a>
+      <a href="./handoffs.html"><span class="ico">⇄</span> Shift Handoff</a>
+      <a href="./weekly-tasks.html"><span class="ico">☑</span> Weekly Tasks</a>
+      <a href="./forms.html"><span class="ico">🗎</span> Forms &amp; Resources <span class="soon">SOON</span></a>
+      <a href="./reports.html"><span class="ico">▤</span> KPIs / Reports</a>
+      <a href="./guides.html"><span class="ico">?</span> Quick Guides <span class="soon">SOON</span></a>
+    </nav>
+    <div class="rail-foot"><span class="avatar">DS</span> <span>Demo Scheduler<br><span style="color:#8A93A6">Thursday, Jul 23, 2026</span></span></div>
+  </aside>
+  <main class="main">
+    <div class="statbar" id="kpis"></div>
+    <div class="grid g-main-side">
+      <section>
+        <div class="ask-hero">
+          <input id="askInput" class="ask-input" placeholder="Ask Devo anything…" aria-label="Ask Devo">
+          <button id="clearBtn" class="ask-clear" hidden>Clear</button>
+          <button id="askBtn" class="btn primary">✦ Ask</button>
+        </div>
+        <div class="chips" id="chips"></div>
+        <div class="devog" id="devoLine">
+          <div class="devog-who">✦ Devo</div>
+          <p class="devog-bub" id="devoBub"></p>
+        </div>
+        <div class="thread" id="thread" aria-live="polite"></div>
+      </section>
+      <aside>
+        <div class="card">
+          <div class="panel-head"><h2>What needs attention now</h2><span class="count" id="qCount"></span></div>
+          <div class="row-list" id="queue"></div>
+        </div>
+      </aside>
+    </div>
+  </main>
+</div>
+<script src="./seed.js"></script>
+<script>
+(function () {
+  var D = window.DEMO;
+  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+
+  /* ---- Derived counts (all from seed) ---- */
+  var flagged = D.careNotes.filter(function (n) { return n.flag !== "good"; });
+  var review = flagged.filter(function (n) { return /review|follow-up/i.test(n.ai); });
+  var dueToday = D.weeklyTasks.filter(function (t) { return !t.done && t.due === "Today"; });
+  var next24 = D.openShifts.filter(function (s) { return s.tier === "URGENT" || s.tier === "TONIGHT"; });
+  var urgent = D.openShifts.filter(function (s) { return s.tier === "URGENT"; })[0];
+  var tonight = D.openShifts.filter(function (s) { return s.tier === "TONIGHT"; })[0];
+  var critNotes = review.filter(function (n) { return n.flag === "crit"; }).length;
+
+  /* ---- KPI statbar (omit empty cells) ---- */
+  [[D.openShifts.length, "Open shifts", "crit"],
+   [review.length, "Care notes to review", "notes"],
+   [dueToday.length, "Tasks due today", "warn"]].forEach(function (c) {
+    if (c[0] > 0) document.getElementById("kpis").appendChild(el("div", "stat " + c[2], '<div class="k">' + c[0] + '</div><div class="l">' + c[1] + "</div>"));
+  });
+
+  /* ---- Devo's proactive line (deterministic, so no AI chip) ---- */
+  document.getElementById("devoBub").textContent =
+    "Start with coverage: " + next24.length + (next24.length === 1 ? " shift starts" : " shifts start") + " within the next 24 hours.";
+
+  /* ---- What needs attention now ---- */
+  var qItems = [
+    { tone: "crit", t: "Open shift · " + urgent.client, s: urgent.when + " · " + urgent.reason + " · Uncovered " + urgent.uncovered, act: "Find coverage", href: "./find-coverage.html" },
+    { tone: "warn", t: "Open shift · " + tonight.client, s: tonight.when + " · " + tonight.reason, act: "Find coverage", href: "./find-coverage.html" },
+    { tone: "notes", t: "Care notes to review", s: critNotes + " critical · " + (review.length - critNotes) + " nurse follow-up · flagged yesterday", act: "Review notes", href: "./notes-review.html" }
+  ];
+  document.getElementById("qCount").textContent = qItems.length;
+  qItems.forEach(function (q) {
+    document.getElementById("queue").appendChild(el("div", "q-item",
+      '<div class="leftbar ' + q.tone + '"><div class="t">' + esc(q.t) + '</div><div class="s">' + esc(q.s) + '</div><a class="act" href="' + q.href + '">' + q.act + "</a></div>"));
+  });
+
+  /* ---- Canned answers (AI chip + prose + deterministic card) ---- */
+  var aiP = function (text) { return '<span class="chip ai">AI Summary</span><p class="prose">' + text + "</p>"; };
+  var card = function (head, rows, href, label) {
+    return '<div class="card ans-card"><div class="ans-head">' + head + '</div><div class="row-list">' + rows + '</div><div class="ans-foot"><a href="' + href + '">' + label + " →</a></div></div>";
+  };
+
+  function ansCoverage() {
+    var top3 = D.match("Eleanor Price").slice(0, 3);
+    var rows = top3.map(function (m) {
+      return '<div class="ans-row"><span class="rank">' + m.rank + '</span><div class="who"><b>' + esc(m.name) + '</b><div class="why">' + esc(m.why) + '</div></div><span class="chip ' + m.tone + '">' + esc(m.grade) + "</span></div>";
+    }).join("");
+    return aiP("<b>" + esc(top3[0].name) + "</b> is the strongest fit for Eleanor Price tomorrow (Fri Jul 24 · 8:00a-4:00p): 4 prior shifts with her and 12 minutes away. " + esc(top3[1].name) + " is a clean second. " + esc(top3[2].name) + " is free after 4:00p only, so he cannot take the full shift.") +
+      card("Top matches · Eleanor Price · Fri Jul 24 · 8:00a-4:00p", rows, "./find-coverage.html", "Run the full match in Find Coverage");
+  }
+
+  function ansOpen() {
+    var rows = D.openShifts.map(function (s) {
+      var tone = s.tier === "URGENT" ? "crit" : s.tier === "TONIGHT" ? "warn" : "";
+      var chip = s.tier === "URGENT" ? "crit" : s.tier === "TONIGHT" ? "warn" : "plain";
+      return '<div class="q-item"><div class="leftbar ' + tone + '"><div class="t flex between">' + esc(s.client) + ' <span class="chip ' + chip + '">' + s.tier + '</span></div><div class="s">' + esc(s.when) + " · " + esc(s.reason) + (s.uncovered ? " · Uncovered " + s.uncovered : "") + "</div></div></div>";
+    }).join("");
+    return aiP(D.openShifts.length + " shifts are open. " + next24.length + " need action within 24 hours: <b>" + esc(urgent.client) + "</b> this morning (uncovered " + urgent.uncovered + ") and <b>" + esc(tonight.client) + "</b> tonight.") +
+      card("Open shifts · all " + D.openShifts.length, rows, "./open-shifts.html", "Open the Open Shifts board");
+  }
+
+  function ansOvernight() {
+    var h = D.handoffs[0];
+    var row = '<div class="ans-row"><div class="who"><b>' + esc(h.from) + " → " + esc(h.to) + '</b><div class="why">' + esc(h.client) + " · " + esc(h.time) + '</div><div class="why">"' + esc(h.note) + '"</div></div></div>';
+    return aiP("One overnight ran: <b>" + esc(h.from) + "</b> with " + esc(h.client) + ". The 11:00p glucose check was refused, then accepted at 1:00a reading 168. He handed off to " + esc(h.to) + " at " + esc(h.time) + " and flagged the morning reading to watch.") +
+      card("Shift handoff · overnight", row, "./handoffs.html", "Open Shift Handoff");
+  }
+
+  function ansNotes() {
+    var rows = flagged.map(function (n) {
+      return '<div class="q-item"><div class="leftbar ' + n.flag + '"><div class="t">' + esc(n.client) + ' <span class="muted">· ' + esc(n.caregiver) + '</span></div><div class="s">' + esc(n.note) + "</div></div></div>";
+    }).join("");
+    return aiP(flagged.length + " of " + D.careNotes.length + " notes from yesterday are flagged: 1 critical (<b>Sofia Marchetti</b>, two exit attempts in one shift) and 2 for attention. " + review.length + " still need review.") +
+      card("Flagged care notes · yesterday", rows, "./notes-review.html", "Open Care Note Review");
+  }
+
+  function ansTasks() {
+    var rows = dueToday.map(function (t) {
+      return '<div class="ans-row"><div class="who"><b>' + esc(t.task) + '</b><div class="why">' + esc(t.owner) + " · From: " + esc(t.from) + '</div></div><span class="chip warn">Due today</span></div>';
+    }).join("");
+    return aiP(dueToday.length + " tasks are due today, both from yesterday's events: the coverage follow-up for Eleanor Price and the nurse review of her bruise report.") +
+      card("Tasks due today", rows, "./weekly-tasks.html", "Open Weekly Tasks");
+  }
+
+  function ansHelp() {
+    return aiP("I can rank coverage for an open shift, list open shifts, summarize overnight handoffs, pull flagged care notes, and show tasks due today. Pick a suggestion above or type a question.");
+  }
+
+  function ansFallback() {
+    return aiP("In this demo I answer the suggested questions only. The production assistant parses free text against live scheduling data. Try one of the chips above.");
+  }
+
+  function route(q) {
+    var t = q.toLowerCase();
+    if (/cover|match/.test(t)) return ansCoverage;
+    if (/overnight|handoff|happened|night/.test(t)) return ansOvernight;
+    if (/note|flag/.test(t)) return ansNotes;
+    if (/task|due/.test(t)) return ansTasks;
+    if (/help|what can/.test(t)) return ansHelp;
+    if (/open|shift/.test(t)) return ansOpen;
+    return ansFallback;
+  }
+
+  function loadingCopy(q) {
+    var t = q.toLowerCase();
+    if (/cover|match/.test(t)) return "Running the match…";
+    if (/open|shift/.test(t)) return "Loading today's open shifts…";
+    return "Checking the schedule…";
+  }
+
+  /* ---- Ask flow ---- */
+  var thread = document.getElementById("thread");
+  var input = document.getElementById("askInput");
+  var askBtn = document.getElementById("askBtn");
+  var clearBtn = document.getElementById("clearBtn");
+  var busy = false;
+
+  function setBusy(b) {
+    busy = b;
+    input.disabled = b; askBtn.disabled = b;
+    $$(".chipq").forEach(function (c) { c.disabled = b; });
+  }
+
+  function ask(q) {
+    if (busy || !q.trim()) return;
+    setBusy(true);
+    document.getElementById("devoLine").hidden = true;
+    thread.appendChild(el("div", "q-row", '<span class="spark">✦</span><span>' + esc(q) + "</span>"));
+    var a = el("div", "a-block", '<span class="thinking"><span class="pulse"></span>' + loadingCopy(q) + "</span>");
+    thread.appendChild(a);
+    a.scrollIntoView({ behavior: "smooth", block: "end" });
+    setTimeout(function () {
+      a.innerHTML = route(q)();
+      setBusy(false);
+      clearBtn.hidden = false;
+      a.scrollIntoView({ behavior: "smooth", block: "end" });
+    }, 550);
+  }
+
+  ["Who can cover Eleanor Price tomorrow 8a-4p?", "What shifts are open today?", "What happened overnight?",
+   "Any flagged care notes?", "What is due today?", "What can you help me with?"].forEach(function (q) {
+    var b = el("button", "chipq", esc(q));
+    b.type = "button";
+    b.addEventListener("click", function () { ask(q); });
+    document.getElementById("chips").appendChild(b);
+  });
+
+  askBtn.addEventListener("click", function () { var q = input.value; input.value = ""; ask(q); });
+  input.addEventListener("keydown", function (e) { if (e.key === "Enter") { var q = input.value; input.value = ""; ask(q); } });
+  clearBtn.addEventListener("click", function () {
+    thread.innerHTML = "";
+    document.getElementById("devoLine").hidden = false;
+    clearBtn.hidden = true;
+    input.focus();
+  });
+})();
+</script>
+</body>
+</html>

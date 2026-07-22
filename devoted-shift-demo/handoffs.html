@@ -1,0 +1,144 @@
+<!-- SHELL TEMPLATE — every demo page copies this structure exactly.
+     Change ONLY: <title>, the `active` class on one nav link, and the <main> content.
+     impeccable-disable overused-font side-tab — exact replica of production design canon (Inter + left status rail are LOCKED in the source system). -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Shift Handoff — Devoted Shift Demo</title>
+<link rel="stylesheet" href="./styles.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%231E40AF%27/%3E%3Ctext x=%2716%27 y=%2722%27 font-family=%27Arial%27 font-size=%2713%27 font-weight=%27bold%27 fill=%27white%27 text-anchor=%27middle%27%3EDS%3C/text%3E%3C/svg%3E">
+<style>
+/* Shift Handoff module styles — built on foundation vars only */
+.ho-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 14px; margin-bottom: 16px; }
+.ho-head { flex-wrap: wrap; row-gap: 8px; }
+.ho-pair { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+.ho-who { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.ho-who .nm { font-weight: 600; line-height: 1.2; }
+.ho-who .rl { font-size: 11px; color: var(--ink-soft); line-height: 1.2; }
+.ho-arrow { width: 24px; height: 24px; border-radius: 50%; background: var(--surface-2); border: 1px solid var(--line-strong); display: grid; place-items: center; color: var(--ink-soft); font-size: 13px; flex: none; }
+.ho-note { background: var(--surface-2); border: 1px solid var(--line-soft); border-radius: var(--radius-sm); padding: 10px 12px; margin: 10px 0 12px; line-height: 1.5; }
+.ho-foot { min-height: 34px; }
+.ho-foot.end { justify-content: flex-end; }
+</style>
+</head>
+<body>
+<div class="demo-note"><b>Interactive demo.</b> Every name, client, and number on this page is fictional. Built as a sanitized copy of a production home-care operations platform.</div>
+<div class="app">
+  <aside class="rail">
+    <a class="rail-brand" href="./index.html">
+      <span class="logo">DS</span>
+      <span><span class="name">Devoted Shift</span><br><span class="sub">Scheduling Intelligence</span></span>
+    </a>
+    <nav class="nav">
+      <a href="./index.html"><span class="ico">✦</span> Devo</a>
+      <a href="./open-shifts.html"><span class="ico">▦</span> Open Shifts <span class="pill">5</span></a>
+      <a href="./find-coverage.html"><span class="ico">◎</span> Find Coverage</a>
+      <a href="./caregivers.html"><span class="ico">☺</span> Caregivers</a>
+      <a href="./clients.html"><span class="ico">⌂</span> Clients <span class="soon">SOON</span></a>
+      <a href="./notes-review.html"><span class="ico">✎</span> Care Note Review <span class="pill">2</span></a>
+      <a href="./handoffs.html" class="active"><span class="ico">⇄</span> Shift Handoff</a>
+      <a href="./weekly-tasks.html"><span class="ico">☑</span> Weekly Tasks</a>
+      <a href="./forms.html"><span class="ico">🗎</span> Forms &amp; Resources <span class="soon">SOON</span></a>
+      <a href="./reports.html"><span class="ico">▤</span> KPIs / Reports</a>
+      <a href="./guides.html"><span class="ico">?</span> Quick Guides <span class="soon">SOON</span></a>
+    </nav>
+    <div class="rail-foot"><span class="avatar">DS</span> <span>Demo Scheduler<br><span style="color:#8A93A6">Thursday, Jul 23, 2026</span></span></div>
+  </aside>
+  <main class="main">
+    <div class="statbar" id="ho-stats"></div>
+    <div class="ho-grid" id="ho-cards"></div>
+    <section class="card">
+      <div class="panel-head"><h2>Older handoffs</h2></div>
+      <div class="panel-body">
+        <div class="empty"><div class="big">All clear.</div>Nothing pending from earlier this week.</div>
+      </div>
+    </section>
+  </main>
+</div>
+<script src="./seed.js"></script>
+<script>
+(function () {
+  var byName = {};
+  DEMO.caregivers.forEach(function (c) { byName[c.name] = c; });
+  var clientByName = {};
+  DEMO.clients.forEach(function (c) { clientByName[c.name] = c; });
+
+  var state = DEMO.handoffs.map(function (h) {
+    return { id: h.id, from: h.from, to: h.to, client: h.client, time: h.time, note: h.note, ack: false, ackAt: null };
+  });
+
+  function initials(name) {
+    var c = byName[name];
+    if (c) return c.initials;
+    return name.split(" ").map(function (w) { return w.charAt(0); }).join("");
+  }
+  function role(name) { var c = byName[name]; return c ? c.role : ""; }
+  function timeNow() {
+    var d = new Date(), h = d.getHours(), m = String(d.getMinutes());
+    if (m.length < 2) m = "0" + m;
+    var ap = h >= 12 ? "p" : "a";
+    h = h % 12; if (h === 0) h = 12;
+    return h + ":" + m + ap;
+  }
+
+  function renderStats() {
+    var pending = state.filter(function (h) { return !h.ack; }).length;
+    var acked = state.filter(function (h) { return h.ack; }).length;
+    var bar = document.getElementById("ho-stats");
+    bar.innerHTML = "";
+    if (pending > 0) {
+      bar.appendChild(el("div", "stat warn", '<div class="k">' + pending + '</div><div class="l">Pending</div>'));
+    }
+    if (acked > 0) {
+      bar.appendChild(el("div", "stat good", '<div class="k">' + acked + '</div><div class="l">Acknowledged today</div>'));
+    }
+  }
+
+  function who(name) {
+    return '<div class="ho-who"><span class="avatar-sm">' + initials(name) + '</span>' +
+      '<div><div class="nm">' + name + '</div><div class="rl">' + role(name) + '</div></div></div>';
+  }
+
+  function renderCards() {
+    var grid = document.getElementById("ho-cards");
+    grid.innerHTML = "";
+    state.forEach(function (h) {
+      var cl = clientByName[h.client];
+      var footer = h.ack
+        ? '<span class="chip good">✓ Acknowledged · ' + h.ackAt + '</span><span class="muted">Demo Scheduler</span>'
+        : '<button class="btn primary" data-ack="' + h.id + '">Acknowledge</button>';
+      var card = el("article", "card",
+        '<div class="panel-body leftbar ' + (h.ack ? "good" : "warn") + '">' +
+          '<div class="flex between ho-head">' +
+            '<div class="ho-pair">' + who(h.from) + '<span class="ho-arrow">→</span>' + who(h.to) + '</div>' +
+            '<span class="chip plain">' + h.time + '</span>' +
+          '</div>' +
+          '<div class="dotline mt">Client <b>' + h.client + '</b>' + (cl ? " · " + cl.city : "") + '</div>' +
+          '<p class="ho-note">' + h.note + '</p>' +
+          '<div class="flex ' + (h.ack ? "between" : "end") + ' ho-foot">' + footer + '</div>' +
+        '</div>');
+      grid.appendChild(card);
+    });
+  }
+
+  document.getElementById("ho-cards").addEventListener("click", function (e) {
+    var btn = e.target.closest("[data-ack]");
+    if (!btn) return;
+    var id = Number(btn.getAttribute("data-ack"));
+    var h = state.find(function (x) { return x.id === id; });
+    if (!h || h.ack) return;
+    h.ack = true;
+    h.ackAt = timeNow();
+    renderStats();
+    renderCards();
+  });
+
+  renderStats();
+  renderCards();
+})();
+</script>
+</body>
+</html>
