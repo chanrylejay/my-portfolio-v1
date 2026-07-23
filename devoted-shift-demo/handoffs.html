@@ -1,6 +1,6 @@
-<!-- SHELL TEMPLATE — every demo page copies this structure exactly.
-     Change ONLY: <title>, the `active` class on one nav link, and the <main> content.
-     impeccable-disable overused-font side-tab — exact replica of production design canon (Inter + left status rail are LOCKED in the source system). -->
+<!-- SHELL v2 — copies the LIVE sidebar anatomy exactly (icons are the production SVG set).
+     Change ONLY: <title>, the `active` class on one nav link, and <main>.
+     impeccable-disable overused-font side-tab — exact replica of production canon. -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,133 +11,246 @@
 <link rel="stylesheet" href="./styles.css">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%231E40AF%27/%3E%3Ctext x=%2716%27 y=%2722%27 font-family=%27Arial%27 font-size=%2713%27 font-weight=%27bold%27 fill=%27white%27 text-anchor=%27middle%27%3EDS%3C/text%3E%3C/svg%3E">
 <style>
-/* Shift Handoff module styles — built on foundation vars only */
-.ho-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 14px; margin-bottom: 16px; }
-.ho-head { flex-wrap: wrap; row-gap: 8px; }
-.ho-pair { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
-.ho-who { display: flex; align-items: center; gap: 8px; min-width: 0; }
-.ho-who .nm { font-weight: 600; line-height: 1.2; }
-.ho-who .rl { font-size: 11px; color: var(--ink-soft); line-height: 1.2; }
-.ho-arrow { width: 24px; height: 24px; border-radius: 50%; background: var(--surface-2); border: 1px solid var(--line-strong); display: grid; place-items: center; color: var(--ink-soft); font-size: 13px; flex: none; }
-.ho-note { background: var(--surface-2); border: 1px solid var(--line-soft); border-radius: var(--radius-sm); padding: 10px 12px; margin: 10px 0 12px; line-height: 1.5; }
-.ho-foot { min-height: 34px; }
-.ho-foot.end { justify-content: flex-end; }
+/* handoffs module — ported from live handoff.css (HandoffBoard) onto foundation tokens */
+.ho-banner { display: flex; align-items: center; gap: 13px; background: var(--brand-deep); color: #fff; border-radius: var(--r); padding: 14px 18px; margin-bottom: 16px; }
+.ho-banner:hover .ho-banner-s { text-decoration: underline; }
+.ho-bico { width: 38px; height: 38px; border-radius: 8px; background: rgba(255,255,255,.16); display: grid; place-items: center; flex: none; }
+.ho-bico svg { width: 18px; height: 18px; }
+.ho-banner-s { font-size: 15px; font-weight: 700; line-height: 1.4; }
+.ho-card { overflow: hidden; }
+.ho-head h2 { text-transform: uppercase; letter-spacing: .04em; margin-right: auto; }
+.ho-head > svg { color: var(--brand); width: 16px; height: 16px; flex: none; }
+.ho-card-n { font-size: 12px; font-weight: 800; border-radius: 11px; min-width: 24px; text-align: center; padding: 1px 7px; background: var(--brand); color: #fff; }
+.ho-add { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 700; color: var(--brand); background: var(--card); border: 1px solid #C6D6FE; border-radius: 8px; padding: 4px 9px; }
+.ho-add:hover { background: var(--brand-soft); }
+.ho-body { padding: 6px 15px 13px; }
+.ho-compose { background: var(--surface-2); border: 1px solid var(--line); border-radius: 8px; padding: 10px; margin: 8px 0; }
+.ho-compose textarea { width: 100%; border: 1px solid var(--line-strong); border-radius: 8px; padding: 8px 10px; font: inherit; font-size: 13px; resize: vertical; outline: none; background: var(--card); color: var(--ink); }
+.ho-compose textarea::placeholder { color: var(--ink-soft); }
+.ho-compose textarea:focus { border-color: var(--brand); }
+.ho-compose-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
+.ho-imp { font-size: 12px; font-weight: 600; color: var(--ink-soft); display: inline-flex; align-items: center; gap: 6px; }
+.ho-post { font-size: 12px; font-weight: 700; color: #fff; background: var(--brand); border-radius: 8px; padding: 7px 14px; }
+.ho-post:hover { background: var(--brand-hover); }
+.ho-post:disabled { opacity: .55; cursor: default; }
+.ho-note, .ho-row { display: flex; align-items: flex-start; gap: 9px; padding: 7px 0; }
+.ho-row { padding: 4px 0; }
+.ho-dot { width: 8px; height: 8px; border-radius: 50%; flex: none; margin-top: 6px; }
+.ho-dot.crit { background: var(--crit); } .ho-dot.warn { background: var(--warn); } .ho-dot.neut { background: var(--ink-faint); }
+.ho-rtx { flex: 1; min-width: 0; }
+.ho-main { font-size: 13.5px; font-weight: 600; line-height: 1.35; }
+.ho-meta { font-size: 12px; color: var(--ink-soft); margin-top: 1px; }
+.ho-clear { display: flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--good); padding: 10px 0 4px; }
+.ho-clear svg { flex: none; }
+.ho-resolve { flex: none; align-self: center; background: var(--card); border: 1px solid #BFE3CE; color: var(--good); border-radius: 8px; padding: 5px 8px; line-height: 0; }
+.ho-resolve:hover { background: var(--good-soft); }
+.ho-reopen { flex: none; align-self: center; border: 1px solid var(--line); border-radius: 8px; padding: 2px 8px; font-size: 11px; font-weight: 700; color: var(--ink-soft); white-space: nowrap; background: var(--card); }
+.ho-resolved { margin-top: 8px; }
+.ho-resolved > summary { cursor: pointer; font-size: 12px; font-weight: 700; color: var(--ink-soft); padding: 6px 0; }
+.ho-resolved .ho-note { opacity: .9; }
+.ho-resolved .ho-main { text-decoration: line-through; text-decoration-color: var(--line-strong); }
+.ho-ref { margin-top: 14px; background: var(--brand-deep); border-radius: var(--r); overflow: hidden; }
+.ho-ref > summary { cursor: pointer; padding: 11px 14px; font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: rgba(255,255,255,.75); }
+.ho-refgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-items: start; padding: 0 14px 14px; }
+.ho-grp { padding: 4px 0 2px; }
+@media (max-width: 820px) { .ho-refgrid { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
 <div class="demo-note"><b>Interactive demo.</b> Every name, client, and number on this page is fictional. Built as a sanitized copy of a production home-care operations platform.</div>
 <div class="app">
   <aside class="rail">
-    <a class="rail-brand" href="./index.html">
-      <span class="logo">DS</span>
-      <span><span class="name">Devoted Shift</span><br><span class="sub">Scheduling Intelligence</span></span>
+    <a class="brand" href="./index.html">
+      <span class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 21s-7-4.6-9.2-9A5.2 5.2 0 0112 5.6 5.2 5.2 0 0121.2 12c-2.2 4.4-9.2 9-9.2 9z" stroke-width="2" stroke-linejoin="round"/></svg></span>
+      <span style="min-width:0;line-height:1">
+        <span class="eyebrow">Devoted Shift</span>
+        <span class="name">Scheduling <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </span>
+      <span class="apps"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="5" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="12" cy="19" r="2"/><circle cx="19" cy="19" r="2"/></svg></span>
     </a>
     <nav class="nav">
-      <a href="./index.html"><span class="ico">✦</span> Devo</a>
-      <a href="./open-shifts.html"><span class="ico">▦</span> Open Shifts <span class="pill">5</span></a>
-      <a href="./find-coverage.html"><span class="ico">◎</span> Find Coverage</a>
-      <a href="./caregivers.html"><span class="ico">☺</span> Caregivers</a>
-      <a href="./clients.html"><span class="ico">⌂</span> Clients <span class="soon">SOON</span></a>
-      <a href="./notes-review.html"><span class="ico">✎</span> Care Note Review <span class="pill">2</span></a>
-      <a href="./handoffs.html" class="active"><span class="ico">⇄</span> Shift Handoff</a>
-      <a href="./weekly-tasks.html"><span class="ico">☑</span> Weekly Tasks</a>
-      <a href="./forms.html"><span class="ico">🗎</span> Forms &amp; Resources <span class="soon">SOON</span></a>
-      <a href="./reports.html"><span class="ico">▤</span> KPIs / Reports</a>
-      <a href="./guides.html"><span class="ico">?</span> Quick Guides <span class="soon">SOON</span></a>
+      <a href="./index.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z" stroke-width="1.8" stroke-linejoin="round"/><path d="M5 17l.7 2L8 19.7 5.7 20.4 5 22l-.7-1.6L2 19.7l2.3-.7L5 17z" stroke-width="1.5" stroke-linejoin="round"/></svg> Devo</a>
+      <a href="./open-shifts.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="17" rx="2" stroke-width="2"/><path d="M3 9h18M8 2v4M16 2v4" stroke-width="2" stroke-linecap="round"/></svg> Open Shifts <span class="count">10</span></a>
+      <a href="./find-coverage.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="7" stroke-width="2"/><path d="M21 21l-4-4" stroke-width="2" stroke-linecap="round"/></svg> Find Coverage</a>
+      <a href="./caregivers.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 11l3 3 8-8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12a9 9 0 11-5-8" stroke-width="2" stroke-linecap="round"/></svg> Caregivers</a>
+      <a href="./clients.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="8" r="3.4" stroke-width="2"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0" stroke-width="2" stroke-linecap="round"/></svg> Clients <span class="soon">SOON</span></a>
+      <a href="./notes-review.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 11l3 3 8-8M3 6h7M3 12h5M3 18h9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Care Note Review</a>
+      <a class="active" href="./handoffs.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M7 8l-4 4 4 4M3 12h11M17 16l4-4-4-4M21 12H10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Shift Handoff</a>
+      <a href="./weekly-tasks.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M10 6h10M10 12h10M10 18h10" stroke-width="2" stroke-linecap="round"/><path d="M4 6.5l1.3 1.3L7.6 5.4M4 17.5l1.3 1.3L7.6 16.4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="5.4" cy="12" r="1.2" fill="currentColor" stroke="none"/></svg> Weekly Tasks</a>
+      <a href="./forms.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="4" y="3" width="14" height="18" rx="2" stroke-width="2"/><path d="M8 8h6M8 12h6M8 16h3" stroke-width="1.8" stroke-linecap="round"/></svg> Forms &amp; Resources</a>
+      <a href="./reports.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> KPIs / Reports</a>
+      <a href="./guides.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 4h11a1 1 0 011 1v14a1 1 0 01-1 1H6a2 2 0 01-2-2V6a2 2 0 012-2z" stroke-width="2" stroke-linejoin="round"/><path d="M9 4v15M12 9h3M12 12.5h3" stroke-width="2" stroke-linecap="round"/></svg> Quick Guides</a>
     </nav>
-    <div class="rail-foot"><span class="avatar">DS</span> <span>Demo Scheduler<br><span style="color:#8A93A6">Thursday, Jul 23, 2026</span></span></div>
+    <div class="rail-foot">
+      <span class="avatar">D</span>
+      <span class="who"><b>Demo Scheduler</b><span>Admin</span></span>
+      <span class="out"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M15 3h4a1 1 0 011 1v16a1 1 0 01-1 1h-4M10 17l5-5-5-5M15 12H3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    </div>
   </aside>
   <main class="main">
-    <div class="statbar" id="ho-stats"></div>
-    <div class="ho-grid" id="ho-cards"></div>
-    <section class="card">
-      <div class="panel-head"><h2>Older handoffs</h2></div>
-      <div class="panel-body">
-        <div class="empty"><div class="big">All clear.</div>Nothing pending from earlier this week.</div>
+
+    <!-- Navy banner: ⇄ square icon + open-shift count, links to Open Shifts -->
+    <a class="ho-banner" href="./open-shifts.html">
+      <span class="ho-bico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M7 8l-4 4 4 4M3 12h11M17 16l4-4-4-4M21 12H10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <span class="ho-banner-s" id="banner-count">10 open shifts</span>
+    </a>
+
+    <!-- Notes for Next Scheduler (the only live card — full width) -->
+    <div class="card ho-card">
+      <div class="panel-head ho-head">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><rect x="8" y="2" width="8" height="4" rx="1" stroke-width="2"/><path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2" stroke-width="2" stroke-linecap="round"/><path d="M12 11h4M12 16h4M8 11h.01M8 16h.01" stroke-width="2" stroke-linecap="round"/></svg>
+        <h2>Notes for Next Scheduler</h2>
+        <span class="ho-card-n" id="open-count" hidden>0</span>
+        <button class="ho-add" id="add-btn" type="button">+ Add note</button>
       </div>
-    </section>
+      <div class="ho-body">
+        <div class="ho-compose" id="compose" hidden>
+          <textarea id="note-text" rows="2" placeholder="Add a note…" aria-label="Handoff note"></textarea>
+          <div class="ho-compose-foot">
+            <label class="ho-imp"><input type="checkbox" id="note-imp"> Important</label>
+            <button class="ho-post" id="post-btn" type="button" disabled>Post note</button>
+          </div>
+        </div>
+        <div id="open-notes"></div>
+        <details class="ho-resolved" id="resolved-details">
+          <summary>Recently resolved · <span id="res-count">2</span></summary>
+          <div id="resolved-notes"></div>
+        </details>
+      </div>
+    </div>
+
+    <!-- Collapsed reference panel for the next scheduler (derived intelligence, demoted below live work) -->
+    <details class="ho-ref">
+      <summary id="ref-summary">For the next scheduler: 3 follow-ups needed · 2 issues to watch</summary>
+      <div class="ho-refgrid">
+        <div class="card ho-card">
+          <div class="panel-head ho-head">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.13.96.36 1.9.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0122 16.92z" stroke-width="2" stroke-linejoin="round"/></svg>
+            <h2>Follow-Ups Needed</h2>
+            <span class="ho-card-n" id="follow-count">3</span>
+          </div>
+          <div class="ho-body"><div class="ho-grp" id="follow-rows"></div></div>
+        </div>
+        <div class="card ho-card">
+          <div class="panel-head ho-head">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke-width="2" stroke-linejoin="round"/><path d="M12 9v4M12 17h.01" stroke-width="2" stroke-linecap="round"/></svg>
+            <h2>Issues to Watch</h2>
+            <span class="ho-card-n" id="watch-count">2</span>
+          </div>
+          <div class="ho-body"><div class="ho-grp" id="watch-rows"></div></div>
+        </div>
+      </div>
+    </details>
+
   </main>
 </div>
 <script src="./seed.js"></script>
 <script>
 (function () {
-  var byName = {};
-  DEMO.caregivers.forEach(function (c) { byName[c.name] = c; });
-  var clientByName = {};
-  DEMO.clients.forEach(function (c) { clientByName[c.name] = c; });
+  var H = DEMO.handoff;
+  var CHECK = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var CHECK13 = CHECK.replace(/"12"/g, '"13"');
 
-  var state = DEMO.handoffs.map(function (h) {
-    return { id: h.id, from: h.from, to: h.to, client: h.client, time: h.time, note: h.note, ack: false, ackAt: null };
-  });
+  document.getElementById("banner-count").textContent = H.openShifts + " open shift" + (H.openShifts === 1 ? "" : "s");
+  document.getElementById("ref-summary").textContent = "For the next scheduler: " + H.followUps + " follow-ups needed · " + H.issuesToWatch + " issues to watch";
+  document.getElementById("follow-count").textContent = H.followUps;
+  document.getElementById("watch-count").textContent = H.issuesToWatch;
 
-  function initials(name) {
-    var c = byName[name];
-    if (c) return c.initials;
-    return name.split(" ").map(function (w) { return w.charAt(0); }).join("");
-  }
-  function role(name) { var c = byName[name]; return c ? c.role : ""; }
-  function timeNow() {
-    var d = new Date(), h = d.getHours(), m = String(d.getMinutes());
-    if (m.length < 2) m = "0" + m;
-    var ap = h >= 12 ? "p" : "a";
-    h = h % 12; if (h === 0) h = 12;
-    return h + ":" + m + ap;
-  }
+  // Recently resolved samples — fictional, cast + shifts pulled from the seed.
+  var grace = DEMO.openShifts.filter(function (s) { return s.client === "Grace Turner"; })[0];
+  var state = {
+    open: H.notes.slice(),
+    resolved: [
+      { body: "Coverage confirmed for Grace Turner's Sunday shift · " + grace.window + " (" + grace.day + ").", meta: "Resolved by " + DEMO.scheduler.name + " · Jul 22, 11:35 AM · Grace Turner" },
+      { body: "Callback logged for Marta Rivers · she confirmed Thursday's availability review call.", meta: "Resolved by " + DEMO.scheduler.name + " · Jul 21, 4:10 PM · Marta Rivers" }
+    ]
+  };
 
-  function renderStats() {
-    var pending = state.filter(function (h) { return !h.ack; }).length;
-    var acked = state.filter(function (h) { return h.ack; }).length;
-    var bar = document.getElementById("ho-stats");
-    bar.innerHTML = "";
-    if (pending > 0) {
-      bar.appendChild(el("div", "stat warn", '<div class="k">' + pending + '</div><div class="l">Pending</div>'));
+  var openWrap = document.getElementById("open-notes"), resWrap = document.getElementById("resolved-notes");
+  var badge = document.getElementById("open-count"), resCount = document.getElementById("res-count");
+  var resDetails = document.getElementById("resolved-details");
+  var addBtn = document.getElementById("add-btn"), compose = document.getElementById("compose");
+  var ta = document.getElementById("note-text"), imp = document.getElementById("note-imp"), post = document.getElementById("post-btn");
+
+  function render() {
+    openWrap.innerHTML = "";
+    if (state.open.length === 0) {
+      openWrap.appendChild(el("div", "ho-clear", CHECK + " No open notes."));
+      badge.hidden = true;
+    } else {
+      badge.hidden = false; badge.textContent = state.open.length;
+      state.open.forEach(function (n, i) {
+        var row = el("div", "ho-note");
+        row.appendChild(el("span", "ho-dot " + (n.important ? "crit" : "neut")));
+        var tx = el("div", "ho-rtx");
+        var main = el("div", "ho-main"); main.textContent = n.body; tx.appendChild(main);
+        tx.appendChild(el("div", "ho-meta", DEMO.scheduler.name + (n.important ? " · Important" : "")));
+        row.appendChild(tx);
+        var btn = el("button", "ho-resolve", CHECK13); btn.type = "button"; btn.title = "Mark resolved"; btn.setAttribute("aria-label", "Mark resolved");
+        btn.onclick = function () {
+          state.resolved.unshift({ body: n.body, meta: "Resolved by " + DEMO.scheduler.name + " · Just now" });
+          state.open.splice(i, 1); render();
+        };
+        row.appendChild(btn); openWrap.appendChild(row);
+      });
     }
-    if (acked > 0) {
-      bar.appendChild(el("div", "stat good", '<div class="k">' + acked + '</div><div class="l">Acknowledged today</div>'));
-    }
-  }
-
-  function who(name) {
-    return '<div class="ho-who"><span class="avatar-sm">' + initials(name) + '</span>' +
-      '<div><div class="nm">' + name + '</div><div class="rl">' + role(name) + '</div></div></div>';
-  }
-
-  function renderCards() {
-    var grid = document.getElementById("ho-cards");
-    grid.innerHTML = "";
-    state.forEach(function (h) {
-      var cl = clientByName[h.client];
-      var footer = h.ack
-        ? '<span class="chip good">✓ Acknowledged · ' + h.ackAt + '</span><span class="muted">Demo Scheduler</span>'
-        : '<button class="btn primary" data-ack="' + h.id + '">Acknowledge</button>';
-      var card = el("article", "card",
-        '<div class="panel-body leftbar ' + (h.ack ? "good" : "warn") + '">' +
-          '<div class="flex between ho-head">' +
-            '<div class="ho-pair">' + who(h.from) + '<span class="ho-arrow">→</span>' + who(h.to) + '</div>' +
-            '<span class="chip plain">' + h.time + '</span>' +
-          '</div>' +
-          '<div class="dotline mt">Client <b>' + h.client + '</b>' + (cl ? " · " + cl.city : "") + '</div>' +
-          '<p class="ho-note">' + h.note + '</p>' +
-          '<div class="flex ' + (h.ack ? "between" : "end") + ' ho-foot">' + footer + '</div>' +
-        '</div>');
-      grid.appendChild(card);
+    resWrap.innerHTML = "";
+    resDetails.hidden = state.resolved.length === 0;
+    resCount.textContent = state.resolved.length;
+    state.resolved.forEach(function (n, i) {
+      var row = el("div", "ho-note");
+      row.appendChild(el("span", "ho-dot neut"));
+      var tx = el("div", "ho-rtx");
+      var main = el("div", "ho-main"); main.textContent = n.body; tx.appendChild(main);
+      tx.appendChild(el("div", "ho-meta", n.meta));
+      row.appendChild(tx);
+      var btn = el("button", "ho-reopen", "Reopen"); btn.type = "button"; btn.title = "Reopen this note";
+      btn.onclick = function () { var m = state.resolved.splice(i, 1)[0]; state.open.push({ body: m.body, important: false }); render(); };
+      row.appendChild(btn); resWrap.appendChild(row);
     });
   }
 
-  document.getElementById("ho-cards").addEventListener("click", function (e) {
-    var btn = e.target.closest("[data-ack]");
-    if (!btn) return;
-    var id = Number(btn.getAttribute("data-ack"));
-    var h = state.find(function (x) { return x.id === id; });
-    if (!h || h.ack) return;
-    h.ack = true;
-    h.ackAt = timeNow();
-    renderStats();
-    renderCards();
-  });
+  addBtn.onclick = function () {
+    var show = compose.hidden;
+    compose.hidden = !show;
+    addBtn.textContent = show ? "✕ Cancel" : "+ Add note";
+    if (show) ta.focus();
+  };
+  ta.oninput = function () { post.disabled = !ta.value.trim(); };
+  post.onclick = function () {
+    if (!ta.value.trim()) return;
+    state.open.push({ body: ta.value.trim(), important: imp.checked });
+    ta.value = ""; imp.checked = false; post.disabled = true;
+    compose.hidden = true; addBtn.textContent = "+ Add note";
+    render();
+  };
 
-  renderStats();
-  renderCards();
+  // Reference rows — built from the seed (tasks + flagged care notes).
+  var followRows = [
+    { cls: "crit", main: DEMO.tasks[1].title, meta: "Fri · 11:00 AM–7:00 PM still uncovered after a call-off · 2 clean fits are free" },
+    { cls: "warn", main: DEMO.tasks[2].title, meta: "Unexplained forearm bruise in yesterday's care note · route to the nurse per protocol" },
+    { cls: "neut", main: DEMO.tasks[0].title, meta: "Monthly availability refresh due · enter it in Edit Availability" }
+  ];
+  var glucose = DEMO.careNotes.rows.filter(function (r) { return r.client === "Nadia Osman"; })[0];
+  var exits = DEMO.careNotes.rows.filter(function (r) { return r.client === "Sofia Marchetti"; })[0];
+  var watchRows = [
+    { cls: "warn", main: "Glucose watch: " + glucose.client, meta: "Refused the 11 PM check, accepted at 1 AM · reading 168 · watch again tonight" },
+    { cls: "warn", main: "Exit-seeking: " + exits.client, meta: "Tried to leave the house twice · redirected safely both times · family notified" }
+  ];
+  function fillRows(id, rows) {
+    var wrap = document.getElementById(id);
+    rows.forEach(function (r) {
+      var row = el("div", "ho-row");
+      row.appendChild(el("span", "ho-dot " + r.cls));
+      var tx = el("div", "ho-rtx");
+      tx.appendChild(el("div", "ho-main", r.main));
+      tx.appendChild(el("div", "ho-meta", r.meta));
+      row.appendChild(tx); wrap.appendChild(row);
+    });
+  }
+  fillRows("follow-rows", followRows);
+  fillRows("watch-rows", watchRows);
+  render();
 })();
 </script>
 </body>

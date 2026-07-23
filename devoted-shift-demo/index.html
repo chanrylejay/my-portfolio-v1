@@ -1,3 +1,6 @@
+<!-- SHELL v2 — copies the LIVE sidebar anatomy exactly (icons are the production SVG set).
+     Change ONLY: <title>, the `active` class on one nav link, and <main>.
+     impeccable-disable overused-font side-tab — exact replica of production canon. -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,88 +11,113 @@
 <link rel="stylesheet" href="./styles.css">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%231E40AF%27/%3E%3Ctext x=%2716%27 y=%2722%27 font-family=%27Arial%27 font-size=%2713%27 font-weight=%27bold%27 fill=%27white%27 text-anchor=%27middle%27%3EDS%3C/text%3E%3C/svg%3E">
 <style>
-/* Devo home — hero ask bar, suggestion chips, Q&A thread, attention queue */
-.ask-hero { display: flex; align-items: center; gap: 10px; background: var(--card); border: 1.5px solid var(--line-strong); border-radius: 14px; padding: 8px 8px 8px 16px; box-shadow: 0 6px 22px -12px rgba(11,19,48,.22); margin-bottom: 12px; }
-.ask-hero:focus-within { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(30,64,175,.14), 0 6px 22px -12px rgba(11,19,48,.22); }
-.ask-input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font: inherit; font-size: 14px; color: var(--ink); }
-.ask-clear { font-size: 13px; font-weight: 600; color: var(--ink-soft); padding: 0 6px; }
-.ask-clear:hover { color: var(--brand); }
-.chips { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-.chipq { font-size: 13px; font-weight: 600; color: var(--ink-soft); background: var(--card); border: 1px solid var(--line-strong); border-radius: 18px; padding: 8px 10px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.chipq:hover:not(:disabled) { background: var(--brand-soft); border-color: var(--brand); color: var(--brand); }
-.chipq:disabled { opacity: .55; cursor: default; }
-.devog { margin-top: 20px; max-width: 94%; }
-.devog-who { display: flex; align-items: center; gap: 6px; margin: 0 2px 5px; font-size: 10px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-soft); }
-.devog-bub { padding: 13px 17px; background: var(--panel-head); border-radius: 12px; font-size: 14px; line-height: 1.55; }
-.thread { display: flex; flex-direction: column; gap: 18px; margin-top: 20px; }
-.q-row { display: flex; align-items: flex-start; gap: 9px; font-size: 14px; font-weight: 700; line-height: 1.4; }
-.q-row .spark { color: var(--brand); flex: none; }
-.a-block { padding-left: 23px; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
-.a-block .prose { line-height: 1.55; }
-.thinking { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--brand); background: var(--brand-soft); border: 1px solid var(--line-strong); border-radius: 10px; padding: 8px 13px; }
-.thinking .pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--brand); animation: dv-pulse 1s infinite; }
-@keyframes dv-pulse { 50% { opacity: .3; } }
-.ans-card { width: 100%; }
-.ans-head { padding: 10px 14px; border-bottom: 1px solid var(--line); background: var(--panel-head); border-radius: var(--radius) var(--radius) 0 0; font-weight: 700; font-size: 13px; }
-.ans-row { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; }
-.ans-row .who { min-width: 0; flex: 1; }
-.ans-row .why { color: var(--ink-soft); font-size: 12px; margin-top: 2px; line-height: 1.45; }
-.ans-row .chip, .ans-row .rank { flex: none; margin-top: 1px; }
-.ans-foot { padding: 9px 14px; border-top: 1px solid var(--line-soft); width: 100%; }
-.ans-foot a { color: var(--brand); font-weight: 600; font-size: 12px; }
-.ans-foot a:hover { text-decoration: underline; }
-.q-item { padding: 11px 14px; }
-.q-item .t { font-weight: 600; }
-.q-item .s { color: var(--ink-soft); font-size: 12px; margin-top: 2px; line-height: 1.45; }
-.q-item .act { display: inline-block; margin-top: 6px; color: var(--brand); font-weight: 600; font-size: 12px; }
-.q-item .act:hover { text-decoration: underline; }
-@media (max-width: 1100px) { .chips { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+/* Devo home (spec section 1): two panes, LEFT chat + RIGHT persistent "Your day" rail. NO statbar. */
+.devo-home { display: grid; grid-template-columns: minmax(0, 1fr) 340px; align-items: start; margin: -32px -32px -32px 0; }
+.devo-chat { min-width: 0; padding: 30px 34px 40px 0; }
+.aiq-root { max-width: 820px; }
+.aiq-greet { margin-bottom: 16px; }
+.aiq-greet-h { font-size: 24px; font-weight: 800; letter-spacing: -.02em; color: var(--ink); text-wrap: balance; }
+.aiq-greet-sun { font-size: 20px; }
+.aiq-greet-sub { margin-top: 6px; font-size: 13px; font-weight: 500; color: var(--ink-soft); }
+.aiq-inbar { margin-bottom: 12px; }
+.aiq-inbar:focus-within { border-color: #C7D2FE; box-shadow: 0 0 0 3px rgba(30,64,175,.14), var(--shadow-pop); }
+.aiq-clear { flex: none; font-size: 13px; font-weight: 600; color: var(--ink-soft); padding: 0 6px; }
+.aiq-clear:hover { color: var(--brand); }
+.aiq-ask-btn { flex: none; display: inline-flex; align-items: center; gap: 6px; height: 37.5px; padding: 0 16px; border-radius: 8px; font-size: 13px; font-weight: 700; color: #fff; background: var(--brand); }
+.aiq-ask-btn:hover { background: var(--brand-hover); }
+.aiq-ask-btn svg { width: 14px; height: 14px; }
+.aiq-chips { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-bottom: 16px; }
+.aiq-chip { font-size: 13px; font-weight: 600; color: var(--ink-soft); background: #fff; border: 1px solid var(--line-strong); border-radius: 18px; padding: 8px 10px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.aiq-chip:hover { background: var(--brand-soft); border-color: var(--brand); color: var(--brand); }
+.aiq-chip:disabled, .aiq-clear:disabled { opacity: .55; cursor: default; }
+.aiq-thread { display: flex; flex-direction: column; gap: 16px; }
+.aiq-devogreet { margin-top: 20px; max-width: 94%; }
+.aiq-devogreet-who { display: flex; align-items: center; gap: 6px; margin: 0 2px 5px; font-size: 10px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-soft); }
+.aiq-devogreet-bub { padding: 13px 17px; background: var(--panel-head); border-radius: 12px; font-size: 15px; line-height: 1.55; color: var(--ink); }
+.aiq-ask { display: flex; align-items: flex-start; gap: 9px; font-size: 14.5px; font-weight: 700; color: var(--ink); line-height: 1.4; }
+.aiq-ask svg { width: 13px; height: 13px; flex: none; margin-top: 3px; color: var(--brand); }
+.aiq-ans { padding-left: 23px; }
+.aiq-ai-label { display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .09em; color: var(--notes); background: var(--notes-soft); border-radius: 6px; padding: 3px 8px; }
+.aiq-ai-label::before { content: "\2726"; font-size: 10px; line-height: 1; }
+.aiq-ai-prose { margin-top: 8px; max-width: 95%; font-size: 13.5px; line-height: 1.6; color: var(--ink); white-space: pre-line; }
+.aiq-thinking { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--brand); background: var(--brand-soft); border: 1px solid var(--line-strong); border-radius: 10px; padding: 9px 13px; }
+.aiq-thinking .pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--brand); animation: aiqPulse 1s ease-in-out infinite; }
+@keyframes aiqPulse { 50% { opacity: .3; } }
+.dvb-panel { position: sticky; top: 0; align-self: start; min-height: 100vh; overflow-y: auto; padding: 30px 22px 40px; border-left: 1px solid var(--line); background: #FCFCFE; }
+.dvb-head { margin: 0 0 13px; font-size: 13px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; color: var(--ink); }
+.dvb-items { display: flex; flex-direction: column; gap: 5px; }
+.dvb-item { display: flex; gap: 9px; align-items: flex-start; padding: 7px 11px; background: #fff; border: 1px solid var(--line); border-radius: 9px; box-shadow: 0 1px 2px rgba(16,24,40,.05); }
+a.dvb-item:hover { border-color: var(--line-strong); }
+.dvb-dot { flex: none; width: 7px; height: 7px; margin-top: 5px; border-radius: 50%; }
+.dvb-dot.notes { background: var(--notes); } .dvb-dot.crit { background: var(--crit); } .dvb-dot.warn { background: var(--warn); }
+.dvb-t2 { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.dvb-t { font-size: 13px; font-weight: 600; line-height: 1.35; color: var(--ink); }
+.dvb-s { font-size: 13px; font-weight: 500; line-height: 1.35; color: var(--ink-soft); }
+@media (max-width: 1024px) {
+  .devo-home { grid-template-columns: 1fr; margin: 0; }
+  .devo-chat { padding: 0 0 24px; }
+  .aiq-chips { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .dvb-panel { position: static; min-height: 0; padding: 22px 0 0; border-left: 0; border-top: 1px solid var(--line); background: transparent; }
+}
 </style>
 </head>
 <body>
 <div class="demo-note"><b>Interactive demo.</b> Every name, client, and number on this page is fictional. Built as a sanitized copy of a production home-care operations platform.</div>
 <div class="app">
   <aside class="rail">
-    <a class="rail-brand" href="./index.html">
-      <span class="logo">DS</span>
-      <span><span class="name">Devoted Shift</span><br><span class="sub">Scheduling Intelligence</span></span>
+    <a class="brand" href="./index.html">
+      <span class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 21s-7-4.6-9.2-9A5.2 5.2 0 0112 5.6 5.2 5.2 0 0121.2 12c-2.2 4.4-9.2 9-9.2 9z" stroke-width="2" stroke-linejoin="round"/></svg></span>
+      <span style="min-width:0;line-height:1">
+        <span class="eyebrow">Devoted Shift</span>
+        <span class="name">Scheduling <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </span>
+      <span class="apps"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="5" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="12" cy="19" r="2"/><circle cx="19" cy="19" r="2"/></svg></span>
     </a>
     <nav class="nav">
-      <a href="./index.html" class="active"><span class="ico">✦</span> Devo</a>
-      <a href="./open-shifts.html"><span class="ico">▦</span> Open Shifts <span class="pill">5</span></a>
-      <a href="./find-coverage.html"><span class="ico">◎</span> Find Coverage</a>
-      <a href="./caregivers.html"><span class="ico">☺</span> Caregivers</a>
-      <a href="./clients.html"><span class="ico">⌂</span> Clients <span class="soon">SOON</span></a>
-      <a href="./notes-review.html"><span class="ico">✎</span> Care Note Review <span class="pill">2</span></a>
-      <a href="./handoffs.html"><span class="ico">⇄</span> Shift Handoff</a>
-      <a href="./weekly-tasks.html"><span class="ico">☑</span> Weekly Tasks</a>
-      <a href="./forms.html"><span class="ico">🗎</span> Forms &amp; Resources <span class="soon">SOON</span></a>
-      <a href="./reports.html"><span class="ico">▤</span> KPIs / Reports</a>
-      <a href="./guides.html"><span class="ico">?</span> Quick Guides <span class="soon">SOON</span></a>
+      <a href="./index.html" class="active"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z" stroke-width="1.8" stroke-linejoin="round"/><path d="M5 17l.7 2L8 19.7 5.7 20.4 5 22l-.7-1.6L2 19.7l2.3-.7L5 17z" stroke-width="1.5" stroke-linejoin="round"/></svg> Devo</a>
+      <a href="./open-shifts.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="17" rx="2" stroke-width="2"/><path d="M3 9h18M8 2v4M16 2v4" stroke-width="2" stroke-linecap="round"/></svg> Open Shifts <span class="count">10</span></a>
+      <a href="./find-coverage.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="7" stroke-width="2"/><path d="M21 21l-4-4" stroke-width="2" stroke-linecap="round"/></svg> Find Coverage</a>
+      <a href="./caregivers.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 11l3 3 8-8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12a9 9 0 11-5-8" stroke-width="2" stroke-linecap="round"/></svg> Caregivers</a>
+      <a href="./clients.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="8" r="3.4" stroke-width="2"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0" stroke-width="2" stroke-linecap="round"/></svg> Clients <span class="soon">SOON</span></a>
+      <a href="./notes-review.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 11l3 3 8-8M3 6h7M3 12h5M3 18h9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Care Note Review</a>
+      <a href="./handoffs.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M7 8l-4 4 4 4M3 12h11M17 16l4-4-4-4M21 12H10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Shift Handoff</a>
+      <a href="./weekly-tasks.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M10 6h10M10 12h10M10 18h10" stroke-width="2" stroke-linecap="round"/><path d="M4 6.5l1.3 1.3L7.6 5.4M4 17.5l1.3 1.3L7.6 16.4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="5.4" cy="12" r="1.2" fill="currentColor" stroke="none"/></svg> Weekly Tasks</a>
+      <a href="./forms.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="4" y="3" width="14" height="18" rx="2" stroke-width="2"/><path d="M8 8h6M8 12h6M8 16h3" stroke-width="1.8" stroke-linecap="round"/></svg> Forms &amp; Resources</a>
+      <a href="./reports.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> KPIs / Reports</a>
+      <a href="./guides.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 4h11a1 1 0 011 1v14a1 1 0 01-1 1H6a2 2 0 01-2-2V6a2 2 0 012-2z" stroke-width="2" stroke-linejoin="round"/><path d="M9 4v15M12 9h3M12 12.5h3" stroke-width="2" stroke-linecap="round"/></svg> Quick Guides</a>
     </nav>
-    <div class="rail-foot"><span class="avatar">DS</span> <span>Demo Scheduler<br><span style="color:#8A93A6">Thursday, Jul 23, 2026</span></span></div>
+    <div class="rail-foot">
+      <span class="avatar">D</span>
+      <span class="who"><b>Demo Scheduler</b><span>Admin</span></span>
+      <span class="out"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M15 3h4a1 1 0 011 1v16a1 1 0 01-1 1h-4M10 17l5-5-5-5M15 12H3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    </div>
   </aside>
   <main class="main">
-    <div class="statbar" id="kpis"></div>
-    <div class="grid g-main-side">
-      <section>
-        <div class="ask-hero">
-          <input id="askInput" class="ask-input" placeholder="Ask Devo anything…" aria-label="Ask Devo">
-          <button id="clearBtn" class="ask-clear" hidden>Clear</button>
-          <button id="askBtn" class="btn primary">✦ Ask</button>
+    <div class="devo-home">
+      <section class="devo-chat">
+        <div class="aiq-root">
+          <div class="aiq-greet">
+            <h1 class="aiq-greet-h" id="greet-h"></h1>
+            <p class="aiq-greet-sub" id="greet-sub"></p>
+          </div>
+          <div class="askbox aiq-inbar">
+            <input id="ask-input" placeholder="Ask Devo anything…" aria-label="Ask Devo">
+            <button type="button" id="clear-btn" class="aiq-clear" hidden>Clear</button>
+            <button type="button" id="ask-btn" class="aiq-ask-btn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5l2.1 6.2 6.2 2.1-6.2 2.1L12 19.1l-2.1-6.2-6.2-2.1 6.2-2.1L12 2.5z"/></svg> Ask</button>
+          </div>
+          <div class="aiq-chips" id="chips"></div>
+          <div class="aiq-thread" id="intro">
+            <div class="aiq-devogreet">
+              <div class="aiq-devogreet-who">&#10038; Devo</div>
+              <p class="aiq-devogreet-bub" id="devo-line"></p>
+            </div>
+          </div>
+          <div class="aiq-thread" id="thread" hidden aria-live="polite"></div>
         </div>
-        <div class="chips" id="chips"></div>
-        <div class="devog" id="devoLine">
-          <div class="devog-who">✦ Devo</div>
-          <p class="devog-bub" id="devoBub"></p>
-        </div>
-        <div class="thread" id="thread" aria-live="polite"></div>
       </section>
-      <aside>
-        <div class="card">
-          <div class="panel-head"><h2>What needs attention now</h2><span class="count" id="qCount"></span></div>
-          <div class="row-list" id="queue"></div>
-        </div>
+      <aside class="dvb-panel" aria-label="What needs you today">
+        <h2 class="dvb-head">Your day</h2>
+        <div class="dvb-items" id="your-day"></div>
       </aside>
     </div>
   </main>
@@ -98,158 +126,133 @@
 <script>
 (function () {
   var D = window.DEMO;
-  var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+  var input = document.getElementById("ask-input");
+  var askBtn = document.getElementById("ask-btn");
+  var clearBtn = document.getElementById("clear-btn");
+  var chipsBox = document.getElementById("chips");
+  var intro = document.getElementById("intro");
+  var thread = document.getElementById("thread");
+  var busy = false;
+  var SPARK = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5l2.1 6.2 6.2 2.1-6.2 2.1L12 19.1l-2.1-6.2-6.2-2.1 6.2-2.1L12 2.5z"/></svg>';
 
-  /* ---- Derived counts (all from seed) ---- */
-  var flagged = D.careNotes.filter(function (n) { return n.flag !== "good"; });
-  var review = flagged.filter(function (n) { return /review|follow-up/i.test(n.ai); });
-  var dueToday = D.weeklyTasks.filter(function (t) { return !t.done && t.due === "Today"; });
-  var next24 = D.openShifts.filter(function (s) { return s.tier === "URGENT" || s.tier === "TONIGHT"; });
-  var urgent = D.openShifts.filter(function (s) { return s.tier === "URGENT"; })[0];
-  var tonight = D.openShifts.filter(function (s) { return s.tier === "TONIGHT"; })[0];
-  var critNotes = review.filter(function (n) { return n.flag === "crit"; }).length;
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function titleCase(s) { return s.toLowerCase().replace(/\b[a-z]/g, function (m) { return m.toUpperCase(); }); }
 
-  /* ---- KPI statbar (omit empty cells) ---- */
-  [[D.openShifts.length, "Open shifts", "crit"],
-   [review.length, "Care notes to review", "notes"],
-   [dueToday.length, "Tasks due today", "warn"]].forEach(function (c) {
-    if (c[0] > 0) document.getElementById("kpis").appendChild(el("div", "stat " + c[2], '<div class="k">' + c[0] + '</div><div class="l">' + c[1] + "</div>"));
+  // greeting + date line + Devo's proactive bubble
+  document.getElementById("greet-h").innerHTML = esc(D.greeting) + ' <span class="aiq-greet-sun" aria-hidden="true">🌞</span>';
+  document.getElementById("greet-sub").textContent = D.todayShort;
+  document.getElementById("devo-line").textContent = D.devoLine;
+
+  // 6 suggestion chips, 3 per row
+  D.askChips.forEach(function (q) {
+    var b = el("button", "aiq-chip");
+    b.type = "button"; b.textContent = q; b.title = q;
+    b.addEventListener("click", function () { ask(q); });
+    chipsBox.appendChild(b);
   });
 
-  /* ---- Devo's proactive line (deterministic, so no AI chip) ---- */
-  document.getElementById("devoBub").textContent =
-    "Start with coverage: " + next24.length + (next24.length === 1 ? " shift starts" : " shifts start") + " within the next 24 hours.";
-
-  /* ---- What needs attention now ---- */
-  var qItems = [
-    { tone: "crit", t: "Open shift · " + urgent.client, s: urgent.when + " · " + urgent.reason + " · Uncovered " + urgent.uncovered, act: "Find coverage", href: "./find-coverage.html" },
-    { tone: "warn", t: "Open shift · " + tonight.client, s: tonight.when + " · " + tonight.reason, act: "Find coverage", href: "./find-coverage.html" },
-    { tone: "notes", t: "Care notes to review", s: critNotes + " critical · " + (review.length - critNotes) + " nurse follow-up · flagged yesterday", act: "Review notes", href: "./notes-review.html" }
-  ];
-  document.getElementById("qCount").textContent = qItems.length;
-  qItems.forEach(function (q) {
-    document.getElementById("queue").appendChild(el("div", "q-item",
-      '<div class="leftbar ' + q.tone + '"><div class="t">' + esc(q.t) + '</div><div class="s">' + esc(q.s) + '</div><a class="act" href="' + q.href + '">' + q.act + "</a></div>"));
+  // right rail: YOUR DAY white cards (dot + bold title + muted subline)
+  D.yourDay.forEach(function (c) {
+    var a = el("a", "dvb-item"); a.href = c.href;
+    a.appendChild(el("span", "dvb-dot " + c.dotClass));
+    var t2 = el("span", "dvb-t2");
+    var t = el("span", "dvb-t"); t.textContent = c.title;
+    var s = el("span", "dvb-s"); s.textContent = c.sub;
+    t2.appendChild(t); t2.appendChild(s); a.appendChild(t2);
+    document.getElementById("your-day").appendChild(a);
   });
 
-  /* ---- Canned answers (AI chip + prose + deterministic card) ---- */
-  var aiP = function (text) { return '<span class="chip ai">AI Summary</span><p class="prose">' + text + "</p>"; };
-  var card = function (head, rows, href, label) {
-    return '<div class="card ans-card"><div class="ans-head">' + head + '</div><div class="row-list">' + rows + '</div><div class="ans-foot"><a href="' + href + '">' + label + " →</a></div></div>";
-  };
+  var CITIES = [];
+  D.coverage.rows.forEach(function (r) { if (CITIES.indexOf(r.city) < 0) CITIES.push(r.city); });
 
-  function ansCoverage() {
-    var top3 = D.match("Eleanor Price").slice(0, 3);
-    var rows = top3.map(function (m) {
-      return '<div class="ans-row"><span class="rank">' + m.rank + '</span><div class="who"><b>' + esc(m.name) + '</b><div class="why">' + esc(m.why) + '</div></div><span class="chip ' + m.tone + '">' + esc(m.grade) + "</span></div>";
-    }).join("");
-    return aiP("<b>" + esc(top3[0].name) + "</b> is the strongest fit for Eleanor Price tomorrow (Fri Jul 24 · 8:00a-4:00p): 4 prior shifts with her and 12 minutes away. " + esc(top3[1].name) + " is a clean second. " + esc(top3[2].name) + " is free after 4:00p only, so he cannot take the full shift.") +
-      card("Top matches · Eleanor Price · Fri Jul 24 · 8:00a-4:00p", rows, "./find-coverage.html", "Run the full match in Find Coverage");
+  function loadingCopy(t) {
+    if (/call[-\s]?off/.test(t)) return "Checking call-offs…";
+    if (/\bavailab|who'?s free|whos free|\bfree\b|cover/.test(t)) return "Checking availability…";
+    if (/open[-\s]?shift|shifts? (are |is )?open|what shifts/.test(t)) return "Loading today's open shifts…";
+    return "Checking the live data…";
   }
 
-  function ansOpen() {
-    var rows = D.openShifts.map(function (s) {
-      var tone = s.tier === "URGENT" ? "crit" : s.tier === "TONIGHT" ? "warn" : "";
-      var chip = s.tier === "URGENT" ? "crit" : s.tier === "TONIGHT" ? "warn" : "plain";
-      return '<div class="q-item"><div class="leftbar ' + tone + '"><div class="t flex between">' + esc(s.client) + ' <span class="chip ' + chip + '">' + s.tier + '</span></div><div class="s">' + esc(s.when) + " · " + esc(s.reason) + (s.uncovered ? " · Uncovered " + s.uncovered : "") + "</div></div></div>";
-    }).join("");
-    return aiP(D.openShifts.length + " shifts are open. " + next24.length + " need action within 24 hours: <b>" + esc(urgent.client) + "</b> this morning (uncovered " + urgent.uncovered + ") and <b>" + esc(tonight.client) + "</b> tonight.") +
-      card("Open shifts · all " + D.openShifts.length, rows, "./open-shifts.html", "Open the Open Shifts board");
+  function coverageAnswer(q) {
+    var t = q.toLowerCase();
+    var city = null;
+    CITIES.forEach(function (c) { if (!city && t.indexOf(c.toLowerCase()) >= 0) city = c; });
+    var free = D.coverage.rows.filter(function (r) { return !r.booked; });
+    var pool = city ? free.filter(function (r) { return r.city === city; }).concat(free.filter(function (r) { return r.city !== city; })) : free;
+    var when = /tomorrow/.test(t) ? "tomorrow" : /saturday/.test(t) ? "Saturday" : /sunday/.test(t) ? "Sunday" : /week/.test(t) ? "this week" : "for that day";
+    var shift = /overnight/.test(t) ? " on the overnight shift" : /evening/.test(t) ? " on the evening shift" : "";
+    var lines = pool.slice(0, 3).map(function (r, i) {
+      return (i + 1) + ". " + r.name + " · " + r.city + " · " + (r.driver ? "drives" : "no car") + (r.onCall ? " · on call" : "");
+    });
+    return "Top 3" + (city ? " near " + city : "") + " " + when + shift + ", ranked by fit:\n" + lines.join("\n") + "\n" +
+      free.length + " caregivers are free in total and " + (D.coverage.rows.length - free.length) + " are already booked. Open Find Coverage for the full ranked list.";
   }
 
-  function ansOvernight() {
-    var h = D.handoffs[0];
-    var row = '<div class="ans-row"><div class="who"><b>' + esc(h.from) + " → " + esc(h.to) + '</b><div class="why">' + esc(h.client) + " · " + esc(h.time) + '</div><div class="why">"' + esc(h.note) + '"</div></div></div>';
-    return aiP("One overnight ran: <b>" + esc(h.from) + "</b> with " + esc(h.client) + ". The 11:00p glucose check was refused, then accepted at 1:00a reading 168. He handed off to " + esc(h.to) + " at " + esc(h.time) + " and flagged the morning reading to watch.") +
-      card("Shift handoff · overnight", row, "./handoffs.html", "Open Shift Handoff");
+  function openShiftsAnswer() {
+    var bands = {};
+    D.openShifts.forEach(function (s) { bands[s.band] = (bands[s.band] || 0) + 1; });
+    var parts = Object.keys(bands).map(function (b) { return bands[b] + " the week of " + titleCase(b.split("·").pop().trim()); });
+    var first = D.openShifts[0];
+    return "Nothing new opened for today itself. The board has " + D.openShifts.length + " open shifts coming up: " + parts.join(" and ") + ".\n" +
+      "Longest-waiting: " + first.client + " · " + first.day + " · " + first.window + " · " + first.city + ", open for " + first.openFor + ".\n" +
+      "The full list is on Open Shifts.";
   }
 
-  function ansNotes() {
-    var rows = flagged.map(function (n) {
-      return '<div class="q-item"><div class="leftbar ' + n.flag + '"><div class="t">' + esc(n.client) + ' <span class="muted">· ' + esc(n.caregiver) + '</span></div><div class="s">' + esc(n.note) + "</div></div></div>";
-    }).join("");
-    return aiP(flagged.length + " of " + D.careNotes.length + " notes from yesterday are flagged: 1 critical (<b>Sofia Marchetti</b>, two exit attempts in one shift) and 2 for attention. " + review.length + " still need review.") +
-      card("Flagged care notes · yesterday", rows, "./notes-review.html", "Open Care Note Review");
-  }
-
-  function ansTasks() {
-    var rows = dueToday.map(function (t) {
-      return '<div class="ans-row"><div class="who"><b>' + esc(t.task) + '</b><div class="why">' + esc(t.owner) + " · From: " + esc(t.from) + '</div></div><span class="chip warn">Due today</span></div>';
-    }).join("");
-    return aiP(dueToday.length + " tasks are due today, both from yesterday's events: the coverage follow-up for Eleanor Price and the nurse review of her bruise report.") +
-      card("Tasks due today", rows, "./weekly-tasks.html", "Open Weekly Tasks");
-  }
-
-  function ansHelp() {
-    return aiP("I can rank coverage for an open shift, list open shifts, summarize overnight handoffs, pull flagged care notes, and show tasks due today. Pick a suggestion above or type a question.");
-  }
-
-  function ansFallback() {
-    return aiP("In this demo I answer the suggested questions only. The production assistant parses free text against live scheduling data. Try one of the chips above.");
+  function callOffsAnswer() {
+    return D.profile.name + " is the only caregiver with a recent call-off · " + D.profile.reliability.callOffs +
+      " in the last 90 days, against a " + D.profile.reliability.pct + "% reliability score. The rest of the active roster is clean. Her profile lists " +
+      D.profile.reliability.issueHistory + " entry in issue history.";
   }
 
   function route(q) {
     var t = q.toLowerCase();
-    if (/cover|match/.test(t)) return ansCoverage;
-    if (/overnight|handoff|happened|night/.test(t)) return ansOvernight;
-    if (/note|flag/.test(t)) return ansNotes;
-    if (/task|due/.test(t)) return ansTasks;
-    if (/help|what can/.test(t)) return ansHelp;
-    if (/open|shift/.test(t)) return ansOpen;
-    return ansFallback;
+    if (/call[-\s]?off/.test(t)) return callOffsAnswer();
+    if (/open[-\s]?shift|(shift).*(open)|(open).*(shift)/.test(t)) return openShiftsAnswer();
+    if (/help|what can you/.test(t)) return "I can check who's free on any day or shift, filter by city and driver status, summarize the open-shift board, and flag call-off patterns · all straight from the live schedule. Try a chip above, or ask in your own words.";
+    if (/free|avail|cover|who/.test(t)) return coverageAnswer(q);
+    return "I can't answer that from the demo data yet. Try asking who's free on a day, what shifts are open, or who has the most call-offs.";
   }
-
-  function loadingCopy(q) {
-    var t = q.toLowerCase();
-    if (/cover|match/.test(t)) return "Running the match…";
-    if (/open|shift/.test(t)) return "Loading today's open shifts…";
-    return "Checking the schedule…";
-  }
-
-  /* ---- Ask flow ---- */
-  var thread = document.getElementById("thread");
-  var input = document.getElementById("askInput");
-  var askBtn = document.getElementById("askBtn");
-  var clearBtn = document.getElementById("clearBtn");
-  var busy = false;
 
   function setBusy(b) {
     busy = b;
-    input.disabled = b; askBtn.disabled = b;
-    $$(".chipq").forEach(function (c) { c.disabled = b; });
+    input.disabled = b; askBtn.disabled = b; clearBtn.disabled = b;
+    $$(".aiq-chip", chipsBox).forEach(function (c) { c.disabled = b; });
   }
 
   function ask(q) {
-    if (busy || !q.trim()) return;
+    q = q.trim();
+    if (!q || busy) return;
     setBusy(true);
-    document.getElementById("devoLine").hidden = true;
-    thread.appendChild(el("div", "q-row", '<span class="spark">✦</span><span>' + esc(q) + "</span>"));
-    var a = el("div", "a-block", '<span class="thinking"><span class="pulse"></span>' + loadingCopy(q) + "</span>");
-    thread.appendChild(a);
-    a.scrollIntoView({ behavior: "smooth", block: "end" });
-    setTimeout(function () {
-      a.innerHTML = route(q)();
+    intro.hidden = true; thread.hidden = false; clearBtn.hidden = false;
+    thread.appendChild(el("div", "aiq-ask", SPARK + "<span>" + esc(q) + "</span>"));
+    var ans = el("div", "aiq-ans", '<div class="aiq-thinking"><span class="pulse"></span>' + esc(loadingCopy(q.toLowerCase())) + "</div>");
+    thread.appendChild(ans);
+    ans.scrollIntoView({ behavior: "smooth", block: "end" });
+    window.setTimeout(function () {
+      var prose = el("p", "aiq-ai-prose");
+      prose.textContent = route(q);
+      ans.innerHTML = "";
+      ans.appendChild(el("span", "aiq-ai-label", "AI"));
+      ans.appendChild(prose);
       setBusy(false);
-      clearBtn.hidden = false;
-      a.scrollIntoView({ behavior: "smooth", block: "end" });
-    }, 550);
+      ans.scrollIntoView({ behavior: "smooth", block: "end" });
+      input.focus();
+    }, 750 + Math.random() * 450);
   }
 
-  ["Who can cover Eleanor Price tomorrow 8a-4p?", "What shifts are open today?", "What happened overnight?",
-   "Any flagged care notes?", "What is due today?", "What can you help me with?"].forEach(function (q) {
-    var b = el("button", "chipq", esc(q));
-    b.type = "button";
-    b.addEventListener("click", function () { ask(q); });
-    document.getElementById("chips").appendChild(b);
-  });
+  function sendFromInput() {
+    var q = input.value.trim();
+    if (!q || busy) return;
+    input.value = "";
+    ask(q);
+  }
 
-  askBtn.addEventListener("click", function () { var q = input.value; input.value = ""; ask(q); });
-  input.addEventListener("keydown", function (e) { if (e.key === "Enter") { var q = input.value; input.value = ""; ask(q); } });
+  askBtn.addEventListener("click", sendFromInput);
+  input.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); sendFromInput(); } });
   clearBtn.addEventListener("click", function () {
-    thread.innerHTML = "";
-    document.getElementById("devoLine").hidden = false;
-    clearBtn.hidden = true;
-    input.focus();
+    if (busy) return;
+    thread.innerHTML = ""; thread.hidden = true;
+    intro.hidden = false; clearBtn.hidden = true;
+    input.value = ""; input.focus();
   });
 })();
 </script>

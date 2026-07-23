@@ -1,6 +1,6 @@
-<!-- SHELL TEMPLATE — every demo page copies this structure exactly.
-     Change ONLY: <title>, the `active` class on one nav link, and the <main> content.
-     impeccable-disable overused-font side-tab — exact replica of production design canon (Inter + left status rail are LOCKED in the source system). -->
+<!-- SHELL v2 — copies the LIVE sidebar anatomy exactly (icons are the production SVG set).
+     Change ONLY: <title>, the `active` class on one nav link, and <main>.
+     impeccable-disable overused-font side-tab — exact replica of production canon. -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,151 +11,185 @@
 <link rel="stylesheet" href="./styles.css">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%231E40AF%27/%3E%3Ctext x=%2716%27 y=%2722%27 font-family=%27Arial%27 font-size=%2713%27 font-weight=%27bold%27 fill=%27white%27 text-anchor=%27middle%27%3EDS%3C/text%3E%3C/svg%3E">
 <style>
-/* weekly-tasks module styles — built on foundation tokens */
-.wt-ck { width: 16px; height: 16px; accent-color: var(--brand); cursor: pointer; display: block; }
-.wt-col-ck { width: 38px; }
-.wt-task { font-weight: 600; }
-tr.wt-done .wt-task { text-decoration: line-through; color: var(--ink-faint); font-weight: 500; }
-tr.wt-done .chip { opacity: .5; }
-tr.wt-done .wt-owner, tr.wt-done .wt-due { color: var(--ink-faint); }
-.wt-due { color: var(--ink-soft); white-space: nowrap; }
-.wt-due.today { color: var(--warn); font-weight: 700; }
-.wt-owner { color: var(--ink-soft); }
-@media (max-width: 700px) { .wt-hide-sm { display: none; } }
+/* Weekly Tasks module — tk-* recipes ported from the live weeklyTasks.css, tinted per anatomy spec §8:
+   HIGH red tint / MED amber tint · MANUAL navy / SYSTEM plain · OPEN outlined. */
+.tk-intro{font-size:13px;color:var(--ink-soft);background:var(--panel-head);border:1px solid var(--line);border-radius:var(--r);padding:13px 16px;margin-bottom:14px;line-height:1.5}
+.tk-intro b{color:var(--ink)}
+.blu{color:var(--brand);font-weight:600}
+.tk-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:14px 0 4px;flex-wrap:wrap}
+.tk-filters{display:flex;gap:8px;flex-wrap:wrap}
+.tk-filter{font-size:12.5px;font-weight:600;padding:6px 14px;border-radius:20px;border:1px solid var(--line);background:#fff;color:var(--ink-soft)}
+.tk-filter.on{background:var(--rail);border-color:var(--rail);color:#fff}
+.tk-actions{display:flex;gap:8px;align-items:center}
+.tk-add{font-size:12.5px;font-weight:700;padding:7px 15px;border-radius:8px;background:var(--brand);color:#fff}
+.tk-add:hover{background:var(--brand-hover)}
+.tk-add.ghost{background:#fff;color:var(--brand);border:1px solid #C6D6FE}
+.tk-add.ghost:hover{background:var(--brand-soft)}
+.tk-sech{font-size:13.5px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--ink);margin:16px 0 9px;display:flex;align-items:center;gap:8px}
+.tk-n{background:var(--line);color:var(--ink-soft);border-radius:9px;padding:1px 8px;font-size:11px;font-weight:700}
+.tk-card{display:flex;gap:14px;justify-content:space-between;background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow-card);padding:13px 16px;margin-bottom:9px}
+.tk-main{flex:1;min-width:0}
+.tk-top{display:flex;align-items:center;gap:9px;margin-bottom:5px;flex-wrap:wrap}
+.tk-title{font-size:14px;font-weight:700;color:var(--ink)}
+.tk-pri,.tk-src{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;padding:2px 7px;border-radius:9px}
+.tk-pri.high{background:var(--crit-soft);color:var(--crit)}
+.tk-pri.med{background:var(--warn-soft);color:var(--warn)}
+.tk-src.manual{background:var(--brand-deep);color:#fff}
+.tk-src.system{background:var(--surface-2);color:var(--ink-soft);border:1px solid var(--line)}
+.tk-state{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.03em;border-radius:20px;padding:2px 9px;white-space:nowrap;background:#fff;color:var(--ink-soft);border:1px solid var(--line-strong)}
+.tk-state.prog{background:var(--brand-soft);color:var(--brand);border-color:transparent}
+.tk-reason{font-size:12px;color:var(--ink-soft);margin:5px 0 2px;display:flex;align-items:flex-start;gap:5px;line-height:1.45}
+.tk-reason .sp{color:var(--brand);flex:none}
+.tk-reason b{color:var(--ink)}
+.tk-reason b.blu{color:var(--brand)}
+.tk-meta{font-size:12px;color:var(--ink-soft);display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:2px}
+.tk-meta a{color:var(--brand);font-weight:600}
+.tk-meta a:hover{text-decoration:underline}
+.tk-by{font-size:12px;color:var(--ink-soft);margin-top:4px}
+.tk-by b{color:var(--ink-soft);font-weight:700}
+.tk-muted{color:var(--ink-soft)}
+.tk-notes{margin-top:9px;width:100%;border:1px solid var(--line);border-radius:8px;padding:7px 10px;font-size:13px;line-height:1.5;color:var(--ink);outline:none;background:var(--canvas);font-family:inherit;resize:vertical;min-height:38px}
+.tk-notes:focus{border-color:var(--brand)}
+.tk-side{display:flex;align-items:flex-start;flex-shrink:0}
+.tk-side-stack{display:flex;flex-direction:column;align-items:stretch;gap:6px}
+.tk-start{display:inline-flex;align-items:center;justify-content:center;gap:6px;font-size:12.5px;font-weight:700;padding:8px 14px;border-radius:8px;background:var(--good);color:#fff;white-space:nowrap}
+.tk-start:hover{background:#166534}
+.tk-start.prog{background:var(--brand-soft);color:var(--brand)}
+.tk-cancel{font-size:12.5px;font-weight:600;padding:5px 10px;border-radius:8px;border:1px solid var(--line);background:#fff;color:var(--ink-soft)}
+.tk-cancel:hover{color:var(--crit);border-color:#F3C1BC}
+.tk-donerow{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow-card);padding:9px 16px;margin-bottom:9px;font-size:13px;color:var(--ink-soft)}
+.tk-donerow .chk{color:var(--good);font-weight:800}
+.tk-donerow .ttl{font-weight:600;text-decoration:line-through;text-decoration-color:var(--line-strong)}
+.tk-donerow .when{margin-left:auto;font-size:12px;color:var(--ink-faint);white-space:nowrap}
+.t-empty{font-size:13px;color:var(--ink-soft);background:var(--panel-head);border:1px dashed var(--line-strong);border-radius:var(--r);padding:16px;text-align:center}
+@media (max-width:940px){.tk-card{flex-direction:column}.tk-side-stack{flex-direction:row}}
 </style>
 </head>
 <body>
 <div class="demo-note"><b>Interactive demo.</b> Every name, client, and number on this page is fictional. Built as a sanitized copy of a production home-care operations platform.</div>
 <div class="app">
   <aside class="rail">
-    <a class="rail-brand" href="./index.html">
-      <span class="logo">DS</span>
-      <span><span class="name">Devoted Shift</span><br><span class="sub">Scheduling Intelligence</span></span>
+    <a class="brand" href="./index.html">
+      <span class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 21s-7-4.6-9.2-9A5.2 5.2 0 0112 5.6 5.2 5.2 0 0121.2 12c-2.2 4.4-9.2 9-9.2 9z" stroke-width="2" stroke-linejoin="round"/></svg></span>
+      <span style="min-width:0;line-height:1">
+        <span class="eyebrow">Devoted Shift</span>
+        <span class="name">Scheduling <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </span>
+      <span class="apps"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="5" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="12" cy="19" r="2"/><circle cx="19" cy="19" r="2"/></svg></span>
     </a>
     <nav class="nav">
-      <a href="./index.html"><span class="ico">✦</span> Devo</a>
-      <a href="./open-shifts.html"><span class="ico">▦</span> Open Shifts <span class="pill">5</span></a>
-      <a href="./find-coverage.html"><span class="ico">◎</span> Find Coverage</a>
-      <a href="./caregivers.html"><span class="ico">☺</span> Caregivers</a>
-      <a href="./clients.html"><span class="ico">⌂</span> Clients <span class="soon">SOON</span></a>
-      <a href="./notes-review.html"><span class="ico">✎</span> Care Note Review <span class="pill">2</span></a>
-      <a href="./handoffs.html"><span class="ico">⇄</span> Shift Handoff</a>
-      <a class="active" href="./weekly-tasks.html"><span class="ico">☑</span> Weekly Tasks</a>
-      <a href="./forms.html"><span class="ico">🗎</span> Forms &amp; Resources <span class="soon">SOON</span></a>
-      <a href="./reports.html"><span class="ico">▤</span> KPIs / Reports</a>
-      <a href="./guides.html"><span class="ico">?</span> Quick Guides <span class="soon">SOON</span></a>
+      <a href="./index.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z" stroke-width="1.8" stroke-linejoin="round"/><path d="M5 17l.7 2L8 19.7 5.7 20.4 5 22l-.7-1.6L2 19.7l2.3-.7L5 17z" stroke-width="1.5" stroke-linejoin="round"/></svg> Devo</a>
+      <a href="./open-shifts.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="17" rx="2" stroke-width="2"/><path d="M3 9h18M8 2v4M16 2v4" stroke-width="2" stroke-linecap="round"/></svg> Open Shifts <span class="count">10</span></a>
+      <a href="./find-coverage.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="7" stroke-width="2"/><path d="M21 21l-4-4" stroke-width="2" stroke-linecap="round"/></svg> Find Coverage</a>
+      <a href="./caregivers.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 11l3 3 8-8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12a9 9 0 11-5-8" stroke-width="2" stroke-linecap="round"/></svg> Caregivers</a>
+      <a href="./clients.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="8" r="3.4" stroke-width="2"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0" stroke-width="2" stroke-linecap="round"/></svg> Clients <span class="soon">SOON</span></a>
+      <a href="./notes-review.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 11l3 3 8-8M3 6h7M3 12h5M3 18h9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Care Note Review</a>
+      <a href="./handoffs.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M7 8l-4 4 4 4M3 12h11M17 16l4-4-4-4M21 12H10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Shift Handoff</a>
+      <a href="./weekly-tasks.html" class="active"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M10 6h10M10 12h10M10 18h10" stroke-width="2" stroke-linecap="round"/><path d="M4 6.5l1.3 1.3L7.6 5.4M4 17.5l1.3 1.3L7.6 16.4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="5.4" cy="12" r="1.2" fill="currentColor" stroke="none"/></svg> Weekly Tasks</a>
+      <a href="./forms.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="4" y="3" width="14" height="18" rx="2" stroke-width="2"/><path d="M8 8h6M8 12h6M8 16h3" stroke-width="1.8" stroke-linecap="round"/></svg> Forms &amp; Resources</a>
+      <a href="./reports.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> KPIs / Reports</a>
+      <a href="./guides.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 4h11a1 1 0 011 1v14a1 1 0 01-1 1H6a2 2 0 01-2-2V6a2 2 0 012-2z" stroke-width="2" stroke-linejoin="round"/><path d="M9 4v15M12 9h3M12 12.5h3" stroke-width="2" stroke-linecap="round"/></svg> Quick Guides</a>
     </nav>
-    <div class="rail-foot"><span class="avatar">DS</span> <span>Demo Scheduler<br><span style="color:#8A93A6">Thursday, Jul 23, 2026</span></span></div>
+    <div class="rail-foot">
+      <span class="avatar">D</span>
+      <span class="who"><b>Demo Scheduler</b><span>Admin</span></span>
+      <span class="out"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M15 3h4a1 1 0 011 1v16a1 1 0 01-1 1h-4M10 17l5-5-5-5M15 12H3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    </div>
   </aside>
   <main class="main">
-    <div class="statbar">
-      <div class="stat" id="statOpen"><div class="k">0</div><div class="l">Open</div></div>
-      <div class="stat good" id="statDone"><div class="k">0</div><div class="l">Done this week</div></div>
-      <div class="stat warn" id="statDue"><div class="k">0</div><div class="l">Due today</div></div>
+    <div class="tk-intro">
+      <b>What should I work on this week?</b> The system continuously scans live signals (<span class="blu">recent call-offs</span>,
+      <span class="blu">availability checks</span> that are due, pending caregiver callbacks, open <span class="blu">shift-handoff items</span>,
+      previous-week coverage gaps, and <span class="blu">new-client onboarding</span> steps) and surfaces recommended work alongside tasks
+      you add yourself. Urgent live items (call-offs, no-shows, coverage) stay on <a class="blu" href="./index.html">Devo</a>.
     </div>
 
-    <section class="card">
-      <div class="panel-head between">
-        <h2>This Week</h2>
-        <div class="seg" id="ownerSeg">
-          <button class="on" data-owner="All">All</button>
-          <button data-owner="Scheduler">Scheduler</button>
-          <button data-owner="Nurse">Nurse</button>
-          <button data-owner="Admin">Admin</button>
-        </div>
+    <div class="tk-bar">
+      <div class="tk-filters">
+        <button class="tk-filter on" data-f="all">All</button>
+        <button class="tk-filter" data-f="SYSTEM">System-generated</button>
+        <button class="tk-filter" data-f="MANUAL">Manual</button>
       </div>
-      <table class="tbl">
-        <thead>
-          <tr>
-            <th class="wt-col-ck"></th>
-            <th>Task</th>
-            <th>Source</th>
-            <th class="wt-hide-sm">Owner</th>
-            <th>Due</th>
-          </tr>
-        </thead>
-        <tbody id="taskBody"></tbody>
-      </table>
-      <div class="empty" id="emptyMsg" hidden>
-        <div class="big">No tasks for this owner</div>
-        Nothing flagged this week for the selected role.
+      <div class="tk-actions">
+        <button class="tk-add ghost">+ New placement</button>
+        <button class="tk-add">+ Add task</button>
       </div>
-    </section>
+    </div>
+
+    <div class="tk-sech">Open Tasks <span class="tk-n" id="tk-count">4</span></div>
+    <div id="tk-list"></div>
   </main>
 </div>
 <script src="./seed.js"></script>
 <script>
 (function () {
-  // Source chips follow the status canon: red = call-off (urgent origin), purple = care notes only,
-  // amber = compliance deadline, neutral for the rest. Brand blue is never a status.
-  var SRC_TONE = {
-    "Call-off": "crit",
-    "Care note flag": "notes",
-    "PTO request": "plain",
-    "Intake": "plain",
-    "Compliance": "warn"
-  };
-  var ownerFilter = "All";
-  var tasks = window.DEMO.weeklyTasks;
-  var body = document.getElementById("taskBody");
-  var emptyMsg = document.getElementById("emptyMsg");
+  var BLUE = ["Edit Availability", "Find Coverage"];
+  var BOLD = ["Friday 11:00 AM–7:00 PM", "2 clean fits", "monthly refresh", "unexplained forearm bruise", "first supervisory visit", "First shift starts Monday"];
+  var tasks = DEMO.tasks.map(function (t, i) {
+    return { pri: t.pri, kind: t.kind, title: t.title, desc: t.desc, who: t.who,
+             createdBy: t.createdBy, assigned: t.assigned, id: i, prog: false, done: false, notes: "" };
+  });
+  var filter = "all";
+  var list = document.getElementById("tk-list");
+  var badge = document.getElementById("tk-count");
 
-  function setStat(id, n) {
-    var box = document.getElementById(id);
-    box.querySelector(".k").textContent = n;
-    box.style.display = n === 0 ? "none" : "";
+  function hi(text) {
+    var s = text;
+    BLUE.forEach(function (p) { s = s.split(p).join('<b class="blu">' + p + "</b>"); });
+    BOLD.forEach(function (p) { s = s.split(p).join("<b>" + p + "</b>"); });
+    return s;
   }
 
-  function renderStats() {
-    var open = 0, done = 0, dueToday = 0;
-    tasks.forEach(function (t) {
-      if (t.done) { done++; return; }
-      open++;
-      if (t.due === "Today") dueToday++;
-    });
-    setStat("statOpen", open);
-    setStat("statDone", done);
-    setStat("statDue", dueToday);
-  }
-
-  function renderRows() {
-    var shown = tasks.filter(function (t) {
-      return ownerFilter === "All" || t.owner === ownerFilter;
-    });
-    body.innerHTML = "";
-    emptyMsg.hidden = shown.length > 0;
+  function render() {
+    list.innerHTML = "";
+    var shown = tasks.filter(function (t) { return filter === "all" || t.kind === filter; });
+    var openCount = 0;
+    if (!shown.length) list.appendChild(el("div", "t-empty", "No " + filter.toLowerCase() + " tasks right now."));
     shown.forEach(function (t) {
-      var tr = el("tr", t.done ? "wt-done" : "");
-      var dueCls = "wt-due" + (t.due === "Today" && !t.done ? " today" : "");
-      tr.innerHTML =
-        '<td class="wt-col-ck"><input type="checkbox" class="wt-ck" data-id="' + t.id + '"' +
-        (t.done ? " checked" : "") + ' aria-label="Mark task done"></td>' +
-        '<td class="wt-task">' + t.task + "</td>" +
-        '<td><span class="chip ' + (SRC_TONE[t.from] || "plain") + '">' + t.from + "</span></td>" +
-        '<td class="wt-owner wt-hide-sm">' + t.owner + "</td>" +
-        '<td><span class="' + dueCls + '">' + t.due + "</span></td>";
-      body.appendChild(tr);
+      if (t.done) {
+        list.appendChild(el("div", "tk-donerow",
+          '<span class="chk">✓</span><span class="ttl">' + t.title + '</span>' +
+          '<span class="when">Done · just now · Demo Scheduler</span>'));
+        return;
+      }
+      openCount++;
+      var card = el("div", "tk-card",
+        '<div class="tk-main">' +
+          '<div class="tk-top">' +
+            '<span class="tk-pri ' + (t.pri === "HIGH" ? "high" : "med") + '">' + t.pri + "</span>" +
+            '<span class="tk-src ' + (t.kind === "MANUAL" ? "manual" : "system") + '">' + t.kind + "</span>" +
+            '<span class="tk-state' + (t.prog ? " prog" : "") + '">' + (t.prog ? "IN PROGRESS" : "OPEN") + "</span>" +
+            '<span class="tk-title">' + t.title + "</span>" +
+          "</div>" +
+          '<div class="tk-reason"><span class="sp">✦</span><span>' + hi(t.desc) + "</span></div>" +
+          '<div class="tk-meta"><a href="#" onclick="return false">' + t.who + "</a></div>" +
+          '<div class="tk-by">Created by <b>' + t.createdBy + "</b> · " +
+            (t.prog ? "Assigned to <b>Demo Scheduler</b>" : '<span class="tk-muted">' + t.assigned + "</span>") + "</div>" +
+          '<textarea class="tk-notes" rows="2" placeholder="Add notes…"></textarea>' +
+        "</div>" +
+        '<div class="tk-side"><div class="tk-side-stack">' +
+          '<button class="tk-start' + (t.prog ? " prog" : "") + '" data-a="start">' + (t.prog ? "In progress" : "▶ Start") + "</button>" +
+          '<button class="tk-cancel" data-a="done">Mark done</button>' +
+        "</div></div>");
+      var notes = card.querySelector(".tk-notes");
+      notes.value = t.notes;
+      notes.addEventListener("input", function () { t.notes = notes.value; });
+      card.querySelector('[data-a="start"]').onclick = function () { t.prog = !t.prog; render(); };
+      card.querySelector('[data-a="done"]').onclick = function () { t.done = true; render(); };
+      list.appendChild(card);
     });
+    badge.textContent = openCount;
   }
 
-  body.addEventListener("change", function (e) {
-    if (!e.target.classList.contains("wt-ck")) return;
-    var id = Number(e.target.getAttribute("data-id"));
-    tasks.forEach(function (t) { if (t.id === id) t.done = e.target.checked; });
-    renderRows();
-    renderStats();
+  $$(".tk-filter").forEach(function (b) {
+    b.onclick = function () {
+      $$(".tk-filter").forEach(function (x) { x.classList.remove("on"); });
+      b.classList.add("on");
+      filter = b.dataset.f;
+      render();
+    };
   });
-
-  document.getElementById("ownerSeg").addEventListener("click", function (e) {
-    var btn = e.target.closest("button");
-    if (!btn) return;
-    ownerFilter = btn.getAttribute("data-owner");
-    $$("#ownerSeg button").forEach(function (b) { b.classList.toggle("on", b === btn); });
-    renderRows();
-  });
-
-  renderRows();
-  renderStats();
+  render();
 })();
 </script>
 </body>

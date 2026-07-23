@@ -1,370 +1,509 @@
-<!-- SHELL TEMPLATE — every demo page copies this structure exactly.
-     Change ONLY: <title>, the `active` class on one nav link, and the <main> content.
-     impeccable-disable overused-font side-tab — exact replica of production design canon (Inter + left status rail are LOCKED in the source system). -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
-<title>Caregiver Profile · Maria Santos — Devoted Shift Demo</title>
+<title>Maria Santos — Devoted Shift Demo</title>
 <link rel="stylesheet" href="./styles.css">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%231E40AF%27/%3E%3Ctext x=%2716%27 y=%2722%27 font-family=%27Arial%27 font-size=%2713%27 font-weight=%27bold%27 fill=%27white%27 text-anchor=%27middle%27%3EDS%3C/text%3E%3C/svg%3E">
 <style>
-/* profile.html module styles — built on foundation vars only */
-.ws-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
-.ws-back { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; color: var(--ink-soft); }
-.ws-back:hover { color: var(--brand); }
-/* side header card */
-.ph-head { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 20px 16px 16px; }
-.ph-avatar { width: 58px; height: 58px; border-radius: 50%; background: var(--brand-soft); color: var(--brand); font-weight: 800; font-size: 18px; display: grid; place-items: center; margin-bottom: 9px; }
-.ph-name { font-size: 17px; font-weight: 800; }
-.stars { position: relative; display: inline-block; font-size: 14px; letter-spacing: 2px; line-height: 1; color: var(--line-strong); }
-.stars .fill { position: absolute; left: 0; top: 0; overflow: hidden; white-space: nowrap; color: var(--warn); }
-.ph-score { display: flex; align-items: center; gap: 7px; margin: 5px 0 8px; }
-.ph-score .n { font-weight: 800; font-variant-numeric: tabular-nums; }
-.ph-rows { width: 100%; margin-top: 10px; border-top: 1px solid var(--line-soft); }
-.ph-row { display: flex; justify-content: space-between; gap: 10px; padding: 7px 2px; border-bottom: 1px solid var(--line-soft); font-size: 12.5px; }
-.ph-row .v { font-weight: 600; }
-.ph-verify { display: flex; align-items: center; gap: 8px; width: 100%; margin-top: 11px; }
-/* employment rows */
-.emp-row { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--line-soft); }
-.emp-row:last-child { border-bottom: 0; }
-.emp-row .l { color: var(--ink-soft); }
-.emp-row .v { font-weight: 600; text-align: right; }
-/* skills dot-line groups */
-.sk { padding: 9px 14px; }
-.g-label { display: block; font-size: 11px; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 3px; }
-/* availability week grid */
-.wk { display: grid; grid-template-columns: repeat(7, 1fr); gap: 7px; }
-.wk-day { border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 8px 4px; text-align: center; cursor: pointer; background: var(--card); }
-.wk-day:hover { border-color: var(--line-strong); }
-.wk-day.today { border-color: var(--brand); box-shadow: 0 0 0 1px var(--brand); }
-.wk-day.sel { background: var(--brand-soft); }
-.wk-dow { font-size: 11px; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-soft); }
-.wk-num { font-size: 15px; font-weight: 700; margin-top: 1px; }
-.wk-blk { margin-top: 6px; font-size: 11px; font-weight: 600; border-radius: 6px; padding: 4px 2px; }
-.wk-blk.devoted { background: var(--good-soft); color: var(--good); }
-.wk-blk.unavail { background: var(--surface-2); color: var(--ink-faint); }
-.wk-detail { margin-top: 12px; padding: 10px 12px; background: var(--surface-2); border-radius: var(--radius-sm); font-size: 12.5px; }
-.wk-detail .hand { margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--line); }
-.legend { display: flex; gap: 14px; margin-top: 11px; font-size: 11.5px; color: var(--ink-soft); }
-.sw { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
-.sw.devoted { background: var(--good-soft); border: 1px solid var(--good); }
-.sw.unavail { background: var(--surface-2); border: 1px solid var(--line-strong); }
-/* score breakdown bars */
-.sc-row { padding: 9px 0; border-bottom: 1px solid var(--line-soft); }
-.sc-row:last-of-type { border-bottom: 0; }
-.sc-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
-.sc-name { font-weight: 600; }
-.sc-w { font-size: 11px; color: var(--ink-faint); margin-left: 6px; }
-.sc-num { font-weight: 700; font-variant-numeric: tabular-nums; }
-.sc-num small { font-weight: 500; color: var(--ink-soft); }
-.sc-bar { height: 7px; background: var(--surface-2); border: 1px solid var(--line-soft); border-radius: 99px; overflow: hidden; margin-top: 6px; }
-.sc-bar i { display: block; height: 100%; border-radius: 99px; background: var(--good); }
-.sc-total { display: flex; justify-content: space-between; padding-top: 10px; margin-top: 4px; border-top: 1px solid var(--line-strong); font-weight: 800; }
-.sc-off { display: flex; justify-content: space-between; gap: 10px; padding: 9px 0; color: var(--ink-soft); }
-/* expanders */
-.xp-btn { display: flex; align-items: center; gap: 6px; width: 100%; padding: 8px 0 2px; font-weight: 600; color: var(--ink-soft); }
-.xp-btn:hover { color: var(--brand); }
-.xp-btn .chev { display: inline-block; transition: transform .15s; }
-.xp-btn[aria-expanded="true"] .chev { transform: rotate(90deg); }
-.xp-body { display: none; padding-top: 8px; }
-.xp-body.open { display: block; }
-/* care notes */
-.note { padding: 11px 14px; }
-.note .meta { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
-.note .who { font-weight: 700; }
-.note .ai-line { display: flex; align-items: flex-start; gap: 8px; margin-top: 8px; }
-.note .ai-line span:last-child { color: var(--ink-soft); }
-/* edit history */
-.h-row { padding: 9px 14px; font-size: 12.5px; }
-.h-field { font-weight: 700; }
-.h-arrow { color: var(--ink-faint); padding: 0 4px; }
-.h-when { color: var(--ink-soft); font-size: 11.5px; margin-top: 2px; }
+main.main{background:radial-gradient(1200px 600px at 80% -10%,#E3E9FA 0,transparent 55%),radial-gradient(1000px 500px at -5% 0%,#E4F4F1 0,transparent 45%),#EEF1F7}
+.pf{max-width:1150px;margin:0 auto}
+.pf-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.pf-back{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--ink-soft);padding:4px 8px;border-radius:8px}
+.pf-back:hover{color:var(--brand);background:var(--brand-soft)}
+.pf-hero{padding:20px 24px;margin-bottom:16px;border-radius:16px}
+.pf-headrow{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.pf-headleft{display:flex;align-items:center;gap:14px}
+.avatar-i.xl{width:56px;height:56px;font-size:18px}
+.pf-name{font-size:22px;font-weight:800;letter-spacing:-.02em}
+.pf-score{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:700;background:#fff;border:1px solid var(--line);border-radius:22px;padding:5px 12px;box-shadow:0 1px 2px rgba(16,24,40,.06)}
+.pf-score b{font-size:15px;font-weight:800;font-variant-numeric:tabular-nums}
+.pf-score small{font-size:11.5px;font-weight:600;color:var(--ink-faint)}
+.pf-hero .btn{height:34px;padding:0 13px;border-radius:9px}
+.pf-status{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px;font-size:13.5px}
+.pf-status .spacer{margin-left:auto;display:inline-flex;align-items:center;gap:8px}
+.ai-panel{margin-top:16px;background:#F4F7FF;border:1px solid #E4ECFF;border-radius:12px;padding:13px 16px}
+.ai-eyebrow{display:block;font-size:10.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--brand);opacity:.85;margin-bottom:6px}
+.ai-text{font-size:14.5px;line-height:1.62;color:#1E2436}
+.ai-text b,.ch-line b{font-weight:650;color:#1E3A8A}
+.pcard{padding:20px 22px;border-radius:16px;margin-bottom:16px}
+.ph{display:flex;align-items:center;gap:9px;font-size:16px;font-weight:700;letter-spacing:-.015em;margin-bottom:14px}
+.hdot{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;background:var(--brand-soft);color:var(--brand);flex:none}
+.hdot.crit{background:var(--crit-soft);color:var(--crit)}
+.hdot.notes{background:var(--notes-soft);color:var(--notes)}
+.hdot svg{width:15px;height:15px}
+.ph .right{margin-left:auto;display:inline-flex;align-items:center;gap:10px;font-weight:500}
+.cal-bar{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:8px}
+.cal-month{font-size:15px;font-weight:700;min-width:150px;text-align:center;letter-spacing:-.01em}
+.cal-nav{width:30px;height:30px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink-soft);display:grid;place-items:center}
+.cal-nav:disabled{opacity:.35;cursor:default}
+.cal-legend{display:flex;flex-wrap:wrap;gap:8px 14px;justify-content:center;margin-bottom:13px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.leg{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:500;color:var(--ink-soft)}
+.sw{width:12px;height:12px;border-radius:3px;border-left:3px solid;display:inline-block}
+.sw.devoted,.blk.devoted{background:var(--brand-soft);border-color:var(--brand)}
+.sw.open,.blk.open{background:var(--good-soft);border-color:var(--good)}
+.sw.agency{background:var(--notes-soft);border-color:var(--notes)}
+.sw.vacation{background:#D7F0ED;border-color:#0B7A70}
+.sw.sick{background:var(--crit-soft);border-color:var(--crit)}
+.sw.unavail,.blk.unavail{background:var(--line-soft);border-color:var(--ink-faint)}
+.sw.needs{background:var(--warn-soft);border-color:var(--warn)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.cal-dow{text-align:center;font-size:11.5px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:var(--ink-soft);padding-bottom:3px}
+.cal-cell{border:1px solid var(--line);border-radius:6px;background:#fff;display:flex;flex-direction:column;gap:3px;min-height:62px;padding:5px 6px 6px 7px;cursor:pointer;transition:filter .12s}
+.cal-cell:not(.empty):hover{filter:brightness(.97)}
+.cal-cell.empty{border:0;background:transparent;cursor:default}
+.cal-cell.today{outline:2px solid var(--brand);outline-offset:-2px}
+.cal-cell.today .cal-d{color:var(--brand)}
+.cal-cell.sel{outline:2px solid var(--brand);outline-offset:-2px;background:var(--brand-soft)}
+.cal-cell.off{background:var(--surface-2)}
+.cal-cell.off .cal-d{color:var(--ink-faint)}
+.cal-d{font-size:13px;font-weight:800;color:var(--ink-soft)}
+.blk{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:2px 5px;padding:2px 5px;border-radius:2px;border-left-width:2.5px;border-left-style:solid}
+.blk.devoted{color:var(--brand-deep)}
+.blk.open{color:var(--good)}
+.blk.unavail{color:var(--ink-soft)}
+.blk .l{font-weight:800;text-transform:uppercase;letter-spacing:.2px;font-size:10.5px;overflow-wrap:anywhere}
+.blk .t{font-size:10.5px;font-weight:600;opacity:.9;font-variant-numeric:tabular-nums}
+.btn.ghost.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+.pf-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.pf-col{display:flex;flex-direction:column;gap:16px;min-width:0}
+.pf-col .pcard{margin-bottom:0}
+.att-top{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.att-big{font-size:33px;font-weight:800;line-height:1;color:var(--good);font-variant-numeric:tabular-nums}
+.att-sub{font-size:13px;color:var(--ink-soft)}
+.att-bar{height:6px;border-radius:4px;background:var(--line);overflow:hidden;margin-top:13px}
+.att-bar i{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,var(--good),#22C55E)}
+.exp{display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-size:13px;font-weight:700;color:var(--brand)}
+.exp .chev{display:inline-block;font-weight:900;transition:transform .15s}
+.exp.open .chev{transform:rotate(90deg)}
+.blist{list-style:none;display:flex;flex-direction:column;gap:8px}
+.blist li{position:relative;padding-left:17px;font-size:13.5px;line-height:1.5}
+.blist li::before{content:"";position:absolute;left:3px;top:7px;width:5px;height:5px;border-radius:50%;background:var(--brand)}
+.blist.red li::before{background:var(--crit)}
+.blist.issue{margin-top:8px}
+.histbtn{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:700;color:var(--brand);background:var(--brand-soft);border-radius:8px;padding:6px 12px}
+.histbtn::after{content:"→";font-size:14px;line-height:1}
+.histbtn:hover{background:var(--brand);color:#fff}
+.ch-head{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--ink-soft)}
+.ai-panel.sm{margin-top:11px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.ch-line{font-size:13.5px;line-height:1.6;color:var(--ink)}
+.msgs{margin-top:10px}
+.msgs summary{font-size:13px;font-weight:700;color:var(--brand);cursor:pointer;list-style:none}
+.msgs summary::before{content:"▸ "}
+.msgs[open] summary::before{content:"▾ "}
+.msgs ul{list-style:none;margin-top:8px;display:flex;flex-direction:column;gap:6px;font-size:13px;line-height:1.55;background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.lx{display:flex;align-items:flex-start;gap:9px;font-size:13.5px;line-height:1.45;margin-top:9px}
+.lx:first-child{margin-top:0}
+.lx .mk{flex:none;width:18px;height:18px;border-radius:6px;display:grid;place-items:center;background:var(--crit-soft);color:var(--crit);margin-top:1px;font-size:11px;font-weight:800}
+.btn.good.done{background:var(--good-soft);color:var(--good)}
+.btn:disabled{opacity:.6;cursor:default}
+/* ---- Edit Profile view ---- */
+.ev-top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:16px}
+.ev-eyebrow{display:block;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--brand);margin-bottom:5px}
+.ev-legend{margin-top:7px;font-size:13px;color:var(--ink-soft)}
+.ev-legend .req{color:var(--crit);font-weight:800}
+.ev-legend .ok,.ev-h .ok,.ev-lbl .ok{color:var(--good);font-weight:800}
+.ev-x{width:36px;height:36px;flex:none;border:1px solid var(--line-strong);border-radius:10px;background:#fff;color:var(--ink-soft);font-size:15px;font-weight:700;display:grid;place-items:center}
+.ev-x:hover{color:var(--crit);border-color:var(--crit);background:var(--crit-soft)}
+.ev-scores{display:grid;grid-template-columns:repeat(4,1fr);border-radius:16px;margin-bottom:16px}
+.ev-score{padding:16px 18px;border-left:1px solid var(--line-soft);min-width:0}
+.ev-score:first-child{border-left:0}
+.ev-slbl{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.ev-score .num{font-size:24px;font-weight:800;margin-top:8px;font-variant-numeric:tabular-nums}
+.ev-score .num small{font-size:12px;font-weight:600;color:var(--ink-faint)}
+.ev-score .num.na{color:var(--ink-faint)}
+.ev-score .sent{font-size:12.5px;line-height:1.5;color:var(--ink-soft);margin-top:6px}
+.ev-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;margin-bottom:16px}
+.ev-col{display:flex;flex-direction:column;gap:16px;min-width:0}
+.ev-col .pcard{margin-bottom:0}
+.ev-h{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;margin-bottom:12px}
+.ev-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--line-soft);font-size:13.5px}
+.ev-rm{flex:none;font-size:12px;font-weight:700;color:var(--crit);border:1px solid var(--line-strong);border-radius:8px;padding:5px 10px;background:#fff}
+.ev-rm:hover{border-color:var(--crit);background:var(--crit-soft)}
+.ev-addrow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.ev-ta{min-height:120px;resize:vertical;line-height:1.6}
+.ev-fields{margin-bottom:0}
+.ev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.ev-lbl{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:6px}
+@media(max-width:1000px){.pf-cols{grid-template-columns:1fr}.ev-cols{grid-template-columns:1fr}.ev-grid{grid-template-columns:1fr 1fr}.ev-scores{grid-template-columns:1fr 1fr}.ev-score{border-left:0}.ev-score:nth-child(even){border-left:1px solid var(--line-soft)}.ev-score:nth-child(n+3){border-top:1px solid var(--line-soft)}}
 </style>
 </head>
 <body>
 <div class="demo-note"><b>Interactive demo.</b> Every name, client, and number on this page is fictional. Built as a sanitized copy of a production home-care operations platform.</div>
 <div class="app">
-  <aside class="rail">
-    <a class="rail-brand" href="./index.html">
-      <span class="logo">DS</span>
-      <span><span class="name">Devoted Shift</span><br><span class="sub">Scheduling Intelligence</span></span>
-    </a>
-    <nav class="nav">
-      <a href="./index.html"><span class="ico">✦</span> Devo</a>
-      <a href="./open-shifts.html"><span class="ico">▦</span> Open Shifts <span class="pill">5</span></a>
-      <a href="./find-coverage.html"><span class="ico">◎</span> Find Coverage</a>
-      <a href="./caregivers.html" class="active"><span class="ico">☺</span> Caregivers</a>
-      <a href="./clients.html"><span class="ico">⌂</span> Clients <span class="soon">SOON</span></a>
-      <a href="./notes-review.html"><span class="ico">✎</span> Care Note Review <span class="pill">2</span></a>
-      <a href="./handoffs.html"><span class="ico">⇄</span> Shift Handoff</a>
-      <a href="./weekly-tasks.html"><span class="ico">☑</span> Weekly Tasks</a>
-      <a href="./forms.html"><span class="ico">🗎</span> Forms &amp; Resources <span class="soon">SOON</span></a>
-      <a href="./reports.html"><span class="ico">▤</span> KPIs / Reports</a>
-      <a href="./guides.html"><span class="ico">?</span> Quick Guides <span class="soon">SOON</span></a>
-    </nav>
-    <div class="rail-foot"><span class="avatar">DS</span> <span>Demo Scheduler<br><span style="color:#8A93A6">Thursday, Jul 23, 2026</span></span></div>
-  </aside>
-  <main class="main">
-
-    <div class="ws-top">
-      <a class="ws-back" href="./caregivers.html">‹ Caregivers</a>
+ <aside class="rail">
+  <a class="brand" href="./index.html">
+   <span class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 21s-7-4.6-9.2-9A5.2 5.2 0 0112 5.6 5.2 5.2 0 0121.2 12c-2.2 4.4-9.2 9-9.2 9z" stroke-width="2" stroke-linejoin="round"/></svg></span>
+   <span style="min-width:0;line-height:1">
+    <span class="eyebrow">Devoted Shift</span>
+    <span class="name">Scheduling <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+   </span>
+   <span class="apps"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="5" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="12" cy="19" r="2"/><circle cx="19" cy="19" r="2"/></svg></span>
+  </a>
+  <nav class="nav">
+   <a href="./index.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z" stroke-width="1.8" stroke-linejoin="round"/><path d="M5 17l.7 2L8 19.7 5.7 20.4 5 22l-.7-1.6L2 19.7l2.3-.7L5 17z" stroke-width="1.5" stroke-linejoin="round"/></svg> Devo</a>
+   <a href="./open-shifts.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="17" rx="2" stroke-width="2"/><path d="M3 9h18M8 2v4M16 2v4" stroke-width="2" stroke-linecap="round"/></svg> Open Shifts <span class="count">10</span></a>
+   <a href="./find-coverage.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="7" stroke-width="2"/><path d="M21 21l-4-4" stroke-width="2" stroke-linecap="round"/></svg> Find Coverage</a>
+   <a class="active" href="./caregivers.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 11l3 3 8-8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12a9 9 0 11-5-8" stroke-width="2" stroke-linecap="round"/></svg> Caregivers</a>
+   <a href="./clients.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="8" r="3.4" stroke-width="2"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0" stroke-width="2" stroke-linecap="round"/></svg> Clients <span class="soon">SOON</span></a>
+   <a href="./notes-review.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 11l3 3 8-8M3 6h7M3 12h5M3 18h9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Care Note Review</a>
+   <a href="./handoffs.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M7 8l-4 4 4 4M3 12h11M17 16l4-4-4-4M21 12H10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Shift Handoff</a>
+   <a href="./weekly-tasks.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M10 6h10M10 12h10M10 18h10" stroke-width="2" stroke-linecap="round"/><path d="M4 6.5l1.3 1.3L7.6 5.4M4 17.5l1.3 1.3L7.6 16.4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="5.4" cy="12" r="1.2" fill="currentColor" stroke="none"/></svg> Weekly Tasks</a>
+   <a href="./forms.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="4" y="3" width="14" height="18" rx="2" stroke-width="2"/><path d="M8 8h6M8 12h6M8 16h3" stroke-width="1.8" stroke-linecap="round"/></svg> Forms &amp; Resources</a>
+   <a href="./reports.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> KPIs / Reports</a>
+   <a href="./guides.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 4h11a1 1 0 011 1v14a1 1 0 01-1 1H6a2 2 0 01-2-2V6a2 2 0 012-2z" stroke-width="2" stroke-linejoin="round"/><path d="M9 4v15M12 9h3M12 12.5h3" stroke-width="2" stroke-linecap="round"/></svg> Quick Guides</a>
+  </nav>
+  <div class="rail-foot">
+   <span class="avatar">D</span>
+   <span class="who"><b>Demo Scheduler</b><span>Admin</span></span>
+   <span class="out"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M15 3h4a1 1 0 011 1v16a1 1 0 01-1 1h-4M10 17l5-5-5-5M15 12H3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+  </div>
+ </aside>
+ <main class="main">
+  <div class="pf" id="profileView">
+   <div class="pf-top">
+    <a class="pf-back" href="./caregivers.html">‹ Caregivers</a>
+    <button class="btn ghost sm" type="button"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9" stroke-width="2"/><path d="M12 7v5l3 2" stroke-width="2" stroke-linecap="round"/></svg> History</button>
+   </div>
+   <section class="card pf-hero">
+    <div class="pf-headrow">
+     <div class="pf-headleft">
+      <span class="avatar-i xl" id="pfAvatar">MS</span>
+      <span class="pf-name" id="pfName">Maria Santos</span>
+      <span class="pf-score">⭐ <b id="pfScore">4.8</b> <small>/ 5</small></span>
+     </div>
+     <div class="flex">
+      <button class="btn primary" type="button" id="editBtn">✏ Edit Profile</button>
+      <button class="btn ghost" type="button">📞 Call</button>
+      <button class="btn ghost" type="button">Resume</button>
+     </div>
     </div>
-
-    <div class="grid g-main-side">
-
-      <!-- MAIN column -->
-      <div class="grid" style="gap:14px; align-content:start;">
-
-        <div class="card">
-          <div class="panel-head"><h2>Employment Summary</h2></div>
-          <div class="panel-body" id="emp"></div>
-        </div>
-
-        <div class="card">
-          <div class="panel-head"><h2>Skills &amp; Strengths</h2></div>
-          <div class="row-list" id="skills"></div>
-        </div>
-
-        <div class="card">
-          <div class="panel-head"><h2>Availability</h2><span class="count" id="wk-range"></span></div>
-          <div class="panel-body">
-            <div class="wk" id="wk"></div>
-            <div class="wk-detail" id="wk-detail"></div>
-            <div class="legend">
-              <span><span class="sw devoted"></span>Devoted shift</span>
-              <span><span class="sw unavail"></span>Unavailable</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="panel-head"><h2>Performance &amp; Reliability</h2></div>
-          <div class="panel-body">
-            <div id="score-rows"></div>
-            <div class="sc-off"><span>Family Feedback <span class="sc-w">excluded</span></span><span>Not yet scored</span></div>
-            <div class="sc-total"><span>Overall</span><span id="sc-overall"></span></div>
-            <button class="xp-btn" id="xp-score-btn" aria-expanded="false"><span class="chev">▸</span> How this score is calculated</button>
-            <div class="xp-body" id="xp-score">
-              <p class="muted">Reliability &amp; Attendance carries 50% of the weight, Performance 37.5%, and Documentation 12.5%. Family Feedback is excluded until structured feedback capture exists, and its weight is redistributed across the other three.</p>
-              <hr class="faint-line">
-              <div class="flex" style="flex-wrap:wrap; gap:8px;">
-                <span class="chip good">No attendance issues in 90 days</span>
-                <span class="chip plain">52 shifts scheduled</span>
-                <span class="chip plain">52 completed</span>
-                <span class="chip plain">0 call-offs</span>
-                <span class="chip plain">0 no-shows</span>
-                <span class="chip plain">0 late arrivals</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="panel-head"><h2>Recent Care Notes</h2><span class="count" id="notes-count"></span></div>
-          <div class="row-list" id="notes"></div>
-        </div>
-
-      </div>
-
-      <!-- SIDE column -->
-      <div class="grid" style="gap:14px; align-content:start;">
-
-        <div class="card">
-          <div class="ph-head">
-            <span class="ph-avatar" id="ph-avatar"></span>
-            <div class="ph-name" id="ph-name"></div>
-            <div class="ph-score">
-              <span class="stars">★★★★★<span class="fill" id="ph-stars-fill">★★★★★</span></span>
-              <span class="n" id="ph-score"></span><span class="muted">/ 5</span>
-            </div>
-            <span class="chip good" id="ph-status"></span>
-            <div class="ph-rows">
-              <div class="ph-row"><span class="muted">Phone</span><a class="v" id="ph-phone" href="#" style="color:var(--brand)"></a></div>
-              <div class="ph-row"><span class="muted">City</span><span class="v" id="ph-city"></span></div>
-            </div>
-            <div class="ph-verify">
-              <span class="chip warn" id="verify-pill">Availability updated 6 days ago</span>
-              <button class="btn ghost" id="verify-btn" style="margin-left:auto; height:28px; padding:0 10px; font-size:12px;">✓ Mark updated</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="panel-body">
-            <span class="chip ai">AI Summary</span>
-            <p id="ai-text" style="margin-top:9px; line-height:1.6;"></p>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="panel-head"><h2>Edit History</h2><span class="count" id="hist-count"></span></div>
-          <div class="row-list" id="hist"></div>
-          <div style="padding: 2px 14px 10px;">
-            <button class="xp-btn" id="xp-hist-btn" aria-expanded="false"><span class="chev">▸</span><span id="xp-hist-label"> Show all edits</span></button>
-          </div>
-        </div>
-
-      </div>
+    <div class="pf-status">
+     <span class="tag good" id="updTag"></span>
+     <span class="muted" id="dueTxt"></span>
+     <span class="muted" id="sentTxt" hidden>Text sent · awaiting reply</span>
+     <span class="spacer">
+      <button class="btn ghost sm" type="button" id="txtBtn">💬 Text to verify</button>
+      <button class="btn good sm" type="button" id="markBtn">✓ Mark updated</button>
+     </span>
     </div>
-
-  </main>
+    <div class="ai-panel">
+     <span class="ai-eyebrow">✦ AI Summary</span>
+     <p class="ai-text" id="aiText"></p>
+    </div>
+   </section>
+   <section class="card pcard">
+    <div class="ph">
+     <span class="hdot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="17" rx="2" stroke-width="2"/><path d="M3 9h18M8 2v4M16 2v4" stroke-width="2" stroke-linecap="round"/></svg></span>
+     Availability
+     <span class="right"><span class="muted" id="selCount"></span><button class="btn ghost sm" type="button" id="selBtn">Select days</button></span>
+    </div>
+    <div class="cal-bar">
+     <button class="cal-nav" type="button" disabled aria-label="Previous month">‹</button>
+     <div class="cal-month" id="calMonth"></div>
+     <button class="cal-nav" type="button" disabled aria-label="Next month">›</button>
+    </div>
+    <div class="cal-legend" id="calLegend"></div>
+    <div class="cal-grid" id="calGrid"></div>
+   </section>
+   <div class="pf-cols">
+    <div class="pf-col">
+     <section class="card pcard">
+      <div class="ph"><span class="hdot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke-width="1.9" stroke-linejoin="round"/></svg></span> Reliability &amp; Attendance</div>
+      <div class="att-top">
+       <span class="att-big" id="attBig"></span>
+       <span class="att-sub">reliable · no late arrivals</span>
+       <span class="tag warn" id="attChip"></span>
+      </div>
+      <div class="att-bar"><i id="attFill"></i></div>
+      <button class="exp" type="button" id="issueBtn"><span class="chev">›</span> <span id="issueLbl"></span></button>
+      <ul class="blist issue" id="issueList" hidden>
+       <li><b>Jun 12</b> · Call-Off · Nadia Osman · flu, gave 6 hours notice <span class="faint">(logged by Dana R.)</span></li>
+      </ul>
+     </section>
+     <section class="card pcard">
+      <div class="ph"><span class="hdot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 7H4a2 2 0 00-2 2v9a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2zM16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span> Work Preferences</div>
+      <div id="wpRows"></div>
+     </section>
+     <section class="card pcard">
+      <div class="ph"><span class="hdot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="7" width="20" height="14" rx="2" stroke-width="1.9"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" stroke-width="1.9" stroke-linecap="round"/></svg></span> Employment Summary</div>
+      <div id="empRows"></div>
+     </section>
+    </div>
+    <div class="pf-col">
+     <section class="card pcard">
+      <div class="ph"><span class="hdot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span> Communication Log <button class="histbtn right" type="button">History</button></div>
+      <div class="ch-head">💬 <span id="chMeta"></span></div>
+      <div class="ai-panel sm">
+       <span class="ai-eyebrow">✦ AI Summary</span>
+       <div class="ch-line" id="chReason"></div>
+       <div class="ch-line" id="chKey"></div>
+      </div>
+      <details class="msgs">
+       <summary>View messages</summary>
+       <ul><li><span class="faint">2:14 PM</span> <b>Office:</b> Hi Maria, a reminder that your dementia care refresher module is due by Jul 31. Reply DONE once you finish it.</li></ul>
+      </details>
+     </section>
+     <section class="card pcard">
+      <div class="ph"><span class="hdot crit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10" stroke-width="1.9"/><path d="M4.9 4.9l14.2 14.2" stroke-width="1.9" stroke-linecap="round"/></svg></span> Blocked Clients</div>
+      <ul class="blist red" id="blkList"></ul>
+     </section>
+     <section class="card pcard">
+      <div class="ph"><span class="hdot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></span> Assignment Restrictions</div>
+      <div id="restrList"></div>
+     </section>
+     <section class="card pcard">
+      <div class="ph"><span class="hdot notes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke-width="1.9" stroke-linejoin="round"/><path d="M14 2v6h6M9 13h6M9 17h6" stroke-width="1.9" stroke-linecap="round"/></svg></span> General Notes</div>
+      <ul class="blist" id="noteList"></ul>
+     </section>
+    </div>
+   </div>
+  </div>
+  <div class="pf" id="editView" hidden>
+   <div class="ev-top">
+    <div>
+     <span class="ev-eyebrow">Editing Profile</span>
+     <h1 class="h1" id="evName">Maria Santos</h1>
+     <div class="ev-legend"><span class="req">*</span> Needed to complete this profile · <span class="ok">✓</span> Filled</div>
+    </div>
+    <button class="ev-x" type="button" id="evClose" aria-label="Close editor">✕</button>
+   </div>
+   <section class="card ev-scores">
+    <div class="ev-score">
+     <div class="ev-slbl">Reliability &amp; Attendance</div>
+     <div class="num">4.9<small> / 5</small></div>
+     <p class="sent" id="evRelSent"></p>
+    </div>
+    <div class="ev-score">
+     <div class="ev-slbl">Performance</div>
+     <div class="num">4.7<small> / 5</small></div>
+    </div>
+    <div class="ev-score">
+     <div class="ev-slbl">Documentation</div>
+     <div class="num">4.6<small> / 5</small></div>
+    </div>
+    <div class="ev-score">
+     <div class="ev-slbl">Family Feedback <span class="tag plain">EXCLUDED</span></div>
+     <div class="num na">N/A</div>
+     <p class="sent">Not yet scored - needs structured family-feedback capture.</p>
+    </div>
+   </section>
+   <div class="ev-cols">
+    <div class="ev-col">
+     <section class="card pcard">
+      <div class="ev-h">★ Preferred Clients</div>
+      <select class="input" id="prefSel"><option value="">Select a client...</option></select>
+     </section>
+     <section class="card pcard">
+      <div class="ev-h">🚫 Blocked Clients <span class="ok">✓</span></div>
+      <div id="evBlkRows"></div>
+      <div class="ev-addrow">
+       <input class="input" id="blkReason" placeholder="Reason">
+       <select class="input" id="blkSel"><option value="">Block a client...</option></select>
+      </div>
+     </section>
+     <section class="card pcard">
+      <div class="ev-h">📄 General Notes</div>
+      <textarea class="input ev-ta" id="evNotes"></textarea>
+     </section>
+    </div>
+    <div class="ev-col">
+     <section class="card pcard">
+      <div class="ev-h">🚫 Assignment Restrictions <span class="ok">✓</span></div>
+      <div id="evResRows"></div>
+      <select class="input mt" id="resSel">
+       <option value="">Add a restriction...</option>
+       <option>No weekend shifts</option>
+       <option>No clients with pets</option>
+       <option>No smoking environments</option>
+      </select>
+     </section>
+    </div>
+   </div>
+   <section class="card pcard ev-fields">
+    <div class="ev-grid">
+     <div>
+      <label class="ev-lbl" for="fStatus">Employment Status <span class="ok">✓</span></label>
+      <select class="input" id="fStatus"><option selected>Active</option><option>Inactive</option><option>On leave</option></select>
+     </div>
+     <div>
+      <label class="ev-lbl" for="fCareer">Career Years <span class="ok">✓</span></label>
+      <input class="input" id="fCareer" type="number" min="0">
+     </div>
+     <div>
+      <label class="ev-lbl" for="fWeekly">Weekly Hours <span class="ok">✓</span></label>
+      <input class="input" id="fWeekly" type="number" min="0">
+     </div>
+     <div>
+      <label class="ev-lbl" for="fMin">Min Shift (Hrs) <span class="ok">✓</span></label>
+      <input class="input" id="fMin" type="number" min="0">
+     </div>
+     <div>
+      <label class="ev-lbl" for="fMax">Max Shift (Hrs) <span class="ok">✓</span></label>
+      <input class="input" id="fMax" type="number" min="0">
+     </div>
+     <div>
+      <label class="ev-lbl" for="fEng">English Proficiency <span class="ok">✓</span></label>
+      <select class="input" id="fEng"><option>Fluent</option><option>Conversational</option><option>Basic</option></select>
+     </div>
+    </div>
+   </section>
+  </div>
+ </main>
 </div>
 <script src="./seed.js"></script>
 <script>
 (function () {
-  var cg = window.DEMO.caregivers.find(function (c) { return c.name === "Maria Santos"; });
-  var handoff = window.DEMO.handoffs.find(function (h) { return h.to === cg.name; });
-
-  /* ---- side header ---- */
-  document.getElementById("ph-avatar").textContent = cg.initials;
-  document.getElementById("ph-name").textContent = cg.name;
-  document.getElementById("ph-score").textContent = cg.score.toFixed(1);
-  document.getElementById("ph-stars-fill").style.width = (cg.score / 5 * 100) + "%";
-  document.getElementById("ph-status").textContent = cg.status;
-  var phone = document.getElementById("ph-phone");
-  phone.textContent = cg.phone;
-  phone.href = "tel:" + cg.phone.replace(/[^0-9]/g, "");
-  document.getElementById("ph-city").textContent = cg.city;
-
-  document.getElementById("verify-btn").addEventListener("click", function () {
-    var pill = document.getElementById("verify-pill");
-    pill.className = "chip good";
-    pill.textContent = "✓ Updated today · Demo Scheduler";
-    this.remove();
-  });
-
-  /* ---- AI summary: composed from seed fields only ---- */
-  document.getElementById("ai-text").textContent =
-    cg.name.split(" ")[0] + " is a " + cg.score.toFixed(1) + "-rated " + cg.role + " in " + cg.city +
-    " averaging " + cg.hours + " hours a week on a " + cg.avail + " pattern, with a clean attendance record over the last 90 days. " +
-    "Strongest fits are " + cg.skills.join(", ").toLowerCase() + " placements; she took this morning's " + handoff.time.replace(" today", "") +
-    " handoff for " + handoff.client + " and is a dependable first call for weekday day coverage.";
-
-  /* ---- employment summary ---- */
-  var empRows = [
-    ["Role", cg.role + " · Home Care Aide"],
-    ["Employment status", cg.status],
-    ["With Devoted Shift since", "Apr 2024 · 2 yrs 3 mo"],
-    ["Scheduled hours / week", String(cg.hours)],
-    ["Total hours worked", "3,740"],
-    ["Last client served", handoff.client]
-  ];
-  document.getElementById("emp").innerHTML = empRows.map(function (r) {
-    return '<div class="emp-row"><span class="l">' + r[0] + '</span><span class="v">' + r[1] + "</span></div>";
+ var P = DEMO.profile, C = P.calendar;
+ document.getElementById("pfAvatar").textContent = P.initials;
+ document.getElementById("pfName").textContent = P.name;
+ document.getElementById("pfScore").textContent = P.score.toFixed(1);
+ document.getElementById("updTag").textContent = "✓ " + P.updated;
+ document.getElementById("dueTxt").textContent = P.nextUpdate;
+ var FACT = /(\d+%|\d+ call-offs?|\d+ late arrivals?|\d+ no-shows?|\d+–\d+ hour day shifts|\d+ weekly hours)/g;
+ document.getElementById("aiText").innerHTML = P.aiSummary.replace(FACT, "<b>$1</b>");
+ document.getElementById("calMonth").textContent = C.month;
+ var LEGEND = [["devoted", "Devoted"], ["open", "Open"], ["agency", "Other agency"], ["vacation", "Vacation"], ["sick", "Sick"], ["unavail", "Unavailable"], ["needs", "Needs update"]];
+ document.getElementById("calLegend").innerHTML = LEGEND.map(function (l) {
+  return '<span class="leg"><span class="sw ' + l[0] + '"></span>' + l[1] + "</span>";
+ }).join("");
+ var grid = document.getElementById("calGrid");
+ var html = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"].map(function (d) { return '<div class="cal-dow">' + d + "</div>"; }).join("");
+ for (var i = 0; i < 3; i++) html += '<div class="cal-cell empty"></div>';
+ for (var n = 1; n <= 31; n++) {
+  var cls = "cal-cell", blk;
+  if (C.devotedDays[n]) blk = '<div class="blk devoted"><span class="l">Devoted</span><span class="t">' + C.devotedDays[n] + "</span></div>";
+  else if (C.unavailable.indexOf(n) > -1) { cls += " off"; blk = '<div class="blk unavail"><span class="l">Unavailable</span></div>'; }
+  else blk = '<div class="blk open"><span class="l">Open</span><span class="t">' + C.openTag(n) + "</span></div>";
+  if (n === C.todayN) cls += " today";
+  html += '<div class="' + cls + '" data-d="' + n + '"><span class="cal-d">' + n + "</span>" + blk + "</div>";
+}
+ grid.innerHTML = html;
+ document.getElementById("attBig").textContent = P.reliability.pct + "%";
+ document.getElementById("attFill").style.width = P.reliability.pct + "%";
+ document.getElementById("attChip").textContent = "⚠ " + P.reliability.callOffs + " call-off" + (P.reliability.callOffs === 1 ? "" : "s");
+ document.getElementById("issueLbl").textContent = "Issue history (" + P.reliability.issueHistory + ")";
+ function kvs(id, rows) {
+  document.getElementById(id).innerHTML = rows.map(function (r) {
+   return '<div class="kv"><span class="k">' + r[0] + '</span><span class="v">' + r[1] + "</span></div>";
   }).join("");
+}
+ kvs("wpRows", P.workPrefs);
+ kvs("empRows", P.employment);
+ document.getElementById("chMeta").textContent = P.commLog.date + " • " + P.commLog.from + " • " + P.commLog.count + " message" + (P.commLog.count === 1 ? "" : "s");
+ document.getElementById("chReason").innerHTML = "<b>Reason:</b> " + P.commLog.reason;
+ document.getElementById("chKey").innerHTML = "<b>Key info:</b> " + P.commLog.keyInfo;
+ document.getElementById("blkList").innerHTML = P.blocked.map(function (b) { return "<li>" + b + "</li>"; }).join("");
+ document.getElementById("restrList").innerHTML = P.restrictions.map(function (r) { return '<div class="lx"><span class="mk">✕</span>' + r + "</div>"; }).join("");
+ document.getElementById("noteList").innerHTML = P.generalNotes.map(function (t) { return "<li>" + t + "</li>"; }).join("");
+ var markBtn = document.getElementById("markBtn");
+ markBtn.addEventListener("click", function () {
+  document.getElementById("updTag").textContent = "✓ Updated today · by " + DEMO.scheduler.name;
+  markBtn.textContent = "✓ Marked updated";
+  markBtn.classList.add("done");
+  markBtn.disabled = true;
+});
+ var txtBtn = document.getElementById("txtBtn");
+ txtBtn.addEventListener("click", function () {
+  document.getElementById("sentTxt").hidden = false;
+  txtBtn.disabled = true;
+});
+ var issueBtn = document.getElementById("issueBtn"), issueList = document.getElementById("issueList");
+ issueBtn.addEventListener("click", function () {
+  var open = issueList.hidden;
+  issueList.hidden = !open;
+  issueBtn.classList.toggle("open", open);
+});
+ var selMode = false, selBtn = document.getElementById("selBtn"), selCount = document.getElementById("selCount");
+ selBtn.addEventListener("click", function () {
+  selMode = !selMode;
+  selBtn.textContent = selMode ? "✓ Done" : "Select days";
+  selBtn.classList.toggle("on", selMode);
+  if (!selMode) {
+   $$(".cal-cell.sel", grid).forEach(function (c) { c.classList.remove("sel"); });
+   selCount.textContent = "";
+}});
+ grid.addEventListener("click", function (e) {
+  if (!selMode) return;
+  var cell = e.target.closest(".cal-cell");
+  if (!cell || cell.classList.contains("empty")) return;
+  cell.classList.toggle("sel");
+  var k = $$(".cal-cell.sel", grid).length;
+  selCount.textContent = k ? k + " day" + (k === 1 ? "" : "s") + " selected" : "";
+});
 
-  /* ---- skills & strengths: dot-line groups (Care Skills straight from seed) ---- */
-  var skillGroups = [
-    ["Care Skills", cg.skills],
-    ["Caregiving Style", ["Calm redirection", "Steady routines", "Patient with repetition"]],
-    ["Communication", ["Clear shift notes", "Reports changes early"]],
-    ["Family Feedback", ["Families ask for her by name", "Gentle with morning routines"]]
-  ];
-  document.getElementById("skills").innerHTML = skillGroups.map(function (g) {
-    return '<div class="sk"><span class="g-label">' + g[0] + '</span><span class="dotline">' +
-      g[1].map(function (s) { return "<b>" + s + "</b>"; }).join(" · ") + "</span></div>";
-  }).join("");
-
-  /* ---- availability week grid: derived from cg.avail = "Mon-Fri day" ---- */
-  var week = [
-    { dow: "Mon", num: 20, on: true }, { dow: "Tue", num: 21, on: true },
-    { dow: "Wed", num: 22, on: true }, { dow: "Thu", num: 23, on: true, today: true },
-    { dow: "Fri", num: 24, on: true }, { dow: "Sat", num: 25, on: false },
-    { dow: "Sun", num: 26, on: false }
-  ];
-  document.getElementById("wk-range").textContent = "Jul 20 – 26";
-  var wkEl = document.getElementById("wk");
-  wkEl.innerHTML = week.map(function (d, i) {
-    return '<div class="wk-day' + (d.today ? " today" : "") + '" data-i="' + i + '" role="button" tabindex="0">' +
-      '<div class="wk-dow">' + d.dow + '</div><div class="wk-num">' + d.num + "</div>" +
-      '<div class="wk-blk ' + (d.on ? "devoted" : "unavail") + '">' + (d.on ? "8:00a–4:00p" : "Unavail") + "</div></div>";
-  }).join("");
-  function showDay(i) {
-    var d = week[i];
-    window.$$(".wk-day", wkEl).forEach(function (n) { n.classList.toggle("sel", +n.dataset.i === i); });
-    var html = "<b>" + d.dow + " · Jul " + d.num + "</b> · " +
-      (d.on ? "Devoted shift · 8:00a–4:00p" : "Unavailable · outside her " + cg.avail + " pattern");
-    if (d.today) {
-      html += '<div class="hand"><b>' + handoff.time.replace(" today", "") + " handoff received</b> from " +
-        handoff.from + " · " + handoff.client + ': <span class="muted">' + handoff.note + "</span></div>";
-    }
-    document.getElementById("wk-detail").innerHTML = html;
-  }
-  window.$$(".wk-day", wkEl).forEach(function (n) {
-    n.addEventListener("click", function () { showDay(+n.dataset.i); });
-    n.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showDay(+n.dataset.i); } });
-  });
-  showDay(3); /* today preselected */
-
-  /* ---- performance & reliability: weighted breakdown (50 / 37.5 / 12.5) ---- */
-  var cats = [
-    { name: "Reliability & Attendance", w: 0.5,   s: 4.9, note: "98% reliability over the last 90 days" },
-    { name: "Performance",              w: 0.375, s: 4.7, note: "No open performance issues" },
-    { name: "Documentation",            w: 0.125, s: 4.6, note: "Care notes filed on time" }
-  ];
-  var overall = 0;
-  document.getElementById("score-rows").innerHTML = cats.map(function (c) {
-    overall += c.s * c.w;
-    return '<div class="sc-row"><div class="sc-top"><span class="sc-name">' + c.name +
-      '<span class="sc-w">' + (c.w * 100) + "% weight</span></span>" +
-      '<span class="sc-num">' + c.s.toFixed(1) + "<small> / 5 · +" + (c.s * c.w).toFixed(2) + "</small></span></div>" +
-      '<div class="sc-bar"><i style="width:' + (c.s / 5 * 100) + '%"></i></div>' +
-      '<div class="muted" style="margin-top:4px; font-size:11.5px;">' + c.note + "</div></div>";
-  }).join("");
-  document.getElementById("sc-overall").textContent = overall.toFixed(1) + " / 5";
-
-  /* ---- recent care notes: hers, consistent with the seed roster ---- */
-  var notes = [
-    { client: handoff.client, when: "Today · Day", flag: "good",
-      note: "Morning glucose 132 at 7:15a after last night's late 168. Breakfast eaten in full. Overnight handoff from " + handoff.from + " reviewed.",
-      ai: "Glucose back in range after last night's 2-hour delay. Keep morning readings on the log this week." },
-    { client: "Peter Halvorsen", when: "Tue Jul 21 · Day", flag: "warn",
-      note: "Client mentioned mild shoulder soreness before the second transfer. Completed with extra support and logged for nurse awareness.",
-      ai: "First mention of shoulder discomfort on record. Watch positioning during transfers this week." },
-    { client: "Peter Halvorsen", when: "Mon Jul 20 · Day", flag: "good",
-      note: "Two Hoyer transfers completed smoothly. Client comfortable and spent the morning reading on the porch.",
-      ai: "Transfers consistent with the care plan. No action needed." }
-  ];
-  document.getElementById("notes-count").textContent = notes.length + " this week";
-  document.getElementById("notes").innerHTML = notes.map(function (n) {
-    return '<div class="note"><div class="leftbar ' + n.flag + '">' +
-      '<div class="meta"><span class="who">' + n.client + '</span><span class="muted">' + n.when + "</span></div>" +
-      "<div>" + n.note + "</div>" +
-      '<div class="ai-line"><span class="chip ai">AI Summary</span><span>' + n.ai + "</span></div></div></div>";
-  }).join("");
-
-  /* ---- edit history: end states match the seed record ---- */
-  var hist = [
-    { f: "Weekly hours", from: "28", to: "32", when: "Jul 18, 2026 · 2:14 PM" },
-    { f: "Availability", from: "Mon-Sat day", to: "Mon-Fri day", when: "Jul 10, 2026 · 9:41 AM" },
-    { f: "Skills", from: "Dementia care, Driver", to: "added Hoyer lift", when: "Jun 26, 2026 · 4:05 PM" },
-    { f: "Preferred area", from: "Lakewood", to: "Brookfield", when: "May 6, 2025 · 11:20 AM" },
-    { f: "Employment status", from: "Onboarding", to: "Active", when: "Apr 14, 2024 · 10:02 AM" }
-  ];
-  function histRow(h) {
-    return '<div class="h-row"><span class="h-field">' + h.f + "</span> · " + h.from +
-      '<span class="h-arrow">→</span><b>' + h.to + "</b>" +
-      '<div class="h-when">' + h.when + " · by Demo Scheduler</div></div>";
-  }
-  document.getElementById("hist-count").textContent = hist.length + " edits";
-  var histEl = document.getElementById("hist");
-  histEl.innerHTML = hist.slice(0, 3).map(histRow).join("");
-
-  /* ---- expanders ---- */
-  document.getElementById("xp-score-btn").addEventListener("click", function () {
-    var open = this.getAttribute("aria-expanded") === "true";
-    this.setAttribute("aria-expanded", String(!open));
-    document.getElementById("xp-score").classList.toggle("open", !open);
-  });
-  document.getElementById("xp-hist-btn").addEventListener("click", function () {
-    var open = this.getAttribute("aria-expanded") === "true";
-    this.setAttribute("aria-expanded", String(!open));
-    histEl.innerHTML = (open ? hist.slice(0, 3) : hist).map(histRow).join("");
-    document.getElementById("xp-hist-label").textContent = open ? " Show all edits" : " Show fewer";
-  });
+ /* ---- Edit Profile view (addendum bullet 4) ---- */
+ var profileView = document.getElementById("profileView"), editView = document.getElementById("editView");
+ document.getElementById("evName").textContent = P.name;
+ var rel = P.reliability;
+ document.getElementById("evRelSent").textContent = rel.pct + "% attendance · " + rel.callOffs + " call-off" + (rel.callOffs === 1 ? "" : "s") + " and no late arrivals on record.";
+ var prefSel = document.getElementById("prefSel");
+ DEMO.clients.forEach(function (c) { prefSel.appendChild(el("option", null, c)); });
+ var BLOCK_REASON = "Caregiver prefers not to work with the client";
+ var blkRows = document.getElementById("evBlkRows"), blkSel = document.getElementById("blkSel"), blkReason = document.getElementById("blkReason");
+ function rowEl(html, name) {
+  var row = el("div", "ev-row");
+  if (name) row.dataset.name = name;
+  row.appendChild(el("span", null, html));
+  var rm = el("button", "ev-rm", "Remove");
+  rm.type = "button";
+  row.appendChild(rm);
+  return row;
+}
+ function addBlockedRow(name, reason) {
+  blkRows.appendChild(rowEl("<b>" + name + "</b> <span class='muted'>· " + reason + "</span>", name));
+}
+ P.blocked.forEach(function (b) { addBlockedRow(b, BLOCK_REASON); });
+ DEMO.clients.filter(function (c) { return P.blocked.indexOf(c) === -1; }).forEach(function (c) { blkSel.appendChild(el("option", null, c)); });
+ blkSel.addEventListener("change", function () {
+  var name = blkSel.value;
+  if (!name) return;
+  addBlockedRow(name, blkReason.value.trim() || BLOCK_REASON);
+  blkSel.remove(blkSel.selectedIndex);
+  blkSel.selectedIndex = 0;
+  blkReason.value = "";
+});
+ blkRows.addEventListener("click", function (e) {
+  if (!e.target.classList.contains("ev-rm")) return;
+  var row = e.target.closest(".ev-row");
+  blkSel.appendChild(el("option", null, row.dataset.name));
+  row.remove();
+});
+ var resRows = document.getElementById("evResRows"), resSel = document.getElementById("resSel");
+ function addResRow(text) { resRows.appendChild(rowEl("<b>" + text + "</b>")); }
+ P.restrictions.forEach(addResRow);
+ resSel.addEventListener("change", function () {
+  var v = resSel.value;
+  if (!v) return;
+  var dup = $$(".ev-row b", resRows).some(function (b) { return b.textContent === v; });
+  if (!dup) addResRow(v);
+  resSel.selectedIndex = 0;
+});
+ resRows.addEventListener("click", function (e) {
+  if (e.target.classList.contains("ev-rm")) e.target.closest(".ev-row").remove();
+});
+ document.getElementById("evNotes").value = P.generalNotes.map(function (t) { return "• " + t; }).join("\n");
+ function pick(rows, key) {
+  for (var j = 0; j < rows.length; j++) if (rows[j][0] === key) return rows[j][1];
+  return "";
+}
+ document.getElementById("fCareer").value = parseInt(pick(P.employment, "Caregiving experience"), 10);
+ document.getElementById("fWeekly").value = parseInt(pick(P.workPrefs, "Preferred weekly hours"), 10);
+ document.getElementById("fMin").value = parseInt(pick(P.workPrefs, "Preferred minimum shift"), 10);
+ document.getElementById("fMax").value = parseInt(pick(P.workPrefs, "Preferred maximum shift"), 10);
+ document.getElementById("fEng").value = pick(P.workPrefs, "English proficiency");
+ document.getElementById("editBtn").addEventListener("click", function () {
+  profileView.hidden = true;
+  editView.hidden = false;
+  window.scrollTo(0, 0);
+});
+ document.getElementById("evClose").addEventListener("click", function () {
+  editView.hidden = true;
+  profileView.hidden = false;
+  window.scrollTo(0, 0);
+});
 })();
 </script>
 </body>

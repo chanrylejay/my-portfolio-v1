@@ -1,4 +1,6 @@
-<!-- impeccable-disable overused-font side-tab — exact replica of production design canon (Inter + left status rail are LOCKED in the source system). -->
+<!-- SHELL v2 — copies the LIVE sidebar anatomy exactly (icons are the production SVG set).
+     Change ONLY: <title>, the `active` class on one nav link, and <main>.
+     impeccable-disable overused-font side-tab — exact replica of production canon. -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,34 +15,38 @@
 <div class="demo-note"><b>Interactive demo.</b> Every name, client, and number on this page is fictional. Built as a sanitized copy of a production home-care operations platform.</div>
 <div class="app">
   <aside class="rail">
-    <a class="rail-brand" href="./index.html">
-      <span class="logo">DS</span>
-      <span><span class="name">Devoted Shift</span><br><span class="sub">Scheduling Intelligence</span></span>
+    <a class="brand" href="./index.html">
+      <span class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 21s-7-4.6-9.2-9A5.2 5.2 0 0112 5.6 5.2 5.2 0 0121.2 12c-2.2 4.4-9.2 9-9.2 9z" stroke-width="2" stroke-linejoin="round"/></svg></span>
+      <span style="min-width:0;line-height:1">
+        <span class="eyebrow">Devoted Shift</span>
+        <span class="name">Scheduling <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </span>
+      <span class="apps"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="5" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="12" cy="19" r="2"/><circle cx="19" cy="19" r="2"/></svg></span>
     </a>
     <nav class="nav">
-      <a href="./index.html"><span class="ico">✦</span> Devo</a>
-      <a href="./open-shifts.html"><span class="ico">▦</span> Open Shifts <span class="pill">5</span></a>
-      <a href="./find-coverage.html"><span class="ico">◎</span> Find Coverage</a>
-      <a href="./caregivers.html"><span class="ico">☺</span> Caregivers</a>
-      <a class="active" href="./clients.html"><span class="ico">⌂</span> Clients <span class="soon">SOON</span></a>
-      <a href="./notes-review.html"><span class="ico">✎</span> Care Note Review <span class="pill">2</span></a>
-      <a href="./handoffs.html"><span class="ico">⇄</span> Shift Handoff</a>
-      <a href="./weekly-tasks.html"><span class="ico">☑</span> Weekly Tasks</a>
-      <a href="./forms.html"><span class="ico">🗎</span> Forms &amp; Resources <span class="soon">SOON</span></a>
-      <a href="./reports.html"><span class="ico">▤</span> KPIs / Reports</a>
-      <a href="./guides.html"><span class="ico">?</span> Quick Guides <span class="soon">SOON</span></a>
+      <a href="./index.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z" stroke-width="1.8" stroke-linejoin="round"/><path d="M5 17l.7 2L8 19.7 5.7 20.4 5 22l-.7-1.6L2 19.7l2.3-.7L5 17z" stroke-width="1.5" stroke-linejoin="round"/></svg> Devo</a>
+      <a href="./open-shifts.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="17" rx="2" stroke-width="2"/><path d="M3 9h18M8 2v4M16 2v4" stroke-width="2" stroke-linecap="round"/></svg> Open Shifts <span class="count">10</span></a>
+      <a href="./find-coverage.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="7" stroke-width="2"/><path d="M21 21l-4-4" stroke-width="2" stroke-linecap="round"/></svg> Find Coverage</a>
+      <a href="./caregivers.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 11l3 3 8-8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12a9 9 0 11-5-8" stroke-width="2" stroke-linecap="round"/></svg> Caregivers</a>
+      <a class="active" href="./clients.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="8" r="3.4" stroke-width="2"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0" stroke-width="2" stroke-linecap="round"/></svg> Clients <span class="soon">SOON</span></a>
+      <a href="./notes-review.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 11l3 3 8-8M3 6h7M3 12h5M3 18h9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Care Note Review</a>
+      <a href="./handoffs.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M7 8l-4 4 4 4M3 12h11M17 16l4-4-4-4M21 12H10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Shift Handoff</a>
+      <a href="./weekly-tasks.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M10 6h10M10 12h10M10 18h10" stroke-width="2" stroke-linecap="round"/><path d="M4 6.5l1.3 1.3L7.6 5.4M4 17.5l1.3 1.3L7.6 16.4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="5.4" cy="12" r="1.2" fill="currentColor" stroke="none"/></svg> Weekly Tasks</a>
+      <a href="./forms.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="4" y="3" width="14" height="18" rx="2" stroke-width="2"/><path d="M8 8h6M8 12h6M8 16h3" stroke-width="1.8" stroke-linecap="round"/></svg> Forms &amp; Resources</a>
+      <a href="./reports.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> KPIs / Reports</a>
+      <a href="./guides.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 4h11a1 1 0 011 1v14a1 1 0 01-1 1H6a2 2 0 01-2-2V6a2 2 0 012-2z" stroke-width="2" stroke-linejoin="round"/><path d="M9 4v15M12 9h3M12 12.5h3" stroke-width="2" stroke-linecap="round"/></svg> Quick Guides</a>
     </nav>
-    <div class="rail-foot"><span class="avatar">DS</span> <span>Demo Scheduler<br><span style="color:#8A93A6">Thursday, Jul 23, 2026</span></span></div>
+    <div class="rail-foot">
+      <span class="avatar">D</span>
+      <span class="who"><b>Demo Scheduler</b><span>Admin</span></span>
+      <span class="out"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M15 3h4a1 1 0 011 1v16a1 1 0 01-1 1h-4M10 17l5-5-5-5M15 12H3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    </div>
   </aside>
   <main class="main">
-    <div class="card">
-      <div class="panel-body empty">
-        <div class="big">Clients module is next on the roadmap</div>
-        In the production system this module is marked the same way: built module by module, shipped only when the workflow it serves is proven. Client coverage today runs through <a href="./find-coverage.html" style="color:var(--brand);font-weight:600">Find Coverage</a>.
-      </div>
-    </div>
+    <div class="card"><div class="panel-body empty"><div class="big">Clients module is next on the roadmap</div>Marked the same way in the production system: built module by module, shipped when the workflow it serves is proven. Client coverage today runs through <a href="./find-coverage.html" style="color:var(--brand);font-weight:700">Find Coverage</a>.</div></div>
   </main>
 </div>
 <script src="./seed.js"></script>
+<!-- PAGE SCRIPT -->
 </body>
 </html>

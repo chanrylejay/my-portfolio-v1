@@ -1,6 +1,6 @@
-<!-- SHELL TEMPLATE — every demo page copies this structure exactly.
-     Change ONLY: <title>, the `active` class on one nav link, and the <main> content.
-     impeccable-disable overused-font side-tab — exact replica of production design canon (Inter + left status rail are LOCKED in the source system). -->
+<!-- SHELL v2 — copies the LIVE sidebar anatomy exactly (icons are the production SVG set).
+     Change ONLY: <title>, the `active` class on one nav link, and <main>.
+     impeccable-disable overused-font side-tab flat-type-hierarchy — exact replica of production canon. -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,194 +11,341 @@
 <link rel="stylesheet" href="./styles.css">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%231E40AF%27/%3E%3Ctext x=%2716%27 y=%2722%27 font-family=%27Arial%27 font-size=%2713%27 font-weight=%27bold%27 fill=%27white%27 text-anchor=%27middle%27%3EDS%3C/text%3E%3C/svg%3E">
 <style>
-/* Care Note Review module — purple is this module's status color (chips + scanned stat) */
-.toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px}
-.fchip{display:inline-flex;align-items:center;gap:7px;height:32px;padding:0 13px;border-radius:99px;border:1px solid var(--line-strong);background:var(--card);font-size:13px;font-weight:600;color:var(--ink-soft)}
-.fchip:hover{border-color:var(--ink-faint)}
-.fchip .n{font-weight:800;font-variant-numeric:tabular-nums;color:var(--ink)}
-.fchip.f-warn .n{color:var(--warn)}
-.fchip.f-good .n{color:var(--good)}
-.fchip.on.f-all{background:var(--brand-soft);border-color:var(--brand);color:var(--brand)}
-.fchip.on.f-all .n{color:var(--brand)}
-.fchip.on.f-warn{background:var(--warn-soft);border-color:var(--warn);color:var(--warn)}
-.fchip.on.f-good{background:var(--good-soft);border-color:var(--good);color:var(--good)}
-.note-row{padding:12px 14px;transition:opacity .17s,transform .17s}
-.note-row.out{opacity:0;transform:translateX(14px)}
-.note-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
-.byline{font-size:12px;color:var(--ink-soft);margin-top:1px}
-.btn.sm{height:28px;padding:0 11px;font-size:12px;flex:none}
-.note-text{margin:9px 0 0;line-height:1.55;max-width:72ch}
-.ai-line{display:flex;align-items:flex-start;gap:8px;margin-top:9px;color:var(--ink-soft);line-height:1.5;max-width:72ch}
-.ai-line .chip{flex:none;margin-top:1px}
-.rev-toggle{width:100%;display:flex;align-items:center;gap:9px;padding:11px 14px;background:var(--panel-head);border:0;border-radius:var(--radius);font-weight:700;font-size:13px;color:var(--ink);text-align:left}
-.rev-toggle .caret{display:inline-block;transition:transform .15s;color:var(--ink-soft)}
-.rev-toggle.open{border-radius:var(--radius) var(--radius) 0 0;border-bottom:1px solid var(--line)}
-.rev-toggle.open .caret{transform:rotate(90deg)}
-.rev-row{display:flex;align-items:center;gap:10px;padding:10px 14px}
-.rev-row .line{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--brand-deep);color:#fff;font-size:13px;font-weight:600;padding:9px 16px;border-radius:8px;box-shadow:var(--shadow-card);opacity:0;pointer-events:none;transition:opacity .2s;z-index:50}
-.toast.show{opacity:1}
+/* Care Note Review board — recipes lifted 1:1 from the live board CSS (chips r12 big-number,
+   glass byclient handle w/ blinking ‹‹, r16 table card, status pills, byline attribution). */
+.cnrx .toolbar{display:flex;align-items:center;gap:14px;margin-bottom:15px;flex-wrap:wrap}
+.cnrx .chips{display:flex;gap:10px;flex-wrap:wrap}
+.cnrx .chip{display:flex;align-items:center;gap:9px;background:#fff;border:1px solid #E6E9F2;border-radius:12px;padding:9px 15px;cursor:pointer;box-shadow:0 1px 2px rgba(16,24,40,.05);color:var(--ink)}
+.cnrx .chip:hover{border-color:#D3DBEA;transform:translateY(-1px)}
+.cnrx .chip.on{border-color:#1E40AF;background:#F5F8FF;box-shadow:0 0 0 1px #1E40AF}
+.cnrx .chip .n{font-size:18px;font-weight:800;line-height:1.1;letter-spacing:-.02em;color:#0B1330}
+.cnrx .chip .lab{font-size:13px;font-weight:600;color:#5A6478}
+.cnrx .chip.need .n{color:#DC2626}
+.cnrx .chip.follow .n{color:#B45309}
+.cnrx .chip.routine .n{color:#15803D}
+.cnrx .chip.all .n{color:#1E40AF}
+.cnrx .chip.all .lab{font-weight:700;color:#0B1330}
+.cnrx .lookup{margin-left:auto;display:flex;align-items:center;gap:10px}
+.cnrx .clientsel{border:1px solid #D5DBE7;border-radius:10px;padding:9px 12px;font:inherit;font-size:13px;color:var(--ink);background:#fff;min-width:190px}
+.cnrx .byclient{background:rgba(255,255,255,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(30,64,175,.45);color:#1E40AF;font-weight:700;font-size:14px;padding:10px 18px;border-radius:12px;box-shadow:0 1px 2px rgba(16,24,40,.06);display:inline-flex;align-items:center;gap:10px;cursor:pointer}
+.cnrx .byclient:hover{background:rgba(255,255,255,.85);border-color:rgba(30,64,175,.65)}
+.cnrx .byclient .arw{font-size:18px;font-weight:800;line-height:1;letter-spacing:-2px;animation:cnrxblink 1.05s ease-in-out infinite}
+@keyframes cnrxblink{0%,100%{opacity:1;transform:translateX(0)}50%{opacity:.35;transform:translateX(-5px)}}
+@media (prefers-reduced-motion:reduce){.cnrx .byclient .arw{animation:none;opacity:1}}
+.cnrx .board{background:#fff;border:1px solid #E6E9F2;border-radius:16px;overflow:hidden;box-shadow:0 1px 2px rgba(16,24,40,.04),0 8px 20px rgba(16,24,40,.03)}
+.cnrx table{width:100%;border-collapse:collapse}
+.cnrx thead th{text-align:left;font-size:14px;letter-spacing:-.015em;color:#0B1330;font-weight:700;padding:13px 16px;border-bottom:1px solid #E6E9F2;background:#F1F3F9}
+.cnrx tbody td{padding:11px 16px;border-bottom:1px solid #EEF1F8;vertical-align:top}
+.cnrx tbody tr:last-child td{border-bottom:0}
+.cnrx tbody tr.clk:hover{background:#FAFBFF}
+.cnrx tbody tr.clk{cursor:pointer}
+.cnrx .cli{display:flex;align-items:center;min-width:150px}
+.cnrx .cli .nm{font-weight:700;color:#0B1330;font-size:13.5px}
+.cnrx .sum{color:#4A5364;font-size:13px;line-height:1.5;max-width:480px}
+.cnrx .sum .hl{color:#1E2436;font-weight:400}
+.cnrx .sum .missing{color:#B45309}
+.cnrx .sum .noshift{color:#9BA3B2;font-size:12.5px;font-weight:500}
+.cnrx .sum .byline{margin-top:5px;color:#33417A;font-size:12px;font-weight:600}
+.cnrx .st{display:inline-flex;align-items:center;gap:6px;font-weight:500;font-size:12px;padding:4px 11px;border-radius:999px;white-space:nowrap}
+.cnrx .st.red{background:#FEF2F2;color:#DC2626}
+.cnrx .st.amber{background:#FFF7ED;color:#B45309}
+.cnrx .st.green{background:#F0FDF4;color:#15803D}
+.cnrx thead th:nth-child(4),.cnrx tbody td:nth-child(4){width:1%;white-space:nowrap}
+.cnrx td.go{text-align:right;width:44px}
+.cnrx .goarrow{color:#1E40AF;font-weight:800;font-size:20px;line-height:1;display:inline-block;padding:2px 4px}
+.cnrx tbody tr.clk:hover .goarrow{transform:translateX(2px)}
+.cnrx .moreroutine{text-align:center;color:#5A6478;font-size:12.5px;padding:12px;width:100%;cursor:pointer}
+.cnrx .moreroutine:hover{background:#FAFBFF}
+/* Row modal (INTERACTION ADDENDUM bullet 3) — centered white r14 dialog on dark overlay,
+   amber-left-railed shift note sections, tab row + ghost Mark as Reviewed. */
+.cnrx .mdl-ovr{position:fixed;inset:0;background:rgba(11,19,48,.55);display:none;align-items:center;justify-content:center;padding:24px;z-index:80}
+.cnrx .mdl-ovr.open{display:flex}
+.cnrx .mdl{position:relative;background:#fff;border-radius:14px;width:min(700px,100%);max-height:86vh;display:flex;flex-direction:column;box-shadow:0 24px 60px -12px rgba(11,19,48,.35)}
+.cnrx .mdl-x{position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:8px;display:grid;place-items:center;color:#5A6478;font-size:15px;line-height:1}
+.cnrx .mdl-x:hover{background:#F1F3F9;color:#0B1330}
+.cnrx .mdl-head{display:flex;align-items:center;gap:13px;padding:20px 52px 14px 22px}
+.cnrx .mdl-name-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.cnrx .mdl-name{font-size:17px;font-weight:800;letter-spacing:-.02em;color:#0B1330}
+.cnrx .mdl-byline{margin-top:3px;color:#5A6478;font-size:12.5px}
+.cnrx .mdl-tabs{display:flex;align-items:center;gap:8px;padding:0 22px 14px;border-bottom:1px solid #E6E9F2;flex-wrap:wrap}
+.cnrx .mdl-tabs .rev{margin-left:auto}
+.cnrx .mdl-body{padding:18px 22px 22px;overflow-y:auto}
+.cnrx .mdl-note{border-left:3px solid #F59E0B;padding:2px 0 2px 14px;margin-bottom:18px}
+.cnrx .mdl-note:last-child{margin-bottom:0}
+.cnrx .mdl-note-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.cnrx .mdl-shift{font-weight:700;font-size:13px;color:#0B1330}
+.cnrx .mdl-note-text{margin-top:8px;color:#4A5364;font-size:13px;line-height:1.65;max-width:60ch}
 </style>
 </head>
 <body>
 <div class="demo-note"><b>Interactive demo.</b> Every name, client, and number on this page is fictional. Built as a sanitized copy of a production home-care operations platform.</div>
 <div class="app">
   <aside class="rail">
-    <a class="rail-brand" href="./index.html">
-      <span class="logo">DS</span>
-      <span><span class="name">Devoted Shift</span><br><span class="sub">Scheduling Intelligence</span></span>
+    <a class="brand" href="./index.html">
+      <span class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 21s-7-4.6-9.2-9A5.2 5.2 0 0112 5.6 5.2 5.2 0 0121.2 12c-2.2 4.4-9.2 9-9.2 9z" stroke-width="2" stroke-linejoin="round"/></svg></span>
+      <span style="min-width:0;line-height:1">
+        <span class="eyebrow">Devoted Shift</span>
+        <span class="name">Scheduling <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </span>
+      <span class="apps"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="5" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="12" cy="19" r="2"/><circle cx="19" cy="19" r="2"/></svg></span>
     </a>
     <nav class="nav">
-      <a href="./index.html"><span class="ico">✦</span> Devo</a>
-      <a href="./open-shifts.html"><span class="ico">▦</span> Open Shifts <span class="pill">5</span></a>
-      <a href="./find-coverage.html"><span class="ico">◎</span> Find Coverage</a>
-      <a href="./caregivers.html"><span class="ico">☺</span> Caregivers</a>
-      <a href="./clients.html"><span class="ico">⌂</span> Clients <span class="soon">SOON</span></a>
-      <a class="active" href="./notes-review.html"><span class="ico">✎</span> Care Note Review <span class="pill">2</span></a>
-      <a href="./handoffs.html"><span class="ico">⇄</span> Shift Handoff</a>
-      <a href="./weekly-tasks.html"><span class="ico">☑</span> Weekly Tasks</a>
-      <a href="./forms.html"><span class="ico">🗎</span> Forms &amp; Resources <span class="soon">SOON</span></a>
-      <a href="./reports.html"><span class="ico">▤</span> KPIs / Reports</a>
-      <a href="./guides.html"><span class="ico">?</span> Quick Guides <span class="soon">SOON</span></a>
+      <a href="./index.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z" stroke-width="1.8" stroke-linejoin="round"/><path d="M5 17l.7 2L8 19.7 5.7 20.4 5 22l-.7-1.6L2 19.7l2.3-.7L5 17z" stroke-width="1.5" stroke-linejoin="round"/></svg> Devo</a>
+      <a href="./open-shifts.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="17" rx="2" stroke-width="2"/><path d="M3 9h18M8 2v4M16 2v4" stroke-width="2" stroke-linecap="round"/></svg> Open Shifts <span class="count">10</span></a>
+      <a href="./find-coverage.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="7" stroke-width="2"/><path d="M21 21l-4-4" stroke-width="2" stroke-linecap="round"/></svg> Find Coverage</a>
+      <a href="./caregivers.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 11l3 3 8-8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12a9 9 0 11-5-8" stroke-width="2" stroke-linecap="round"/></svg> Caregivers</a>
+      <a href="./clients.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="8" r="3.4" stroke-width="2"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0" stroke-width="2" stroke-linecap="round"/></svg> Clients <span class="soon">SOON</span></a>
+      <a class="active" href="./notes-review.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 11l3 3 8-8M3 6h7M3 12h5M3 18h9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Care Note Review</a>
+      <a href="./handoffs.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M7 8l-4 4 4 4M3 12h11M17 16l4-4-4-4M21 12H10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Shift Handoff</a>
+      <a href="./weekly-tasks.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M10 6h10M10 12h10M10 18h10" stroke-width="2" stroke-linecap="round"/><path d="M4 6.5l1.3 1.3L7.6 5.4M4 17.5l1.3 1.3L7.6 16.4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="5.4" cy="12" r="1.2" fill="currentColor" stroke="none"/></svg> Weekly Tasks</a>
+      <a href="./forms.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="4" y="3" width="14" height="18" rx="2" stroke-width="2"/><path d="M8 8h6M8 12h6M8 16h3" stroke-width="1.8" stroke-linecap="round"/></svg> Forms &amp; Resources</a>
+      <a href="./reports.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> KPIs / Reports</a>
+      <a href="./guides.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 4h11a1 1 0 011 1v14a1 1 0 01-1 1H6a2 2 0 01-2-2V6a2 2 0 012-2z" stroke-width="2" stroke-linejoin="round"/><path d="M9 4v15M12 9h3M12 12.5h3" stroke-width="2" stroke-linecap="round"/></svg> Quick Guides</a>
     </nav>
-    <div class="rail-foot"><span class="avatar">DS</span> <span>Demo Scheduler<br><span style="color:#8A93A6">Thursday, Jul 23, 2026</span></span></div>
+    <div class="rail-foot">
+      <span class="avatar">D</span>
+      <span class="who"><b>Demo Scheduler</b><span>Admin</span></span>
+      <span class="out"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M15 3h4a1 1 0 011 1v16a1 1 0 01-1 1h-4M10 17l5-5-5-5M15 12H3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    </div>
   </aside>
   <main class="main">
-    <div class="statbar" id="stats"></div>
-    <div class="toolbar" id="chips"></div>
-    <div class="card mb">
-      <div class="panel-head"><h2>Yesterday's Care Notes</h2><span class="count">Wednesday, Jul 22, 2026</span></div>
-      <div class="row-list" id="list"></div>
+    <div class="cnrx">
+      <div class="toolbar">
+        <div class="chips" id="chips"></div>
+        <div class="lookup">
+          <select class="clientsel" id="clientSel" hidden aria-label="Look up by client"></select>
+          <div class="byclient" id="byclient" role="button" tabindex="0"><span class="arw">‹‹</span> Look up by client</div>
+        </div>
+      </div>
+      <div class="board">
+        <table>
+          <thead>
+            <tr><th>Client</th><th>A.M. Summary</th><th>P.M. Summary</th><th>Status</th><th></th></tr>
+          </thead>
+          <tbody id="boardBody"></tbody>
+        </table>
+      </div>
+      <div class="mdl-ovr" id="noteModal" role="dialog" aria-modal="true" aria-labelledby="mdlName">
+        <div class="mdl">
+          <button class="mdl-x" id="mdlX" aria-label="Close">✕</button>
+          <div class="mdl-head">
+            <span class="avatar-i" id="mdlAvatar"></span>
+            <div style="min-width:0">
+              <div class="mdl-name-row"><span class="mdl-name" id="mdlName"></span><span id="mdlPill"></span></div>
+              <div class="mdl-byline" id="mdlByline"></div>
+            </div>
+          </div>
+          <div class="mdl-tabs">
+            <button class="btn sm primary" data-tab="notes">Care Notes</button>
+            <button class="btn sm ghost ink" data-tab="match">Care Plan Match</button>
+            <button class="btn sm ghost ink" data-tab="history">History</button>
+            <button class="btn sm ghost rev" id="mdlReview">✓ Mark as Reviewed</button>
+          </div>
+          <div class="mdl-body" id="mdlBody"></div>
+        </div>
+      </div>
     </div>
-    <div class="card" id="revCard" hidden>
-      <button class="rev-toggle" id="revToggle" aria-expanded="false"><span class="caret">›</span> Reviewed <span class="count">· <span id="revCount">0</span></span></button>
-      <div class="row-list" id="revList" hidden></div>
-    </div>
-    <div class="toast" id="toast" role="status"></div>
   </main>
 </div>
 <script src="./seed.js"></script>
 <script>
 (function () {
-  var D = window.DEMO;
-  var RANK = { crit: 0, warn: 1, good: 2 };
-  var state = { filter: "all", reviewed: [], revOpen: false };
+  var CN = window.DEMO.careNotes;
+  var KEY = { "Needs Action": { k: "need", c: "red" }, "Follow-up": { k: "follow", c: "amber" }, "Routine": { k: "routine", c: "green" } };
+  var chipFilter = "all";
+  var clientFilter = "";
 
-  var stats = document.getElementById("stats");
-  var chips = document.getElementById("chips");
-  var list = document.getElementById("list");
-  var revCard = document.getElementById("revCard");
-  var revToggle = document.getElementById("revToggle");
-  var revCount = document.getElementById("revCount");
-  var revList = document.getElementById("revList");
-  var toast = document.getElementById("toast");
-  var toastTimer = null;
+  var chipsEl = document.getElementById("chips");
+  var selEl = document.getElementById("clientSel");
+  var handleEl = document.getElementById("byclient");
+  var bodyEl = document.getElementById("boardBody");
 
-  function isFlagged(n) { return n.flag !== "good"; }
-  function openNotes() { return D.careNotes.filter(function (n) { return state.reviewed.indexOf(n.id) < 0; }); }
-  function noteById(id) { return D.careNotes.filter(function (n) { return n.id === id; })[0]; }
-  function initialsOf(name) {
-    var c = D.caregivers.filter(function (x) { return x.name === name; })[0];
-    if (c) return c.initials;
-    return name.split(" ").map(function (w) { return w[0]; }).join("").toUpperCase();
-  }
-
-  /* KPI statbar — real counts, empty cells omitted */
-  function renderStats() {
-    var flagged = openNotes().filter(isFlagged).length;
-    var html = '<div class="stat notes"><div class="k">' + D.careNotes.length + '</div><div class="l">Notes scanned</div></div>';
-    if (flagged > 0) html += '<div class="stat warn"><div class="k">' + flagged + '</div><div class="l">Flagged</div></div>';
-    if (state.reviewed.length > 0) html += '<div class="stat good"><div class="k">' + state.reviewed.length + '</div><div class="l">Reviewed</div></div>';
-    stats.innerHTML = html;
-  }
-
-  /* filter chips — counts always derived from the same open list the rows use */
-  function chipBtn(key, label, n, tone) {
-    return '<button class="fchip ' + tone + (state.filter === key ? " on" : "") + '" data-f="' + key + '"><span class="n">' + n + "</span> " + label + "</button>";
+  function chipBtn(k, n, lab) {
+    var on = !clientFilter && chipFilter === k;
+    return '<button class="chip ' + k + (on ? " on" : "") + '" data-k="' + k + '"><span class="n">' + n + '</span><span class="lab">' + lab + "</span></button>";
   }
   function renderChips() {
-    var o = openNotes();
-    chips.innerHTML =
-      chipBtn("all", "All", o.length, "f-all") +
-      chipBtn("flagged", "Flagged", o.filter(isFlagged).length, "f-warn") +
-      chipBtn("clear", "Clear", o.filter(function (n) { return !isFlagged(n); }).length, "f-good");
+    var c = CN.counts;
+    chipsEl.innerHTML =
+      chipBtn("need", c.needsAction, "Needs Action") +
+      chipBtn("follow", c.followUp, "Follow-up") +
+      chipBtn("routine", c.routine, "Routine") +
+      chipBtn("all", c.all, "All Clients");
   }
-  chips.addEventListener("click", function (e) {
-    var b = e.target.closest("[data-f]");
+
+  function cellHTML(v, flagged) {
+    if (v === null) return '<td class="sum"><span class="noshift">No shift</span></td>';
+    if (v.missing) return '<td class="sum"><span class="missing">No care note submitted</span><div class="byline">— ' + v.by + "</div></td>";
+    var text = flagged ? '<span class="hl">' + v.text + "</span>" : v.text;
+    return '<td class="sum">' + text + '<div class="byline">— ' + v.by + "</div></td>";
+  }
+
+  function renderRows() {
+    var rows = CN.rows;
+    if (clientFilter) {
+      rows = rows.filter(function (r) { return r.client === clientFilter; });
+    } else if (chipFilter !== "all") {
+      rows = rows.filter(function (r) { return KEY[r.status].k === chipFilter; });
+    }
+    var html = rows.map(function (r) {
+      var flagged = r.status === "Needs Action";
+      return '<tr class="clk" data-client="' + r.client + '"><td><div class="cli"><div class="nm">' + r.client + "</div></div></td>" +
+        cellHTML(r.am, flagged) + cellHTML(r.pm, flagged) +
+        '<td><span class="st ' + KEY[r.status].c + '">● ' + r.status + "</span></td>" +
+        '<td class="go"><span class="goarrow">›</span></td></tr>';
+    }).join("");
+    if (chipFilter === "all" && !clientFilter && CN.moreRoutine > 0) {
+      html += '<tr><td colspan="5" style="padding:0"><button class="moreroutine">+ ' +
+        CN.moreRoutine + " more routine client" + (CN.moreRoutine === 1 ? "" : "s") + "</button></td></tr>";
+    }
+    if (!rows.length) {
+      html = '<tr><td colspan="5" class="sum" style="padding:22px 20px;color:#5A6478;font-size:13.5px">You’re clear. No care notes match this filter.</td></tr>';
+    }
+    bodyEl.innerHTML = html;
+  }
+
+  chipsEl.addEventListener("click", function (e) {
+    var b = e.target.closest(".chip");
     if (!b) return;
-    var f = b.getAttribute("data-f");
-    state.filter = (state.filter === f && f !== "all") ? "all" : f;
-    renderAll();
+    var k = b.getAttribute("data-k");
+    chipFilter = k === "all" ? "all" : (chipFilter === k && !clientFilter ? "all" : k);
+    clientFilter = "";
+    selEl.value = "";
+    selEl.hidden = true;
+    renderChips();
+    renderRows();
   });
 
-  function visibleNotes() {
-    var o = openNotes().slice().sort(function (a, b) { return RANK[a.flag] - RANK[b.flag] || a.id - b.id; });
-    if (state.filter === "flagged") return o.filter(isFlagged);
-    if (state.filter === "clear") return o.filter(function (n) { return !isFlagged(n); });
-    return o;
+  selEl.innerHTML = '<option value="">All clients</option>' + CN.rows.map(function (r) {
+    return "<option>" + r.client + "</option>";
+  }).join("");
+  handleEl.addEventListener("click", function () {
+    selEl.hidden = !selEl.hidden;
+    if (!selEl.hidden) selEl.focus();
+  });
+  handleEl.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); handleEl.click(); }
+  });
+  selEl.addEventListener("change", function () {
+    clientFilter = selEl.value;
+    if (clientFilter) chipFilter = "all";
+    renderChips();
+    renderRows();
+  });
+
+  renderChips();
+  renderRows();
+
+  /* ---- Row modal (INTERACTION ADDENDUM bullet 3) ---- */
+  var cityOf = {};
+  window.DEMO.openShifts.forEach(function (s) { if (!cityOf[s.client]) cityOf[s.client] = s.city; });
+
+  // Full note text per client+shift: the seed summary expanded with plausible fictional
+  // care detail (same cast, no new names). Falls back to the seed sentence if unmapped.
+  var EXPAND = {
+    "Sofia Marchetti|am": "Client tried to leave the house twice during the afternoon, once through the front door and once through the garage. I redirected her safely both times using a calm voice and her favorite photo album, and she settled within a few minutes each time. All exterior doors were checked and the door chime is working. She ate a full lunch and drank well through the shift. Family was notified by phone and asked to be updated again tomorrow.",
+    "Nadia Osman|pm": "Client refused the 11:00 PM glucose check and became irritated when I offered a second time. I stepped away and offered again at 1:00 AM, and she accepted; the reading was 168. She took a small snack and a full glass of water afterward. No signs of dizziness or confusion. She slept well for the rest of the night and was resting comfortably at the end of my shift.",
+    "Eleanor Price|am": "During morning bathing I noticed a slight bruise on the client’s left forearm, about the size of a quarter. She does not recall bumping into anything and reports no pain when the area is touched. No other marks were found during the skin check. I took a photo for the record and noted it on the daily log. The rest of the morning routine went smoothly and she ate most of her breakfast.",
+    "June Park|am": "Wound dressing was changed on schedule this morning. The site looks clean with no drainage, no odor, and no new redness around the edges. Client tolerated the change well and reported only mild tenderness. She spent most of the morning in her chair by the window and was in good spirits. Fluids were encouraged and she finished two full glasses of water before lunch.",
+    "Victor Ames|am": "Client had a comfortable day overall. Family visited in the afternoon and he stayed engaged in conversation for about an hour. Appetite remains low but stable; he ate about half of his lunch and accepted a protein shake. No pain complaints during the shift. Repositioned every two hours per the care plan.",
+    "Victor Ames|pm": "Quiet evening with no incidents. Client ate about half of his dinner and drank a full cup of tea. He took his evening medications with a reminder and had no issues. He watched television for a while and was resting comfortably in bed by 9:30 PM. I checked on him twice before end of shift; breathing even, no distress.",
+    "Peter Halvorsen|am": "Two Hoyer transfers were completed smoothly with the sling positioned per the care plan. Client spent the morning reading on the porch and was in a pleasant mood. Skin check during morning care showed no new areas of concern. He ate a full breakfast and drank well. All equipment was inspected and stored properly after each transfer."
+  };
+
+  var ovrEl = document.getElementById("noteModal");
+  var xEl = document.getElementById("mdlX");
+  var avatarEl = document.getElementById("mdlAvatar");
+  var nameEl = document.getElementById("mdlName");
+  var pillEl = document.getElementById("mdlPill");
+  var bylineEl = document.getElementById("mdlByline");
+  var mdlBodyEl = document.getElementById("mdlBody");
+  var reviewEl = document.getElementById("mdlReview");
+  var tabEls = ovrEl.querySelectorAll(".mdl-tabs [data-tab]");
+  var openRow = null;
+  var tab = "notes";
+
+  function initialsOf(name) {
+    return name.split(/\s+/).map(function (w) { return w.charAt(0); }).join("").slice(0, 2).toUpperCase();
   }
 
-  function renderList() {
-    var rows = visibleNotes();
-    if (rows.length === 0) {
-      list.innerHTML = openNotes().length === 0
-        ? '<div class="empty"><div class="big">You’re clear.</div>No care notes from yesterday need review.</div>'
-        : '<div class="empty">No notes match this filter.</div>';
+  function shiftSection(kind, v) {
+    var icon = kind === "am" ? "☀" : "🌙";
+    var label = kind === "am" ? "A.M. Shift" : "P.M. Shift";
+    var chip = kind === "am" ? "9:00 AM – 8:00 PM" : "8:00 PM – 8:00 AM";
+    var body = v.missing
+      ? '<p class="mdl-note-text warn-text">No care note submitted.</p>'
+      : '<p class="mdl-note-text">' + (EXPAND[openRow.client + "|" + kind] || v.text) + "</p>";
+    return '<div class="mdl-note"><div class="mdl-note-head"><span class="mdl-shift">' + icon + " " + label + " · " + v.by +
+      '</span><span class="tag plain">' + chip + "</span></div>" + body + "</div>";
+  }
+
+  function renderModalBody() {
+    if (tab !== "notes") {
+      mdlBodyEl.innerHTML = '<div class="empty"><div class="big">Included in the full system.</div>This demo shows the Care Notes tab.</div>';
       return;
     }
-    list.innerHTML = rows.map(function (n) {
-      return '<div class="note-row" data-id="' + n.id + '"><div class="leftbar ' + n.flag + '">' +
-        '<div class="note-head">' +
-          '<div class="flex"><span class="avatar-sm">' + initialsOf(n.caregiver) + '</span><div>' +
-            '<div><b>' + n.caregiver + '</b> <span class="muted">for</span> <b>' + n.client + '</b></div>' +
-            '<div class="byline">' + n.shift + '</div>' +
-          '</div></div>' +
-          '<button class="btn ghost sm" data-rev="' + n.id + '">✓ Mark reviewed</button>' +
-        '</div>' +
-        '<p class="note-text">' + n.note + '</p>' +
-        '<div class="ai-line"><span class="chip ai">AI Summary</span><span>' + n.ai + '</span></div>' +
-      '</div></div>';
-    }).join("");
+    var html = "";
+    if (openRow.am) html += shiftSection("am", openRow.am);
+    if (openRow.pm) html += shiftSection("pm", openRow.pm);
+    if (!html) html = '<div class="empty">No shift notes for this day.</div>';
+    mdlBodyEl.innerHTML = html;
   }
 
-  list.addEventListener("click", function (e) {
-    var b = e.target.closest("[data-rev]");
-    if (!b) return;
-    var id = Number(b.getAttribute("data-rev"));
-    b.closest(".note-row").classList.add("out");
-    window.setTimeout(function () {
-      state.reviewed.push(id);
-      showToast("Marked reviewed · " + noteById(id).client);
-      renderAll();
-    }, 170);
+  function setTab(t) {
+    tab = t;
+    tabEls.forEach(function (b) {
+      b.className = b.getAttribute("data-tab") === t ? "btn sm primary" : "btn sm ghost ink";
+    });
+    renderModalBody();
+  }
+
+  function openModal(row) {
+    openRow = row;
+    avatarEl.textContent = initialsOf(row.client);
+    nameEl.textContent = row.client;
+    pillEl.innerHTML = '<span class="st ' + KEY[row.status].c + '">● ' + row.status + "</span>";
+    var city = cityOf[row.client] || "";
+    bylineEl.textContent = city;
+    bylineEl.style.display = city ? "" : "none";
+    setTab("notes");
+    ovrEl.classList.add("open");
+    xEl.focus();
+  }
+
+  function closeModal() {
+    ovrEl.classList.remove("open");
+    openRow = null;
+  }
+
+  bodyEl.addEventListener("click", function (e) {
+    var tr = e.target.closest("tr.clk");
+    if (!tr) return;
+    var name = tr.getAttribute("data-client");
+    var row = CN.rows.filter(function (r) { return r.client === name; })[0];
+    if (row) openModal(row);
   });
 
-  /* Reviewed — collapsed by default; re-reading stays one click away */
-  function renderReviewed() {
-    if (state.reviewed.length === 0) { revCard.hidden = true; return; }
-    revCard.hidden = false;
-    revCount.textContent = state.reviewed.length;
-    revToggle.classList.toggle("open", state.revOpen);
-    revToggle.setAttribute("aria-expanded", state.revOpen ? "true" : "false");
-    revList.hidden = !state.revOpen;
-    revList.innerHTML = state.reviewed.map(function (id) {
-      var n = noteById(id);
-      return '<div class="rev-row"><div class="leftbar ' + n.flag + ' line"><b>' + n.caregiver +
-        '</b> <span class="muted">for</span> <b>' + n.client + '</b> <span class="muted">· ' + n.shift +
-        ' · ' + n.note + '</span></div><span class="chip good">Reviewed</span></div>';
-    }).join("");
-  }
-  revToggle.addEventListener("click", function () { state.revOpen = !state.revOpen; renderReviewed(); });
+  tabEls.forEach(function (b) {
+    b.addEventListener("click", function () { setTab(b.getAttribute("data-tab")); });
+  });
 
-  function showToast(m) {
-    toast.textContent = m;
-    toast.classList.add("show");
-    window.clearTimeout(toastTimer);
-    toastTimer = window.setTimeout(function () { toast.classList.remove("show"); }, 2200);
-  }
+  reviewEl.addEventListener("click", function () {
+    if (openRow && openRow.status !== "Routine") {
+      if (openRow.status === "Needs Action") CN.counts.needsAction--;
+      else if (openRow.status === "Follow-up") CN.counts.followUp--;
+      CN.counts.routine++;
+      openRow.status = "Routine";
+      renderChips();
+      renderRows();
+    }
+    closeModal();
+  });
 
-  function renderAll() { renderStats(); renderChips(); renderList(); renderReviewed(); }
-  renderAll();
+  xEl.addEventListener("click", closeModal);
+  ovrEl.addEventListener("click", function (e) { if (e.target === ovrEl) closeModal(); });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && ovrEl.classList.contains("open")) closeModal();
+  });
 })();
 </script>
 </body>

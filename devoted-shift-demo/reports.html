@@ -1,6 +1,6 @@
-<!-- SHELL TEMPLATE — every demo page copies this structure exactly.
-     Change ONLY: <title>, the `active` class on one nav link, and the <main> content.
-     impeccable-disable overused-font side-tab — exact replica of production design canon (Inter + left status rail are LOCKED in the source system). -->
+<!-- SHELL v2 — copies the LIVE sidebar anatomy exactly (icons are the production SVG set).
+     Change ONLY: <title>, the `active` class on one nav link, and <main>.
+     impeccable-disable overused-font side-tab — exact replica of production canon. -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,209 +11,198 @@
 <link rel="stylesheet" href="./styles.css">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%231E40AF%27/%3E%3Ctext x=%2716%27 y=%2722%27 font-family=%27Arial%27 font-size=%2713%27 font-weight=%27bold%27 fill=%27white%27 text-anchor=%27middle%27%3EDS%3C/text%3E%3C/svg%3E">
 <style>
-/* reports.html module styles — built on the shared tokens */
-.rpt-top { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px; }
-.rpt-top .statbar { flex: 1; margin-bottom: 0; }
-
-/* Coverage-by-day SVG chart: neutral data grey, today in ink, brand only for selection */
-.cvx { display: block; width: 100%; height: auto; }
-.cvx .cbar { fill: var(--ink-faint); cursor: pointer; transition: fill .15s; }
-.cvx .cbar:hover { fill: var(--ink-soft); }
-.cvx .cbar.today { fill: var(--ink); }
-.cvx .cbar.today:hover { fill: var(--ink); }
-.cvx .cbar.sel { stroke: var(--brand); stroke-width: 2; }
-.cvx .val { font: 700 11px Inter, system-ui, sans-serif; fill: var(--ink); font-variant-numeric: tabular-nums; }
-.cvx .day { font: 500 11px Inter, system-ui, sans-serif; fill: var(--ink-soft); }
-.cvx .day.today { font-weight: 700; fill: var(--ink); }
-.cvx .base { stroke: var(--line-strong); }
-.day-note { margin-top: 10px; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
-.day-note b { color: var(--ink); }
-
-/* Call-off reasons: plain-div horizontal bars, amber = attention */
-.cob-row { display: grid; grid-template-columns: 80px 1fr 26px; align-items: center; gap: 10px; padding: 8px 0; }
-.cob-row + .cob-row { border-top: 1px solid var(--line-soft); }
-.cob-l { font-weight: 600; }
-.cob-t { height: 14px; border-radius: 4px; background: var(--surface-2); }
-.cob-bar { height: 100%; border-radius: 4px; background: var(--warn); }
-.cob-n { font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }
-
-/* Recent call-offs expander */
-.linkbtn { color: var(--brand); font-weight: 600; padding: 0; margin-top: 12px; display: inline-flex; align-items: center; gap: 6px; }
-.linkbtn:hover { color: var(--brand-hover); }
-.co-item { display: flex; align-items: center; gap: 10px; padding: 9px 0 9px 11px; }
-.co-date { width: 58px; flex: none; font-weight: 700; }
-.co-main { flex: 1; min-width: 0; }
-
-/* Leaderboard */
-.card.clip { overflow: hidden; }
-.tbl td.num { font-variant-numeric: tabular-nums; font-weight: 700; }
-.src-note { padding: 10px 14px; font-size: 12px; color: var(--ink-faint); }
-
+/* Reports — printable operations document (letterhead + accordion + KPI tiles + trend + leaderboard) */
+.rpt-doc { max-width: 900px; }
+.lh { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 3px solid var(--brand-deep); padding-bottom: 14px; margin-bottom: 18px; }
+.lh-brand { display: flex; align-items: center; gap: 13px; }
+.lh-logo { width: 48px; height: 48px; flex: none; border-radius: 10px; background: var(--brand); color: #fff; display: grid; place-items: center; }
+.lh-logo svg { width: 26px; height: 26px; }
+.lh-co { font-size: 20px; font-weight: 800; letter-spacing: -.3px; color: var(--brand-deep); }
+.lh-tag { font-size: 9px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--ink-faint); margin-top: 2px; }
+.lh-right { text-align: right; }
+.lh-doc { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: .5px; color: var(--brand-deep); }
+.lh-meta { font-size: 11px; color: var(--ink-soft); margin-top: 2px; }
+.rpt-print { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 700; padding: 6px 13px; border-radius: 8px; border: 1px solid var(--line-strong); background: var(--card); color: var(--brand); margin-top: 9px; }
+.rpt-print:hover { background: var(--brand-soft); }
+/* collapsible section */
+.rep-acc { background: var(--card); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow-card); margin-bottom: 12px; overflow: hidden; }
+.rep-h2 { font-size: inherit; font-weight: inherit; }
+.rep-headmain { display: flex; align-items: center; gap: 12px; width: 100%; padding: 15px 18px; text-align: left; }
+.rep-headmain:hover { background: var(--panel-head); }
+.rep-acc.open .rep-headmain { border-bottom: 1px solid var(--line-soft); }
+.rep-chev { display: flex; color: var(--ink-faint); transition: transform .18s; flex: none; }
+.rep-acc.open .rep-chev { transform: rotate(180deg); }
+.rep-title { display: block; font-size: 13.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; color: var(--ink); }
+.rep-desc { display: block; font-size: 12px; font-weight: 400; color: var(--ink-soft); margin-top: 2px; }
+.rep-body { display: none; padding: 4px 18px 18px; }
+.rep-acc.open .rep-body { display: block; }
+.rep-sub { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-soft); margin: 16px 0 9px; }
+.rep-body > .rep-sub:first-child { margin-top: 4px; }
+/* KPI tiles */
+.pf-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.pf-tile { background: var(--card); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow-card); padding: 11px 13px; }
+.pf-v { font-size: 21px; font-weight: 800; color: var(--ink); font-variant-numeric: tabular-nums; letter-spacing: -.5px; line-height: 1; }
+.pf-v.good { color: var(--good); }
+.pf-l { font-size: 12px; font-weight: 700; color: var(--ink); margin-top: 6px; line-height: 1.25; }
+.pf-tsub { font-size: 12px; font-weight: 600; color: var(--ink-soft); margin-top: 3px; line-height: 1.25; }
+/* chart card */
+.rv-card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow-card); padding: 14px 16px; margin-top: 12px; min-width: 0; }
+.rv-ctitle { font-size: 13.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; color: var(--ink); margin-bottom: 12px; display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.rv-csub { font-size: 11px; font-weight: 600; color: var(--ink-soft); text-transform: none; letter-spacing: normal; text-align: right; }
+/* leaderboard table */
+.lb-wrap { border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow-card); background: var(--card); overflow: hidden; }
+.lb-rank { width: 28px; height: 28px; border-radius: 50%; background: var(--panel-head); color: var(--ink-soft); font-weight: 800; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; }
+.lb-name { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 13.5px; }
+.lb-num { font-weight: 800; font-variant-numeric: tabular-nums; }
+.lb-wrap .tbl td { vertical-align: middle; }
+.lb-wrap .tbl tr:last-child td { border-bottom: 0; }
+.rpt-note { display: flex; align-items: flex-start; gap: 6px; font-size: 11.5px; color: var(--ink-soft); margin-top: 12px; line-height: 1.45; }
+.rpt-note svg { flex: none; margin-top: 2px; }
 @media print {
-  .rail, .demo-note, .linkbtn, #printBtn { display: none; }
+  .demo-note, .rail, .rpt-print, .rep-chev { display: none !important; }
   .main { padding: 0; }
+  .rep-acc, .rv-card, .lb-wrap { break-inside: avoid; box-shadow: none; }
 }
+@media (max-width: 760px) { .pf-grid { grid-template-columns: 1fr; } .lh-right { text-align: left; } }
 </style>
 </head>
 <body>
 <div class="demo-note"><b>Interactive demo.</b> Every name, client, and number on this page is fictional. Built as a sanitized copy of a production home-care operations platform.</div>
 <div class="app">
   <aside class="rail">
-    <a class="rail-brand" href="./index.html">
-      <span class="logo">DS</span>
-      <span><span class="name">Devoted Shift</span><br><span class="sub">Scheduling Intelligence</span></span>
+    <a class="brand" href="./index.html">
+      <span class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 21s-7-4.6-9.2-9A5.2 5.2 0 0112 5.6 5.2 5.2 0 0121.2 12c-2.2 4.4-9.2 9-9.2 9z" stroke-width="2" stroke-linejoin="round"/></svg></span>
+      <span style="min-width:0;line-height:1">
+        <span class="eyebrow">Devoted Shift</span>
+        <span class="name">Scheduling <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </span>
+      <span class="apps"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="5" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="12" cy="19" r="2"/><circle cx="19" cy="19" r="2"/></svg></span>
     </a>
     <nav class="nav">
-      <a href="./index.html"><span class="ico">✦</span> Devo</a>
-      <a href="./open-shifts.html"><span class="ico">▦</span> Open Shifts <span class="pill">5</span></a>
-      <a href="./find-coverage.html"><span class="ico">◎</span> Find Coverage</a>
-      <a href="./caregivers.html"><span class="ico">☺</span> Caregivers</a>
-      <a href="./clients.html"><span class="ico">⌂</span> Clients <span class="soon">SOON</span></a>
-      <a href="./notes-review.html"><span class="ico">✎</span> Care Note Review <span class="pill">2</span></a>
-      <a href="./handoffs.html"><span class="ico">⇄</span> Shift Handoff</a>
-      <a href="./weekly-tasks.html"><span class="ico">☑</span> Weekly Tasks</a>
-      <a href="./forms.html"><span class="ico">🗎</span> Forms &amp; Resources <span class="soon">SOON</span></a>
-      <a href="./reports.html" class="active"><span class="ico">▤</span> KPIs / Reports</a>
-      <a href="./guides.html"><span class="ico">?</span> Quick Guides <span class="soon">SOON</span></a>
+      <a href="./index.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z" stroke-width="1.8" stroke-linejoin="round"/><path d="M5 17l.7 2L8 19.7 5.7 20.4 5 22l-.7-1.6L2 19.7l2.3-.7L5 17z" stroke-width="1.5" stroke-linejoin="round"/></svg> Devo</a>
+      <a href="./open-shifts.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="17" rx="2" stroke-width="2"/><path d="M3 9h18M8 2v4M16 2v4" stroke-width="2" stroke-linecap="round"/></svg> Open Shifts <span class="count">10</span></a>
+      <a href="./find-coverage.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="7" stroke-width="2"/><path d="M21 21l-4-4" stroke-width="2" stroke-linecap="round"/></svg> Find Coverage</a>
+      <a href="./caregivers.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 11l3 3 8-8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12a9 9 0 11-5-8" stroke-width="2" stroke-linecap="round"/></svg> Caregivers</a>
+      <a href="./clients.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="8" r="3.4" stroke-width="2"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0" stroke-width="2" stroke-linecap="round"/></svg> Clients <span class="soon">SOON</span></a>
+      <a href="./notes-review.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 11l3 3 8-8M3 6h7M3 12h5M3 18h9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Care Note Review</a>
+      <a href="./handoffs.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M7 8l-4 4 4 4M3 12h11M17 16l4-4-4-4M21 12H10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Shift Handoff</a>
+      <a href="./weekly-tasks.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M10 6h10M10 12h10M10 18h10" stroke-width="2" stroke-linecap="round"/><path d="M4 6.5l1.3 1.3L7.6 5.4M4 17.5l1.3 1.3L7.6 16.4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="5.4" cy="12" r="1.2" fill="currentColor" stroke="none"/></svg> Weekly Tasks</a>
+      <a href="./forms.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="4" y="3" width="14" height="18" rx="2" stroke-width="2"/><path d="M8 8h6M8 12h6M8 16h3" stroke-width="1.8" stroke-linecap="round"/></svg> Forms &amp; Resources</a>
+      <a class="active" href="./reports.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> KPIs / Reports</a>
+      <a href="./guides.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 4h11a1 1 0 011 1v14a1 1 0 01-1 1H6a2 2 0 01-2-2V6a2 2 0 012-2z" stroke-width="2" stroke-linejoin="round"/><path d="M9 4v15M12 9h3M12 12.5h3" stroke-width="2" stroke-linecap="round"/></svg> Quick Guides</a>
     </nav>
-    <div class="rail-foot"><span class="avatar">DS</span> <span>Demo Scheduler<br><span style="color:#8A93A6">Thursday, Jul 23, 2026</span></span></div>
+    <div class="rail-foot">
+      <span class="avatar">D</span>
+      <span class="who"><b>Demo Scheduler</b><span>Admin</span></span>
+      <span class="out"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M15 3h4a1 1 0 011 1v16a1 1 0 01-1 1h-4M10 17l5-5-5-5M15 12H3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    </div>
   </aside>
   <main class="main">
+    <div class="rpt-doc">
 
-    <div class="rpt-top">
-      <div class="statbar">
-        <div class="stat good"><div class="k">94%</div><div class="l">Shifts covered · this week</div></div>
-        <div class="stat warn"><div class="k">3</div><div class="l">Call-offs this week</div></div>
-        <div class="stat"><div class="k">42m</div><div class="l">Avg fill time</div></div>
-        <div class="stat notes"><div class="k">2</div><div class="l">Care notes flagged</div></div>
-      </div>
-      <button class="btn ghost" id="printBtn">Print / Save PDF</button>
-    </div>
-
-    <div class="grid g2 mb">
-      <div class="card">
-        <div class="panel-head"><h2>Coverage by day</h2><span class="count">% of scheduled visits · Jul 20–26</span></div>
-        <div class="panel-body">
-          <div id="covChart"></div>
-          <div class="day-note" id="dayNote"></div>
+      <div class="lh">
+        <div class="lh-brand">
+          <span class="lh-logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 21s-7-4.6-9.2-9A5.2 5.2 0 0112 5.6 5.2 5.2 0 0121.2 12c-2.2 4.4-9.2 9-9.2 9z" stroke-width="2" stroke-linejoin="round"/></svg></span>
+          <div>
+            <div class="lh-co">Devoted Shift</div>
+            <div class="lh-tag">Scheduling Intelligence for Home Care</div>
+          </div>
+        </div>
+        <div class="lh-right">
+          <div class="lh-doc">Operations Report</div>
+          <div class="lh-meta">Generated July 22, 2026 at 4:55 PM</div>
+          <button type="button" class="rpt-print" onclick="window.print()">🖨 Print / Save PDF</button>
         </div>
       </div>
-      <div class="card">
-        <div class="panel-head"><h2>Call-off reasons this month</h2><span class="count">11 total</span></div>
-        <div class="panel-body">
-          <div id="cobList"></div>
-          <button class="linkbtn" id="coToggle" aria-expanded="false" aria-controls="coRecent">Recent call-offs <span id="coArrow">▾</span></button>
-          <div class="row-list" id="coRecent" hidden></div>
+
+      <div class="rep-acc open" id="kpiSection">
+        <h2 class="rep-h2">
+          <button type="button" class="rep-headmain" aria-expanded="true">
+            <span class="rep-chev"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span>
+              <span class="rep-title">Scheduler KPI Report</span>
+              <span class="rep-desc">Coverage, fill, no-shows, and the scheduler leaderboard</span>
+            </span>
+          </button>
+        </h2>
+        <div class="rep-body">
+          <div class="rep-sub">Scheduling KPIs</div>
+          <div class="pf-grid" id="kpiGrid"></div>
+
+          <div class="rv-card">
+            <div class="rv-ctitle">Coverage Rate Trend <span class="rv-csub" id="trendSub"></span></div>
+            <div id="trendChart"></div>
+          </div>
+
+          <div class="rep-sub">Scheduler Leaderboard</div>
+          <div class="lb-wrap">
+            <table class="tbl">
+              <thead>
+                <tr><th style="width:44px">#</th><th>Scheduler</th><th>Shifts filled</th><th>Avg fill time</th><th>Tasks completed</th></tr>
+              </thead>
+              <tbody id="lbBody"></tbody>
+            </table>
+          </div>
+          <div class="rpt-note"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9" stroke-width="2"/><path d="M12 11v6M12 7.5v.5" stroke-width="2" stroke-linecap="round"/></svg> Credited to the scheduler who logged the accepted offer.</div>
         </div>
       </div>
-    </div>
 
-    <div class="card clip">
-      <div class="panel-head"><h2>Scheduler leaderboard</h2><span class="count">shifts filled · July</span></div>
-      <table class="tbl">
-        <thead>
-          <tr><th style="width:44px"></th><th>Scheduler</th><th>Shifts filled</th><th>Avg fill time</th><th>Tasks completed</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><span class="rank">1</span></td>
-            <td><div class="flex"><span class="avatar-sm">DR</span> <b>Dana R.</b> <span class="chip plain">Top contributor</span></div></td>
-            <td class="num">18</td><td class="num">36m</td><td class="num">9</td>
-          </tr>
-          <tr>
-            <td><span class="rank">2</span></td>
-            <td><div class="flex"><span class="avatar-sm">MT</span> <b>Miguel T.</b></div></td>
-            <td class="num">14</td><td class="num">44m</td><td class="num">7</td>
-          </tr>
-          <tr>
-            <td><span class="rank">3</span></td>
-            <td><div class="flex"><span class="avatar-sm">AP</span> <b>Ashley P.</b></div></td>
-            <td class="num">11</td><td class="num">49m</td><td class="num">5</td>
-          </tr>
-        </tbody>
-      </table>
-      <div class="src-note">Credited to the scheduler who logged the accepted offer.</div>
     </div>
-
   </main>
 </div>
 <script src="./seed.js"></script>
 <script>
 (function () {
-  /* Coverage by day — week of Mon Jul 20 to Sun Jul 26, 2026. Weekly average: 94%. */
-  var DAYS = [
-    { d: "Mon", dt: "Jul 20", v: 96,  note: "1 visit went uncovered" },
-    { d: "Tue", dt: "Jul 21", v: 100, note: "fully covered" },
-    { d: "Wed", dt: "Jul 22", v: 91,  note: "2 visits went uncovered" },
-    { d: "Thu", dt: "Jul 23", v: 95,  today: true, note: "2 open shifts still to fill" },
-    { d: "Fri", dt: "Jul 24", v: 88,  note: "1 open shift · PTO backfill in progress" },
-    { d: "Sat", dt: "Jul 25", v: 90,  note: "1 open shift unfilled" },
-    { d: "Sun", dt: "Jul 26", v: 98,  note: "1 visit pending confirmation" }
-  ];
-  var SLOT = 80, BW = 46, BASE = 150;
-  var svg = ['<svg class="cvx" viewBox="0 0 560 190" role="img" aria-label="Coverage by day, Monday through Sunday, percent of scheduled visits covered">'];
-  svg.push('<line class="base" x1="6" y1="150.5" x2="554" y2="150.5"></line>');
-  DAYS.forEach(function (d, i) {
-    var h = Math.round(d.v / 100 * 124);
-    var x = i * SLOT + 17, y = BASE - h, cx = i * SLOT + 40;
-    svg.push('<g><title>' + d.d + ' ' + d.dt + ' — ' + d.v + '%</title>' +
-      '<rect class="cbar' + (d.today ? ' today' : '') + '" data-i="' + i + '" x="' + x + '" y="' + y + '" width="' + BW + '" height="' + h + '" rx="4"></rect>' +
-      '<text class="val" x="' + cx + '" y="' + (y - 7) + '" text-anchor="middle">' + d.v + '</text>' +
-      '<text class="day' + (d.today ? ' today' : '') + '" x="' + cx + '" y="172" text-anchor="middle">' + d.d + ' ' + d.dt.slice(4) + '</text></g>');
-  });
-  svg.push('</svg>');
-  var wrap = document.getElementById('covChart');
-  wrap.innerHTML = svg.join('');
+  const R = window.DEMO.reports;
 
-  var note = document.getElementById('dayNote');
-  function selectDay(i) {
-    $$('.cbar', wrap).forEach(function (r) { r.classList.toggle('sel', +r.getAttribute('data-i') === i); });
-    var d = DAYS[i];
-    note.innerHTML = '<b>' + d.d + ' ' + d.dt + '</b> · ' + d.v + '% covered · ' + d.note;
-  }
-  wrap.addEventListener('click', function (e) {
-    var r = e.target.closest ? e.target.closest('rect.cbar') : null;
-    if (r) selectDay(+r.getAttribute('data-i'));
-  });
-  selectDay(3); /* today */
-
-  /* Call-off reasons this month — plain-div horizontal bars */
-  var REASONS = [["Sick", 5], ["Personal", 3], ["Transport", 2], ["No show", 1]];
-  document.getElementById('cobList').innerHTML = REASONS.map(function (r) {
-    return '<div class="cob-row"><span class="cob-l">' + r[0] + '</span>' +
-      '<div class="cob-t"><div class="cob-bar" style="width:' + (r[1] / REASONS[0][1] * 100) + '%"></div></div>' +
-      '<span class="cob-n">' + r[1] + '</span></div>';
-  }).join('');
-
-  /* Recent call-offs — people from the shared demo dataset */
-  var cg = {};
-  window.DEMO.caregivers.forEach(function (c) { cg[c.name] = c; });
-  var RECENT = [
-    { date: "Today",  who: "Faye Whitman", reason: "Sick",      client: "Eleanor Price", when: "Day 8:00a–4:00p",  covered: null,           tone: "crit" },
-    { date: "Wed 22", who: "Kim Navarro",  reason: "Personal",  client: "Victor Ames",   when: "Day 10:00a–2:00p", covered: "Rosa Alvarez",  tone: "good" },
-    { date: "Mon 20", who: "Daniel Osei",  reason: "Transport", client: "Grace Turner",  when: "Eve 4:00p–8:00p",  covered: "Marta Rivers",  tone: "good" }
-  ];
-  document.getElementById('coRecent').innerHTML = RECENT.map(function (r) {
-    var c = cg[r.who];
-    return '<div class="co-item leftbar ' + r.tone + '">' +
-      '<span class="co-date">' + r.date + '</span>' +
-      '<span class="avatar-sm">' + (c ? c.initials : '') + '</span>' +
-      '<span class="co-main"><b>' + r.who + '</b> · ' + r.reason +
-      ' <span class="muted">· ' + r.client + ' · ' + r.when + '</span></span>' +
-      (r.covered ? '<span class="chip good">Covered · ' + r.covered + '</span>'
-                 : '<span class="chip crit">Not covered</span>') +
-      '</div>';
-  }).join('');
-
-  var tog = document.getElementById('coToggle'), panel = document.getElementById('coRecent');
-  tog.addEventListener('click', function () {
-    var opening = panel.hasAttribute('hidden');
-    if (opening) { panel.removeAttribute('hidden'); } else { panel.setAttribute('hidden', ''); }
-    tog.setAttribute('aria-expanded', opening ? 'true' : 'false');
-    document.getElementById('coArrow').textContent = opening ? '▴' : '▾';
+  // KPI tiles
+  const grid = document.getElementById("kpiGrid");
+  R.kpis.forEach(function (k) {
+    grid.appendChild(el("div", "pf-tile",
+      '<div class="pf-v ' + (k.cls || "") + '">' + k.v + '</div>' +
+      '<div class="pf-l">' + k.label + '</div>' +
+      (k.sub ? '<div class="pf-tsub">' + k.sub + '</div>' : '')));
   });
 
-  document.getElementById('printBtn').addEventListener('click', function () { window.print(); });
+  // Coverage rate trend — inline SVG line chart (dots on points, y gridlines 0/50/100)
+  const pts = R.trend;
+  const w = 680, h = 150, padL = 26, padR = 12, padT = 12, padB = 20, n = pts.length;
+  const xs = function (i) { return padL + (n <= 1 ? 0 : (i / (n - 1)) * (w - padL - padR)); };
+  const ys = function (r) { return padT + (1 - Math.max(0, Math.min(100, r)) / 100) * (h - padT - padB); };
+  let svg = '<svg viewBox="0 0 ' + w + ' ' + h + '" width="100%" height="' + h + '" preserveAspectRatio="xMinYMin meet" role="img">';
+  [0, 50, 100].forEach(function (g) {
+    svg += '<line x1="' + padL + '" y1="' + ys(g).toFixed(1) + '" x2="' + (w - padR) + '" y2="' + ys(g).toFixed(1) + '" stroke="#E6E9F2" stroke-width="1"/>';
+    svg += '<text x="0" y="' + (ys(g) + 3).toFixed(1) + '" font-size="9" fill="#8A93A6">' + g + '</text>';
+  });
+  svg += '<path d="' + pts.map(function (p, i) { return (i ? "L" : "M") + xs(i).toFixed(1) + "," + ys(p).toFixed(1); }).join(" ") + '" fill="none" stroke="#1E40AF" stroke-width="2.5"/>';
+  pts.forEach(function (p, i) { svg += '<circle cx="' + xs(i).toFixed(1) + '" cy="' + ys(p).toFixed(1) + '" r="2.5" fill="#1E40AF"/>'; });
+  svg += '<text x="' + padL + '" y="' + (h - 5) + '" font-size="9" fill="#8A93A6">06-30</text>';
+  svg += '<text x="' + (w - padR) + '" y="' + (h - 5) + '" font-size="9" text-anchor="end" fill="#8A93A6">07-22</text></svg>';
+  document.getElementById("trendChart").innerHTML = svg;
+  document.getElementById("trendSub").textContent = "trailing-7d rate, snapshotted daily · " + n + " days";
+
+  // Leaderboard rows
+  const tb = document.getElementById("lbBody");
+  R.leaderboard.forEach(function (s, i) {
+    const initials = s.name.split(/\s+/).map(function (x) { return x[0]; }).join("").replace(/[^A-Za-z]/g, "").toUpperCase().slice(0, 2);
+    const tr = document.createElement("tr");
+    tr.innerHTML =
+      '<td><span class="lb-rank">' + (i + 1) + '</span></td>' +
+      '<td><span class="lb-name"><span class="avatar-i sm">' + initials + '</span>' + s.name + '</span></td>' +
+      '<td class="lb-num">' + s.filled + '</td>' +
+      '<td class="lb-num">' + s.avg + '</td>' +
+      '<td class="lb-num">' + s.tasks + '</td>';
+    tb.appendChild(tr);
+  });
+
+  // Collapsible section toggle
+  $$(".rep-headmain").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      const acc = btn.closest(".rep-acc");
+      acc.classList.toggle("open");
+      btn.setAttribute("aria-expanded", acc.classList.contains("open") ? "true" : "false");
+    });
+  });
 })();
 </script>
 </body>

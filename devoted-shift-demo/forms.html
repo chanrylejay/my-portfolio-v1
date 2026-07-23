@@ -1,4 +1,6 @@
-<!-- impeccable-disable overused-font side-tab — exact replica of production design canon (Inter + left status rail are LOCKED in the source system). -->
+<!-- SHELL v2 — copies the LIVE sidebar anatomy exactly (icons are the production SVG set).
+     Change ONLY: <title>, the `active` class on one nav link, and <main>.
+     impeccable-disable overused-font side-tab — exact replica of production canon. -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,39 +10,171 @@
 <title>Forms &amp; Resources — Devoted Shift Demo</title>
 <link rel="stylesheet" href="./styles.css">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%231E40AF%27/%3E%3Ctext x=%2716%27 y=%2722%27 font-family=%27Arial%27 font-size=%2713%27 font-weight=%27bold%27 fill=%27white%27 text-anchor=%27middle%27%3EDS%3C/text%3E%3C/svg%3E">
+<style>
+/* Forms & Resources — module CSS ported from the live fr-* recipes onto foundation vars */
+.fr-toolbar { display: flex; gap: 9px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
+.fr-search { display: inline-flex; align-items: center; gap: 8px; flex: 1; min-width: 200px; max-width: 380px; background: var(--card); border: 1px solid var(--line-strong); border-radius: 8px; padding: 0 12px; color: var(--ink-soft); }
+.fr-search:focus-within { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(30,64,175,.12); }
+.fr-search input { border: none; outline: none; padding: 9px 0; font-size: 13px; flex: 1; min-width: 0; background: transparent; color: var(--ink); }
+.fr-search svg { width: 14px; height: 14px; flex: none; }
+.fr-newai { display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 700; padding: 9px 14px; border-radius: 8px; background: var(--brand); color: #fff; }
+.fr-newai:hover { background: var(--brand-hover); }
+.fr-tabs { display: flex; gap: 6px; margin-left: auto; }
+.fr-tab { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; padding: 9px 14px; border-radius: 8px; border: 1px solid var(--line-strong); background: var(--card); color: var(--ink-soft); }
+.fr-tab:hover { background: var(--surface-2); }
+.fr-tab.on { background: var(--brand); color: #fff; border-color: var(--brand); }
+.fr-resultline { font-size: 11.5px; font-weight: 700; color: var(--ink-soft); margin: 0 0 2px 2px; }
+.fr-cat { margin-bottom: 10px; }
+.fr-cat-bar { display: flex; align-items: center; gap: 10px; width: 100%; background: var(--card); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow-card); padding: 12px 15px; text-align: left; transition: background .12s, border-color .12s; }
+.fr-cat-bar:hover { background: var(--surface-2); border-color: var(--line-strong); }
+.fr-cat-bar:not(.collapsed) { border-bottom-left-radius: 0; border-bottom-right-radius: 0; border-bottom-color: var(--line-soft); background: #FAFCFD; }
+.fr-cat-ic { width: 30px; height: 30px; border-radius: 8px; background: var(--brand); color: #fff; display: flex; align-items: center; justify-content: center; flex: 0 0 auto; }
+.fr-cat-name { font-size: 13.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; color: var(--ink); }
+.fr-cat-count { font-size: 11.5px; font-weight: 800; color: var(--ink-soft); background: var(--panel-head); border: 1px solid var(--line); border-radius: 11px; min-width: 22px; text-align: center; padding: 1px 7px; }
+.fr-cat-chev { margin-left: auto; color: var(--ink-soft); display: flex; transition: transform .15s; }
+.fr-cat-chev.open { transform: rotate(180deg); }
+.fr-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 11px; padding: 11px 2px 6px; }
+.fr-card { display: flex; flex-direction: column; gap: 9px; min-width: 0; border: 1px solid var(--line); border-radius: 12px; background: var(--card); box-shadow: var(--shadow-card); padding: 14px; transition: border-color .15s, box-shadow .15s, transform .15s; }
+.fr-card:hover { border-color: #B6CBFD; box-shadow: 0 4px 14px rgba(16,24,40,.08); transform: translateY(-1px); }
+.fr-card-top { display: flex; align-items: flex-start; gap: 10px; min-width: 0; }
+.fr-ficon { width: 30px; height: 30px; border-radius: 8px; background: var(--brand-soft); color: var(--brand); display: flex; align-items: center; justify-content: center; flex: 0 0 auto; }
+.fr-fname { font-size: 13.5px; font-weight: 700; color: var(--ink); line-height: 1.3; min-width: 0; overflow-wrap: anywhere; }
+.fr-card-meta { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .5px; color: var(--ink-soft); margin: -2px 0 1px; }
+.fr-card-acts { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; margin-top: auto; min-width: 0; }
+.fr-act { display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: 12px; font-weight: 700; padding: 8px 12px; border-radius: 8px; border: 1px solid #C6D6FE; background: var(--card); color: var(--brand); flex: 1 1 auto; min-width: 0; }
+.fr-act:hover { background: var(--brand-soft); }
+.fr-act-icons { display: inline-flex; gap: 6px; flex: 0 0 auto; }
+.fr-iact { display: inline-flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 8px; border: 1px solid #B6CBFD; background: var(--card); color: var(--brand); transition: background .12s, border-color .12s; }
+.fr-iact:hover { background: var(--brand-soft); border-color: var(--brand); }
+.fr-empty { font-size: 13px; color: var(--ink-soft); background: var(--surface-2); border: 1px dashed var(--line); border-radius: 12px; padding: 26px 22px; text-align: center; line-height: 1.5; }
+@media (max-width: 1200px) { .fr-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 700px) { .fr-grid { grid-template-columns: 1fr; } }
+</style>
 </head>
 <body>
 <div class="demo-note"><b>Interactive demo.</b> Every name, client, and number on this page is fictional. Built as a sanitized copy of a production home-care operations platform.</div>
 <div class="app">
   <aside class="rail">
-    <a class="rail-brand" href="./index.html">
-      <span class="logo">DS</span>
-      <span><span class="name">Devoted Shift</span><br><span class="sub">Scheduling Intelligence</span></span>
+    <a class="brand" href="./index.html">
+      <span class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 21s-7-4.6-9.2-9A5.2 5.2 0 0112 5.6 5.2 5.2 0 0121.2 12c-2.2 4.4-9.2 9-9.2 9z" stroke-width="2" stroke-linejoin="round"/></svg></span>
+      <span style="min-width:0;line-height:1">
+        <span class="eyebrow">Devoted Shift</span>
+        <span class="name">Scheduling <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </span>
+      <span class="apps"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="5" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="12" cy="19" r="2"/><circle cx="19" cy="19" r="2"/></svg></span>
     </a>
     <nav class="nav">
-      <a href="./index.html"><span class="ico">✦</span> Devo</a>
-      <a href="./open-shifts.html"><span class="ico">▦</span> Open Shifts <span class="pill">5</span></a>
-      <a href="./find-coverage.html"><span class="ico">◎</span> Find Coverage</a>
-      <a href="./caregivers.html"><span class="ico">☺</span> Caregivers</a>
-      <a href="./clients.html"><span class="ico">⌂</span> Clients <span class="soon">SOON</span></a>
-      <a href="./notes-review.html"><span class="ico">✎</span> Care Note Review <span class="pill">2</span></a>
-      <a href="./handoffs.html"><span class="ico">⇄</span> Shift Handoff</a>
-      <a href="./weekly-tasks.html"><span class="ico">☑</span> Weekly Tasks</a>
-      <a class="active" href="./forms.html"><span class="ico">🗎</span> Forms &amp; Resources <span class="soon">SOON</span></a>
-      <a href="./reports.html"><span class="ico">▤</span> KPIs / Reports</a>
-      <a href="./guides.html"><span class="ico">?</span> Quick Guides <span class="soon">SOON</span></a>
+      <a href="./index.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z" stroke-width="1.8" stroke-linejoin="round"/><path d="M5 17l.7 2L8 19.7 5.7 20.4 5 22l-.7-1.6L2 19.7l2.3-.7L5 17z" stroke-width="1.5" stroke-linejoin="round"/></svg> Devo</a>
+      <a href="./open-shifts.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="17" rx="2" stroke-width="2"/><path d="M3 9h18M8 2v4M16 2v4" stroke-width="2" stroke-linecap="round"/></svg> Open Shifts <span class="count">10</span></a>
+      <a href="./find-coverage.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="7" stroke-width="2"/><path d="M21 21l-4-4" stroke-width="2" stroke-linecap="round"/></svg> Find Coverage</a>
+      <a href="./caregivers.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 11l3 3 8-8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12a9 9 0 11-5-8" stroke-width="2" stroke-linecap="round"/></svg> Caregivers</a>
+      <a href="./clients.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="8" r="3.4" stroke-width="2"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0" stroke-width="2" stroke-linecap="round"/></svg> Clients <span class="soon">SOON</span></a>
+      <a href="./notes-review.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 11l3 3 8-8M3 6h7M3 12h5M3 18h9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Care Note Review</a>
+      <a href="./handoffs.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M7 8l-4 4 4 4M3 12h11M17 16l4-4-4-4M21 12H10" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Shift Handoff</a>
+      <a href="./weekly-tasks.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M10 6h10M10 12h10M10 18h10" stroke-width="2" stroke-linecap="round"/><path d="M4 6.5l1.3 1.3L7.6 5.4M4 17.5l1.3 1.3L7.6 16.4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="5.4" cy="12" r="1.2" fill="currentColor" stroke="none"/></svg> Weekly Tasks</a>
+      <a href="./forms.html" class="active"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="4" y="3" width="14" height="18" rx="2" stroke-width="2"/><path d="M8 8h6M8 12h6M8 16h3" stroke-width="1.8" stroke-linecap="round"/></svg> Forms &amp; Resources</a>
+      <a href="./reports.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> KPIs / Reports</a>
+      <a href="./guides.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 4h11a1 1 0 011 1v14a1 1 0 01-1 1H6a2 2 0 01-2-2V6a2 2 0 012-2z" stroke-width="2" stroke-linejoin="round"/><path d="M9 4v15M12 9h3M12 12.5h3" stroke-width="2" stroke-linecap="round"/></svg> Quick Guides</a>
     </nav>
-    <div class="rail-foot"><span class="avatar">DS</span> <span>Demo Scheduler<br><span style="color:#8A93A6">Thursday, Jul 23, 2026</span></span></div>
+    <div class="rail-foot">
+      <span class="avatar">D</span>
+      <span class="who"><b>Demo Scheduler</b><span>Admin</span></span>
+      <span class="out"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M15 3h4a1 1 0 011 1v16a1 1 0 01-1 1h-4M10 17l5-5-5-5M15 12H3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    </div>
   </aside>
   <main class="main">
-    <div class="card">
-      <div class="panel-body empty">
-        <div class="big">Forms &amp; Resources is next on the roadmap</div>
-        Agency document templates and onboarding packets will live here once the paper workflow is mapped.
+    <div class="fr-toolbar">
+      <label class="fr-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="7" stroke-width="2"/><path d="M21 21l-4-4" stroke-width="2" stroke-linecap="round"/></svg>
+        <input id="fr-q" type="text" placeholder="Search forms…" aria-label="Search forms">
+      </label>
+      <button class="fr-newai" type="button">✨ New Form (AI)</button>
+      <div class="fr-tabs">
+        <button class="fr-tab on" type="button" data-tab="library">Library</button>
+        <button class="fr-tab" type="button" data-tab="sent">Sent Forms</button>
       </div>
+    </div>
+    <div id="fr-library"></div>
+    <div id="fr-sent" hidden>
+      <div class="fr-empty">No forms texted this session yet.</div>
     </div>
   </main>
 </div>
 <script src="./seed.js"></script>
+<script>
+(function () {
+  var docSvg = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="4" y="3" width="14" height="18" rx="2" stroke-width="2"/><path d="M8 8h6M8 12h6M8 16h3" stroke-width="1.8" stroke-linecap="round"/></svg>';
+  var chevSvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var lib = document.getElementById('fr-library');
+  var sentPane = document.getElementById('fr-sent');
+  var q = document.getElementById('fr-q');
+  var collapsed = {};
+
+  function card(f) {
+    return el('div', 'fr-card',
+      '<div class="fr-card-top"><span class="fr-ficon">' + docSvg + '</span><span class="fr-fname">' + f.title + '</span></div>' +
+      '<div class="fr-card-meta">' + f.type + '</div>' +
+      '<div class="fr-card-acts">' +
+        '<button class="fr-act" type="button">👁 Preview</button>' +
+        '<div class="fr-act-icons">' +
+          '<button class="fr-iact" type="button" title="Print blank form" aria-label="Print ' + f.title + '">🖨</button>' +
+          '<button class="fr-iact" type="button" title="Text to a caregiver" aria-label="Send ' + f.title + '">✈</button>' +
+          '<button class="fr-iact" type="button" title="Edit form" aria-label="Edit ' + f.title + '">✏</button>' +
+        '</div>' +
+      '</div>');
+  }
+
+  function render() {
+    lib.innerHTML = '';
+    var term = q.value.trim().toLowerCase();
+    if (term) {
+      var hits = [];
+      DEMO.forms.categories.forEach(function (c) {
+        c.items.forEach(function (f) {
+          if (f.title.toLowerCase().indexOf(term) !== -1 || f.type.toLowerCase().indexOf(term) !== -1) hits.push(f);
+        });
+      });
+      if (!hits.length) {
+        lib.appendChild(el('div', 'fr-empty', 'No forms match “' + q.value.trim() + '”.'));
+        return;
+      }
+      lib.appendChild(el('div', 'fr-resultline', hits.length + (hits.length === 1 ? ' form' : ' forms') + ' matching “' + q.value.trim() + '”'));
+      var g = el('div', 'fr-grid');
+      hits.forEach(function (f) { g.appendChild(card(f)); });
+      lib.appendChild(g);
+      return;
+    }
+    DEMO.forms.categories.forEach(function (c) {
+      var open = !collapsed[c.name];
+      var wrap = el('div', 'fr-cat');
+      var bar = el('button', 'fr-cat-bar' + (open ? '' : ' collapsed'),
+        '<span class="fr-cat-ic">' + docSvg + '</span>' +
+        '<span class="fr-cat-name">' + c.name + '</span>' +
+        '<span class="fr-cat-count">' + c.count + '</span>' +
+        '<span class="fr-cat-chev' + (open ? ' open' : '') + '">' + chevSvg + '</span>');
+      bar.type = 'button';
+      bar.addEventListener('click', function () { collapsed[c.name] = !collapsed[c.name]; render(); });
+      wrap.appendChild(bar);
+      if (open) {
+        var g = el('div', 'fr-grid');
+        c.items.forEach(function (f) { g.appendChild(card(f)); });
+        wrap.appendChild(g);
+      }
+      lib.appendChild(wrap);
+    });
+  }
+
+  q.addEventListener('input', render);
+  $$('.fr-tab').forEach(function (t) {
+    t.addEventListener('click', function () {
+      $$('.fr-tab').forEach(function (x) { x.classList.toggle('on', x === t); });
+      var isSent = t.getAttribute('data-tab') === 'sent';
+      lib.hidden = isSent;
+      sentPane.hidden = !isSent;
+    });
+  });
+  render();
+})();
+</script>
 </body>
 </html>
