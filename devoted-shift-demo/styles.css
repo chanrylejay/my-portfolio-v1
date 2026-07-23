@@ -120,3 +120,23 @@ table.tbl { width: 100%; border-collapse: collapse; }
   .g2, .g3, .g4, .g-main-side { grid-template-columns: 1fr; }
   .main { padding: 16px; }
 }
+
+/* ---- System switcher (platform launcher) ---- */
+.sw-pop { position: fixed; top: 34px; left: 10px; z-index: 60; width: 300px; background: #fff; border-radius: 14px; box-shadow: 0 18px 50px -12px rgba(11,19,48,.35); border: 1px solid var(--line); padding: 8px; color: var(--ink); display: none; }
+.sw-pop.open { display: block; }
+.sw-head { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px 10px; }
+.sw-head b { font-size: 13.5px; font-weight: 800; }
+.sw-head span { font-size: 10px; font-weight: 700; letter-spacing: .1em; color: var(--ink-faint); }
+.sw-row { display: flex; align-items: center; gap: 11px; width: 100%; text-align: left; padding: 9px 10px; border-radius: 10px; }
+.sw-row:hover { background: var(--surface-2); }
+.sw-row.here { background: var(--brand-soft); }
+.sw-ico { width: 36px; height: 36px; flex: none; border-radius: 9px; display: grid; place-items: center; color: #fff; }
+.sw-ico svg { width: 19px; height: 19px; }
+.sw-row .t { flex: 1; min-width: 0; line-height: 1.25; }
+.sw-row .t b { display: block; font-size: 13px; font-weight: 700; }
+.sw-row .t span { font-size: 11.5px; color: var(--ink-soft); }
+.sw-badge { flex: none; font-size: 9.5px; font-weight: 800; letter-spacing: .06em; border-radius: 99px; padding: 3px 8px; }
+.sw-badge.live { background: var(--good-soft); color: var(--good); }
+.sw-badge.soon { background: var(--warn-soft); color: var(--warn); }
+.rail { position: sticky; }
+.brand { position: relative; cursor: pointer; }

@@ -149,3 +149,61 @@ window.DEMO = {
 };
 window.$$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
 window.el = (tag, cls, html) => { const n = document.createElement(tag); if (cls) n.className = cls; if (html != null) n.innerHTML = html; return n; };
+
+/* ---- System switcher (platform launcher) — injected on every page from the shared seed ---- */
+window.DEMO.systems = [
+  { name: "Scheduling Intelligence", sub: "You are here", tone: "#1E40AF", here: true,
+    icon: '<rect x="3" y="4.5" width="18" height="16" rx="2" stroke-width="2"/><path d="M3 9h18M8 3v3M16 3v3" stroke-width="2" stroke-linecap="round"/>' },
+  { name: "Team Hub", sub: "Staff directory, comms & collaboration", tone: "#1F7A4A", badge: "LIVE",
+    icon: '<circle cx="9" cy="8" r="3" stroke-width="2"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0" stroke-width="2" stroke-linecap="round"/><path d="M16 6.6a3 3 0 0 1 0 5.4M20.5 19a5.6 5.6 0 0 0-3-4.4" stroke-width="2" stroke-linecap="round"/>' },
+  { name: "HR", sub: "Onboarding, records & time-off", tone: "#BD8312", badge: "SOON",
+    icon: '<rect x="3" y="5" width="18" height="14" rx="2" stroke-width="2"/><circle cx="8.5" cy="11" r="2" stroke-width="2"/><path d="M14 10h4M14 13.5h4M5 16.6c.6-1.6 2-2.3 3.5-2.3s2.9.7 3.5 2.3" stroke-width="1.8" stroke-linecap="round"/>' },
+  { name: "Finance", sub: "Payroll, billing & invoicing", tone: "#11546F", badge: "SOON",
+    icon: '<circle cx="12" cy="12" r="9" stroke-width="2"/><path d="M12 7v10M14.6 9.3c-.5-.8-1.5-1.3-2.6-1.3-1.4 0-2.5.8-2.5 2 0 1.3 1.1 1.8 2.6 2s2.5.8 2.5 2.1c0 1.2-1.1 2-2.6 2-1.2 0-2.2-.5-2.7-1.4" stroke-width="1.8" stroke-linecap="round"/>' },
+  { name: "Recruiting", sub: "Applicants & hiring pipeline", tone: "#5A6B7A", badge: "SOON",
+    icon: '<circle cx="10" cy="8" r="3.2" stroke-width="2"/><path d="M4 19a6 6 0 0 1 12 0" stroke-width="2" stroke-linecap="round"/><path d="M19 8v6M16 11h6" stroke-width="2" stroke-linecap="round"/>' },
+  { name: "Marketing", sub: "Referrals, CRM & community outreach", tone: "#B5468A", badge: "SOON",
+    icon: '<path d="M4 10v4h3l6 4V6l-6 4H4z" stroke-width="2" stroke-linejoin="round"/><path d="M17 9a4 4 0 0 1 0 6" stroke-width="2" stroke-linecap="round"/>' },
+  { name: "Digital Marketing", sub: "Website, social media, SEO & campaigns", tone: "#7A4FB5", badge: "SOON",
+    icon: '<circle cx="12" cy="12" r="9" stroke-width="2"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18" stroke-width="1.6"/>' },
+  { name: "Company", sub: "Policies, compliance, quality & company resources", tone: "#3A6B7A", badge: "SOON",
+    icon: '<path d="M4 21V5l8-2 8 2v16" stroke-width="2" stroke-linejoin="round"/><path d="M9 21v-4h6v4M8 8h.01M12 8h.01M16 8h.01M8 12h.01M12 12h.01M16 12h.01" stroke-width="2" stroke-linecap="round"/>' },
+  { name: "Training", sub: "Orientation, courses & certifications", tone: "#C0662A", badge: "SOON",
+    icon: '<path d="M3 9l9-4 9 4-9 4-9-4z" stroke-width="2" stroke-linejoin="round"/><path d="M7 11v4c0 1.5 2.2 2.5 5 2.5s5-1 5-2.5v-4M21 9v4" stroke-width="2" stroke-linecap="round"/>' }
+];
+(function () {
+  function init() {
+    var brand = document.querySelector(".brand");
+    var rail = document.querySelector(".rail");
+    if (!brand || !rail) return;
+    var pop = document.createElement("div");
+    pop.className = "sw-pop";
+    pop.setAttribute("role", "menu");
+    var rows = window.DEMO.systems.map(function (s) {
+      return '<button class="sw-row' + (s.here ? " here" : "") + '" type="button">' +
+        '<span class="sw-ico" style="background:' + s.tone + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor">' + s.icon + "</svg></span>" +
+        '<span class="t"><b>' + s.name + "</b><span>" + s.sub + "</span></span>" +
+        (s.badge ? '<span class="sw-badge ' + s.badge.toLowerCase() + '">' + s.badge + "</span>" : "") +
+        "</button>";
+    }).join("");
+    pop.innerHTML = '<div class="sw-head"><b>Devoted Shift Platform</b><span>SWITCH SYSTEM</span></div>' + rows;
+    document.body.appendChild(pop);
+    brand.setAttribute("aria-label", "Switch system");
+    brand.addEventListener("click", function (e) {
+      e.preventDefault();
+      pop.classList.toggle("open");
+    });
+    pop.addEventListener("click", function (e) {
+      var row = e.target.closest(".sw-row");
+      if (row) pop.classList.remove("open");
+    });
+    document.addEventListener("click", function (e) {
+      if (!pop.contains(e.target) && !brand.contains(e.target)) pop.classList.remove("open");
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") pop.classList.remove("open");
+    });
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+  else init();
+})();
