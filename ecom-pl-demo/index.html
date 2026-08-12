@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Profit and loss with supporting analytics for a direct-to-consumer commerce stack.">
+<meta name="description" content="Multi-store, multi-currency profit and loss with supporting analytics. Sample data, fictional stores.">
 <meta name="theme-color" content="#0e1013">
-<title>Halden Goods — Profit &amp; Loss</title>
+<title>E-commerce P&amp;L dashboard · sample data</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Schibsted+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -432,7 +432,7 @@
     </section>
 
     <section class="tile c8" id="p-products">
-      <div class="ph"><h2>Product performance</h2><span class="sub">8 active</span></div>
+      <div class="ph"><h2>Product performance</h2><span class="sub">top 8 by revenue</span></div>
       <div class="scroll"><table>
         <thead><tr><th class="l">SKU</th><th>Units</th><th>Revenue</th><th>Margin</th>
           <th>14-day</th><th>Stock cover</th></tr></thead>
@@ -441,7 +441,7 @@
     </section>
 
     <section class="tile c4" id="p-markets">
-      <div class="ph"><h2>Markets</h2><span class="sub">by revenue</span></div>
+      <div class="ph"><h2>Markets</h2><span class="sub" id="geoSub"></span></div>
       <div class="rows" id="geo"></div>
       <div class="ph" style="margin:22px 0 14px"><h2>Return reasons</h2><span class="sub" id="rrSub"></span></div>
       <div class="rows" id="rr"></div>
@@ -931,8 +931,6 @@ function renderProducts() {
   }).join("");
 }
 
-const GEO = [["United States",.42,"var(--s1)"],["United Kingdom",.18,"var(--s6)"],["Germany",.11,"var(--s3)"],
-             ["Canada",.09,"var(--s4)"],["Australia",.07,"var(--s2)"],["Rest of world",.13,"var(--s5)"]];
 const RR = [["Damaged in transit",.34,"var(--s5)"],["Wrong item sent",.22,"var(--s2)"],["Changed mind",.19,"var(--s3)"],
             ["Arrived late",.14,"var(--s1)"],["Quality below expectation",.11,"var(--s6)"]];
 function allocate(defs, pick, seed) {
@@ -942,10 +940,17 @@ function allocate(defs, pick, seed) {
   return acc;
 }
 function renderLists() {
-  const g = allocate(GEO, d => d.rev, 51), gT = g.reduce((a, b) => a + b, 0), gM = Math.max(...g);
-  $("geo").innerHTML = GEO.map(([n, , c], i) => '<div class="row"><span>' + n + '</span><span class="nv">' +
-    usd(g[i]) + " \u00b7 " + (g[i] / gT * 100).toFixed(0) + '%</span><span class="bar2"><i style="width:' +
-    (g[i] / gM * 100).toFixed(0) + '%;background:' + c + '"></i></span></div>').join("");
+  /* Markets are derived from the stores in view, so this panel can never disagree with the P&L.
+     The hardcoded country split it replaced said Germany was 11% of revenue while the German
+     store was 37% of it. */
+  const TONE = ["var(--s1)","var(--s6)","var(--s3)","var(--s4)","var(--s2)","var(--s5)"];
+  const mk = shown().map((id, i) => ({ n:SDEF[id].market, v:rollStore(id).rev, c:TONE[i % TONE.length] }))
+    .sort((a, b) => b.v - a.v);
+  const gT = mk.reduce((a, x) => a + x.v, 0) || 1, gM = Math.max(...mk.map(x => x.v)) || 1;
+  $("geo").innerHTML = mk.map(x => '<div class="row"><span>' + x.n + '</span><span class="nv">' +
+    usd(x.v) + " \u00b7 " + (x.v / gT * 100).toFixed(0) + '%</span><span class="bar2"><i style="width:' +
+    (x.v / gM * 100).toFixed(0) + '%;background:' + x.c + '"></i></span></div>').join("");
+  $("geoSub").textContent = mk.length === 1 ? "single store" : "net revenue by store market";
   const r = allocate(RR, d => d.refunds, 63), rT = r.reduce((a, b) => a + b, 0), rM = Math.max(...r);
   $("rr").innerHTML = RR.map(([n, , c], i) => '<div class="row"><span>' + n + '</span><span class="nv">' +
     usd(r[i]) + '</span><span class="bar2"><i style="width:' + (r[i] / rM * 100).toFixed(0) + '%;background:' +
