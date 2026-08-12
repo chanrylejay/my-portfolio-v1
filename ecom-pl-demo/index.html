@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Profit and loss with supporting analytics for a direct-to-consumer commerce stack.">
+<meta name="theme-color" content="#0e1013">
+<title>Halden Goods — Profit &amp; Loss</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Schibsted+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>try{if(window.matchMedia("(prefers-color-scheme: light)").matches)document.documentElement.dataset.theme="light";}catch(e){}</script>
+<style>
+  :root {
+    --canvas:#0e1013; --tile:#14171c; --tile-2:#191d25; --line:#23272f; --line-2:#333944;
+    --tx:#f4f5f7; --tx-2:#a8aeb9; --tx-3:#828892;
+    --bad:#ff6154; --bad-bg:rgba(255,97,84,.12); --good:#4fb488;
+    --look:#e0a458; --look-bg:rgba(224,164,88,.12);
+    --s1:#4c9aff; --s2:#f0b429; --s3:#9f7aea; --s4:#45b26b; --s5:#ef5da8; --s6:#14b8c4;
+    --heat-a:76,154,255; --heat-b:240,180,41; --on-strong:#06121f; --grad:.32;
+    --mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  }
+  [data-theme="light"] {
+    --canvas:#f4f5f7; --tile:#ffffff; --tile-2:#f7f8fa; --line:#e7e9ed; --line-2:#d2d6dd;
+    --tx:#0d0f12; --tx-2:#565d67; --tx-3:#6b717b;
+    --bad:#c93425; --bad-bg:rgba(201,52,37,.08); --good:#1f7a54;
+    --look:#8a5d13; --look-bg:rgba(138,93,19,.08);
+    --s1:#2563eb; --s2:#b45309; --s3:#7c3aed; --s4:#15803d; --s5:#be185d; --s6:#0e7490;
+    --heat-a:37,99,235; --heat-b:180,83,9; --on-strong:#ffffff; --grad:.20;
+  }
+
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--canvas); color:var(--tx);
+    font-family:"Schibsted Grotesk", -apple-system, "Segoe UI Variable", system-ui, sans-serif;
+    font-size:15px; line-height:1.55; -webkit-font-smoothing:antialiased; }
+  .n { font-family:var(--mono); }
+
+  /* ---------- chrome ---------- */
+  .top { position:sticky; top:0; z-index:40; background:var(--canvas); border-bottom:1px solid var(--line); }
+  .top-in { max-width:1360px; margin:0 auto; padding:0 20px; height:58px; display:flex; align-items:center; gap:12px; }
+  .mark { font-weight:600; letter-spacing:-.015em; margin-right:auto; white-space:nowrap; }
+  .sw { display:inline-flex; gap:2px; padding:3px; background:var(--tile); border:1px solid var(--line); border-radius:9px; }
+  .sw button { min-height:32px; padding:0 14px; background:none; border:none; border-radius:6px;
+               color:var(--tx-2); font:inherit; font-size:13px; font-weight:500; cursor:pointer;
+               transition:color .15s, background .15s; white-space:nowrap; }
+  .sw button:hover { color:var(--tx); }
+  .sw button:focus-visible { outline:2px solid var(--tx); outline-offset:2px; }
+  .sw button[aria-selected="true"], .sw button[aria-pressed="true"] { background:var(--line-2); color:var(--tx); }
+  .btn { min-height:34px; padding:0 13px; background:none; border:1px solid var(--line-2); border-radius:8px;
+         color:var(--tx-2); font:inherit; font-size:13px; cursor:pointer; transition:color .15s, border-color .15s; }
+  .btn:hover { color:var(--tx); border-color:var(--tx-3); }
+  .btn:focus-visible { outline:2px solid var(--tx); outline-offset:2px; }
+
+  .wrap { max-width:1360px; margin:0 auto; padding:18px 20px 80px; }
+  [hidden] { display:none !important; }
+
+  /* ---------- shared tile ---------- */
+  .demo { margin-left:8px; padding:2px 7px; border:1px solid var(--line-2); border-radius:5px;
+    font-family:var(--mono); font-size:10px; font-weight:500; letter-spacing:.04em; color:var(--tx-3);
+    text-transform:uppercase; vertical-align:2px; }
+  .pick { display:inline-flex; align-items:center; gap:7px; }
+  .pl-lab { font-size:12px; color:var(--tx-3); }
+  .pick select { min-height:34px; padding:0 26px 0 10px; background:var(--tile); color:var(--tx);
+    border:1px solid var(--line-2); border-radius:8px; font:inherit; font-size:13px; cursor:pointer;
+    appearance:none; background-image:linear-gradient(45deg,transparent 50%,var(--tx-3) 50%),
+    linear-gradient(135deg,var(--tx-3) 50%,transparent 50%);
+    background-position:calc(100% - 14px) 15px, calc(100% - 9px) 15px;
+    background-size:5px 5px,5px 5px; background-repeat:no-repeat; }
+  .pick select:focus-visible { outline:2px solid var(--s1); outline-offset:1px; }
+  .c12{grid-column:span 12}
+  .slackgrid { display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,1fr); gap:26px; align-items:start; }
+  .slacknote p { margin:0 0 13px; font-size:13px; line-height:1.6; color:var(--tx-2); }
+  .slacknote p:last-child { margin-bottom:0; }
+  .slacknote b { color:var(--tx); font-weight:600; }
+  .cur { margin-left:5px; padding:1px 5px; border-radius:4px; background:var(--line);
+    font-family:var(--mono); font-size:9.5px; letter-spacing:.03em; color:var(--tx-3); vertical-align:1px; }
+  .fx { font-size:12px; color:var(--tx-3); margin:12px 0 0; line-height:1.5; }
+  .fx b { color:var(--tx-2); font-weight:500; }
+
+  .slack { border:1px solid var(--line); border-radius:10px; overflow:hidden; margin-top:2px; }
+  .slack-top { display:flex; align-items:center; gap:8px; padding:9px 13px;
+    background:var(--canvas-2,rgba(127,127,127,.06)); border-bottom:1px solid var(--line);
+    font-size:12px; color:var(--tx-3); }
+  .slack-top .chan { font-weight:600; color:var(--tx-2); }
+  .slack-top .when { margin-left:auto; font-family:var(--mono); font-size:11px; }
+  .slack-body { display:flex; gap:11px; padding:14px 13px; }
+  .slack-av { flex:0 0 30px; height:30px; border-radius:7px; background:var(--s1); color:#fff;
+    display:grid; place-items:center; font-size:13px; font-weight:700; }
+  .slack-who { font-size:13px; font-weight:600; color:var(--tx); margin:0 0 6px; }
+  .slack-who span { margin-left:6px; padding:1px 5px; border-radius:4px; background:var(--line);
+    font-size:9px; font-weight:600; letter-spacing:.05em; text-transform:uppercase; color:var(--tx-3);
+    vertical-align:1px; }
+  .slack-msg { margin:0; font-size:13px; line-height:1.65; color:var(--tx-2); }
+  .slack-msg b { color:var(--tx); font-weight:600; }
+  .slack-msg .ln { display:block; }
+  .slack-msg .flag { color:var(--bad); }
+  .slack-msg .ok { color:var(--good); }
+  .slack-foot { padding:11px 13px; border-top:1px solid var(--line); font-size:12px; color:var(--tx-3); }
+  .tile { background:var(--tile); border:1px solid var(--line); border-radius:14px; padding:22px; min-width:0; }
+  .cap { font-size:13px; font-weight:500; color:var(--tx-3); margin:0 0 14px; }
+  .ph { display:flex; align-items:baseline; gap:10px; margin-bottom:14px; }
+  .ph h2 { font-size:16px; font-weight:600; margin:0; letter-spacing:-.01em; }
+  .ph .sub { font-size:12px; color:var(--tx-3); margin-left:auto; font-family:var(--mono); }
+  .note { font-size:12px; color:var(--tx-3); margin:14px 0 0; line-height:1.5; }
+  .note b { color:var(--look); font-weight:500; }
+
+  /* ================= OVERVIEW ================= */
+  .ov { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+  .w2 { grid-column:span 2; } .w3 { grid-column:span 3; }
+
+  .big { font-size:58px; font-weight:600; letter-spacing:-.04em; line-height:1; margin:0; }
+  .big.bad { color:var(--bad); }
+  .cmp { margin:10px 0 0; font-size:15px; color:var(--tx-3); }
+  .cmp b { font-weight:600; } .cmp b.dn { color:var(--bad); } .cmp b.up { color:var(--good); }
+
+  .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:18px; margin:22px 0 0;
+           padding:20px 0 0; border-top:1px solid var(--line); }
+  .stat .sl { display:block; font-size:12px; font-weight:500; letter-spacing:.05em; text-transform:uppercase;
+              color:var(--tx-3); margin-bottom:5px; }
+  .stat .sv { display:block; font-size:20px; font-weight:600; letter-spacing:-.015em; }
+
+  .goal { margin-top:22px; padding-top:20px; border-top:1px solid var(--line); }
+  .track { position:relative; height:10px; background:var(--line); border-radius:5px; }
+  .fill { position:absolute; inset:0 auto 0 0; background:var(--good); border-radius:5px; }
+  .fill.bad { background:var(--bad); }
+  .pin { position:absolute; top:-5px; bottom:-5px; width:2px; background:var(--tx); border-radius:1px; }
+  .goalTxt { margin:11px 0 0; font-size:14px; } .goalTxt b { font-weight:600; }
+
+  .strip { margin-top:22px; padding-top:20px; border-top:1px solid var(--line); }
+  .stripCap { font-size:12px; font-weight:500; letter-spacing:.05em; text-transform:uppercase;
+              color:var(--tx-3); margin:0 0 15px; }
+  .sbars { display:flex; align-items:flex-end; gap:7px; height:70px; }
+  .sday { flex:1; display:flex; flex-direction:column; justify-content:flex-end; height:100%; }
+  .sbar { background:var(--line-2); border-radius:2px; min-height:3px; }
+  .sday.neg .sbar { background:var(--bad); }
+  .sday.now .sbar { background:var(--tx-2); }
+  .sdot { width:5px; height:5px; border-radius:50%; background:var(--tx); margin:0 auto 5px; }
+  .srow { display:flex; gap:7px; margin-top:9px; }
+  .srow span { flex:1; text-align:center; font-size:12px; }
+  .srow.days span { color:var(--tx-3); } .srow.days span.now { color:var(--tx); font-weight:600; }
+  .srow.mar span { color:var(--tx-2); font-family:var(--mono); font-size:11px; }
+  .srow.mar span.neg { color:var(--bad); font-weight:500; }
+  .srow.mar span.top { color:var(--good); font-weight:500; }
+  .marCap { font-size:11px; letter-spacing:.05em; text-transform:uppercase; color:var(--tx-3); margin:15px 0 4px; }
+
+  .find { margin:0; padding:0; list-style:none; }
+  .find li { padding:15px 0; border-top:1px solid var(--line); line-height:1.5; color:var(--tx-2); font-size:14px; }
+  .find li:first-child { border-top:none; padding-top:0; }
+  .find b { color:var(--tx); font-weight:600; }
+  .find .warn b { color:var(--bad); }
+  .jump { display:inline-block; margin-top:7px; background:none; border:none; padding:0; cursor:pointer;
+          font:inherit; font-size:13px; color:var(--s1); text-decoration:underline;
+          text-underline-offset:3px; text-decoration-thickness:1px; }
+  .jump:hover { color:var(--tx); }
+  .jump:focus-visible { outline:2px solid var(--tx); outline-offset:3px; border-radius:3px; }
+
+  .act { margin-top:18px; padding:15px 16px; background:var(--look-bg); border-left:2px solid var(--look);
+         border-radius:0 9px 9px 0; font-size:14px; line-height:1.5; color:var(--tx-2); }
+  .act .h { display:block; font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+            color:var(--look); margin-bottom:7px; }
+  .act b { color:var(--tx); font-weight:600; }
+
+  /* P&L */
+  table { width:100%; border-collapse:collapse; }
+  th { font-size:12px; font-weight:500; letter-spacing:.04em; color:var(--tx-3); text-align:right;
+       padding:0 0 12px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  th.l { text-align:left; } th.share { text-align:left; padding-left:24px; }
+  td { padding:11px 0; border-bottom:1px solid var(--line); text-align:right; white-space:nowrap; }
+  td.l { text-align:left; }
+  tr.head td { padding:24px 0 9px; border-bottom:none; font-size:12px; font-weight:600; letter-spacing:.08em;
+               text-transform:uppercase; color:var(--tx-3); }
+  tr.head:first-child td { padding-top:2px; }
+  tr.sub td { border-top:1px solid var(--line-2); border-bottom:none; padding-top:14px; }
+  tr.sub .lbl, tr.sub .amt { font-weight:600; }
+  tr.net td { border-top:2px solid var(--tx); border-bottom:none; padding-top:18px; }
+  tr.net .lbl { font-size:17px; font-weight:600; }
+  tr.net .amt { font-size:25px; font-weight:600; letter-spacing:-.02em; }
+  tr.net .amt.bad { color:var(--bad); }
+  .lbl { font-size:15px; } .amt { font-size:16px; font-weight:500; font-family:var(--mono); }
+  tr.minor .lbl, tr.minor .amt { color:var(--tx-2); }
+  .drill { background:none; border:none; padding:0; font:inherit; font-size:15px; color:inherit;
+           cursor:pointer; text-align:left; border-bottom:1px dotted var(--tx-3); }
+  .drill:hover { color:var(--s1); border-bottom-color:var(--s1); }
+  .drill:focus-visible { outline:2px solid var(--tx); outline-offset:2px; }
+  td.share { width:190px; padding-left:24px; text-align:left; }
+  .sharewrap { display:flex; align-items:center; gap:10px; }
+  .sharebar { flex:1; height:8px; background:var(--line); border-radius:4px; overflow:hidden; }
+  .sharebar i { display:block; height:100%; background:var(--line-2); border-radius:4px; }
+  .sharebar.inflow i { background:var(--tx-3); }
+  .sharebar.ads i { background:var(--tx-2); }
+  .sharebar.profit i { background:var(--good); }
+  .sharenum { width:48px; text-align:right; font-size:13px; color:var(--tx-3); font-family:var(--mono); }
+  .pts { font-size:13px; color:var(--tx-3); font-family:var(--mono); }
+  .pts.bad { color:var(--bad); }
+
+  /* ================= ANALYSIS ================= */
+  .kpis { display:grid; grid-template-columns:repeat(8,1fr); gap:1px; background:var(--line);
+          border:1px solid var(--line); border-radius:12px; overflow:hidden; margin-bottom:14px; }
+  .kpi { background:var(--tile); padding:13px 14px 11px; min-width:0; }
+  .kpi .k { font-size:12px; letter-spacing:.04em; text-transform:uppercase; color:var(--tx-3);
+            white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .kpi .v { font-family:var(--mono); font-size:21px; font-weight:500; letter-spacing:-.02em; margin:5px 0 3px; }
+  .kpi .d { font-family:var(--mono); font-size:11px; color:var(--tx-3); }
+  .kpi .d.up { color:var(--good); } .kpi .d.dn { color:var(--bad); }
+  .kpi svg { display:block; width:100%; height:20px; margin-top:7px; }
+
+  .an { display:grid; grid-template-columns:repeat(12,1fr); gap:14px; }
+  .c4{grid-column:span 4}.c5{grid-column:span 5}.c6{grid-column:span 6}
+  .c7{grid-column:span 7}.c8{grid-column:span 8}
+  .flash { animation:fl 1.6s ease-out; }
+  @keyframes fl { 0%{box-shadow:0 0 0 2px var(--s1)} 100%{box-shadow:0 0 0 0 rgba(0,0,0,0)} }
+
+  .ax { font-family:var(--mono); font-size:10px; fill:var(--tx-3); }
+  .gl { stroke:var(--line); stroke-width:1; }
+  svg { overflow:visible; }
+  .legend { display:flex; gap:14px; font-size:12px; color:var(--tx-2); margin-top:10px; flex-wrap:wrap; }
+  .legend i { display:inline-block; width:9px; height:9px; border-radius:2px; margin-right:5px; vertical-align:-1px; }
+
+  .fn { display:grid; gap:9px; }
+  .fstage { display:grid; grid-template-columns:1fr auto; align-items:center; gap:10px; }
+  .fbar { height:30px; border-radius:4px; display:flex; align-items:center; padding:0 10px;
+          font-size:12px; color:#fff; font-weight:600; white-space:nowrap; overflow:hidden; }
+  .fnum { font-family:var(--mono); font-size:12px; color:var(--tx-2); white-space:nowrap; }
+  .fdrop { font-family:var(--mono); font-size:11px; color:var(--tx-3); padding-left:10px; }
+  .fdrop b { color:var(--s2); font-weight:500; }
+
+  .an td { font-family:var(--mono); font-size:12px; padding:9px 0; }
+  .an td.l { font-family:"Schibsted Grotesk", sans-serif; font-size:13px; }
+  .an tr:last-child td { border-bottom:none; }
+  .tag { display:inline-block; width:8px; height:8px; border-radius:2px; margin-right:8px; }
+  .mb { display:block; height:5px; background:var(--line-2); border-radius:3px; margin-top:5px; overflow:hidden; }
+  .mb i { display:block; height:100%; border-radius:3px; }
+  .warnx { color:var(--bad); } .dim { color:var(--tx-3); }
+
+  .hm, .cohort { display:grid; gap:2px; }
+  .hcell { border-radius:2px; min-height:16px; }
+  .hlab { font-family:var(--mono); font-size:10px; color:var(--tx-3); display:flex; align-items:center; }
+  .hlab.c { justify-content:center; }
+  .ccell { border-radius:2px; height:24px; display:flex; align-items:center; justify-content:center;
+           font-family:var(--mono); font-size:10px; color:var(--tx); }
+  .scale { display:flex; align-items:center; gap:6px; font-size:11px; color:var(--tx-3); margin-top:10px; }
+  .scale i { width:16px; height:9px; border-radius:2px; display:block; }
+
+  .rows { display:grid; gap:11px; }
+  .row { display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; font-size:13px; }
+  .row .bar2 { grid-column:1/-1; height:5px; background:var(--line-2); border-radius:3px; overflow:hidden; }
+  .row .bar2 i { display:block; height:100%; border-radius:3px; }
+  .row .nv { font-family:var(--mono); color:var(--tx-2); font-size:12px; }
+
+  .foot b { color:var(--tx-2); font-weight:600; }
+  .foot { color:var(--tx-3); font-size:12px; margin:24px 0 0; line-height:1.6; }
+  .scroll { overflow-x:auto; }
+  noscript p { padding:18px; background:var(--tile); border:1px solid var(--line); border-radius:12px; color:var(--tx-2); }
+
+  @media (max-width:1400px){ .kpis{grid-template-columns:repeat(4,1fr)} }
+  @media (max-width:1150px){ .c4,.c5,.c6,.c7,.c8{grid-column:span 12} }
+  @media (max-width:880px){
+    .ov{grid-template-columns:1fr} .w2,.w3{grid-column:span 1} .slackgrid{grid-template-columns:1fr}
+    .big{font-size:44px} .tile{padding:18px} .stats{grid-template-columns:repeat(2,1fr)}
+    .kpis{grid-template-columns:repeat(2,1fr)}
+    td.share{width:130px;padding-left:14px} .sharenum{width:42px}
+    table{min-width:520px} .srow span{font-size:10px}
+  }
+  @media (prefers-reduced-motion:reduce){ *{animation:none !important; transition:none !important} }
+  @media print {
+    :root,[data-theme="light"]{ --canvas:#fff;--tile:#fff;--tile-2:#fff;--line:#dde0e4;--line-2:#b6bac1;
+      --tx:#111418;--tx-2:#43484f;--tx-3:#5d626a;--bad:#a82a1e;--good:#1c6b4a;--look:#7a5210;--look-bg:#faf3e6; }
+    .top{display:none} .tile{break-inside:avoid} .wrap{padding-top:0}
+  }
+</style>
+</head>
+<body>
+
+<header class="top"><div class="top-in">
+  <span class="mark">Portfolio<span class="demo">sample data</span></span>
+  <span class="pick">
+    <label class="pl-lab" for="storeSel">Store</label>
+    <select id="storeSel" aria-label="Store"></select>
+  </span>
+  <span class="pick">
+    <label class="pl-lab" for="curSel">Report in</label>
+    <select id="curSel" aria-label="Reporting currency">
+      <option value="USD">USD $</option><option value="EUR">EUR &#8364;</option><option value="GBP">GBP &#163;</option>
+    </select>
+  </span>
+  <span class="sw" role="tablist" aria-label="Depth">
+    <button role="tab" data-m="ov" aria-selected="true">Overview</button>
+    <button role="tab" data-m="an" aria-selected="false">Analysis</button>
+  </span>
+  <span class="sw" id="periods" aria-label="Period">
+    <button data-w="1"  aria-pressed="true">Today</button>
+    <button data-w="7"  aria-pressed="false">7d</button>
+    <button data-w="30" aria-pressed="false">30d</button>
+    <button data-w="90" aria-pressed="false">90d</button>
+  </span>
+  <button class="btn" id="theme"></button>
+</div></header>
+
+<div class="wrap">
+<noscript><p>This dashboard needs JavaScript switched on to show your figures.</p></noscript>
+
+<!-- ============ OVERVIEW ============ -->
+<main id="ov">
+  <div class="ov">
+    <section class="tile w2">
+      <p class="cap" id="cap1"></p>
+      <p class="big" id="big"></p>
+      <p class="cmp" id="cmp"></p>
+      <div class="stats" id="stats"></div>
+      <div class="goal">
+        <div class="track" id="track"></div>
+        <p class="goalTxt" id="goalTxt"></p>
+      </div>
+      <div class="strip">
+        <p class="stripCap">Profit by day · last 7 days</p>
+        <div class="sbars" id="sbars"></div>
+        <div class="srow days" id="sdays"></div>
+        <p class="marCap">Margin kept on each day</p>
+        <div class="srow mar" id="smar"></div>
+      </div>
+    </section>
+
+    <section class="tile">
+      <p class="cap">What happened</p>
+      <ul class="find" id="find"></ul>
+      <div id="act"></div>
+    </section>
+
+    <section class="tile w3">
+      <p class="cap" id="cap2"></p>
+      <div class="scroll"><table>
+        <thead><tr><th class="l">Line</th><th>Amount</th>
+          <th class="share">Share of revenue</th><th id="chHead">Change</th></tr></thead>
+        <tbody id="pl"></tbody>
+      </table></div>
+      <p class="note">Change is in percentage points of revenue. A cost rising with sales is normal; a rising share is not. Underlined lines open their detail in Analysis.</p>
+    </section>
+
+    <section class="tile w3" id="p-slack">
+      <p class="cap">Automated Slack reporting</p>
+      <div class="slackgrid">
+        <div>
+          <div class="slack">
+            <div class="slack-top"><span class="chan">#finance</span><span>4 members</span>
+              <span class="when">Today 8:00 AM</span></div>
+            <div class="slack-body">
+              <div class="slack-av">P</div>
+              <div>
+                <p class="slack-who">P&amp;L Bot <span>app</span></p>
+                <p class="slack-msg" id="slackMsg"></p>
+              </div>
+            </div>
+            <div class="slack-foot" id="slackFoot"></div>
+          </div>
+        </div>
+        <div class="slacknote">
+          <p><b>Daily, 08:00.</b> Yesterday's profit and loss for every store, posted before anyone
+            opens a spreadsheet. The figures are the same ones on this page, so the post and the
+            dashboard can never disagree.</p>
+          <p><b>Mondays, 08:00.</b> The seven-day roll-up by store, the estimated profit for the
+            week ahead, and any line that moved more than two points of revenue.</p>
+          <p><b>Alerts, as they happen.</b> A store dipping below its margin floor, ad spend
+            climbing faster than revenue, or a subscription charging for something nobody opened
+            this month.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<!-- ============ ANALYSIS ============ -->
+<main id="an" hidden>
+  <div class="kpis" id="kpis"></div>
+  <div class="an">
+    <section class="tile c12" id="p-stores">
+      <div class="ph"><h2>Stores</h2><span class="sub" id="stSub"></span></div>
+      <div class="scroll"><table>
+        <thead><tr><th class="l">Store</th><th class="l">Market</th><th>Net revenue</th>
+          <th>Ad spend</th><th>Cost of goods</th><th>Net profit</th><th>Margin</th>
+          <th>Share of profit</th></tr></thead>
+        <tbody id="st"></tbody>
+      </table></div>
+      <p class="fx" id="fxNote"></p>
+    </section>
+
+    <section class="tile c7" id="p-trend">
+      <div class="ph"><h2>Revenue and paid spend</h2><span class="sub" id="tsSub"></span></div>
+      <svg id="ts" viewBox="0 0 760 250" preserveAspectRatio="none" role="img"
+           aria-label="Daily revenue as an area with paid spend as a line."></svg>
+      <div class="legend"><span><i style="background:var(--s1)"></i>Net revenue</span>
+        <span><i style="background:var(--s2)"></i>Paid spend</span>
+        <span><i style="background:var(--s5)"></i>Flagged day</span></div>
+    </section>
+
+    <section class="tile c5" id="p-funnel">
+      <div class="ph"><h2>Acquisition funnel</h2><span class="sub" id="fnSub"></span></div>
+      <div class="fn" id="fn"></div>
+      <p class="note" id="fnNote"></p>
+    </section>
+
+    <section class="tile c7" id="p-channels">
+      <div class="ph"><h2>Channel performance</h2><span class="sub">attributed</span></div>
+      <div class="scroll"><table>
+        <thead><tr><th class="l">Channel</th><th>Spend</th><th>Attr. revenue</th>
+          <th>ROAS</th><th>CAC</th><th>Share</th></tr></thead>
+        <tbody id="ch"></tbody>
+      </table></div>
+      <p class="note" id="chNote"></p>
+    </section>
+
+    <section class="tile c5" id="p-scatter">
+      <div class="ph"><h2>Spend against revenue</h2><span class="sub">daily, fitted</span></div>
+      <svg id="sc" viewBox="0 0 520 250" role="img"
+           aria-label="Daily paid spend against revenue with a fitted curve."></svg>
+      <p class="note" id="scNote"></p>
+    </section>
+
+    <section class="tile c6" id="p-cohorts">
+      <div class="ph"><h2>Cohort retention</h2><span class="sub">repeat purchase rate</span></div>
+      <div class="cohort" id="co"></div>
+      <div class="scale"><span>0%</span>
+        <i style="background:rgba(var(--heat-a),.12)"></i><i style="background:rgba(var(--heat-a),.32)"></i>
+        <i style="background:rgba(var(--heat-a),.55)"></i><i style="background:rgba(var(--heat-a),.78)"></i>
+        <i style="background:rgba(var(--heat-a),1)"></i><span>30%</span></div>
+      <p class="note" id="coNote"></p>
+    </section>
+
+    <section class="tile c6" id="p-hours">
+      <div class="ph"><h2>Orders by hour</h2><span class="sub">local time</span></div>
+      <div class="hm" id="hm"></div>
+      <p class="note" id="hmNote"></p>
+    </section>
+
+    <section class="tile c8" id="p-products">
+      <div class="ph"><h2>Product performance</h2><span class="sub">8 active</span></div>
+      <div class="scroll"><table>
+        <thead><tr><th class="l">SKU</th><th>Units</th><th>Revenue</th><th>Margin</th>
+          <th>14-day</th><th>Stock cover</th></tr></thead>
+        <tbody id="sk"></tbody>
+      </table></div>
+    </section>
+
+    <section class="tile c4" id="p-markets">
+      <div class="ph"><h2>Markets</h2><span class="sub">by revenue</span></div>
+      <div class="rows" id="geo"></div>
+      <div class="ph" style="margin:22px 0 14px"><h2>Return reasons</h2><span class="sub" id="rrSub"></span></div>
+      <div class="rows" id="rr"></div>
+    </section>
+  </div>
+</main>
+
+<p class="foot" id="foot"></p>
+</div>
+
+<script>
+/* ==================================================================
+   ONE ENGINE. Both depths read from it, so the P&L and the KPI rail
+   cannot disagree — that is the whole point of merging them.
+   90 days ending Tuesday 11 August 2026.
+================================================================== */
+function mulberry32(a){ return function(){ a|=0; a=a+0x6D2B79F5|0;
+  var t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t;
+  return ((t^t>>>14)>>>0)/4294967296; }; }
+
+const WD  = [0.82,0.88,0.90,0.95,1.00,1.35,1.25];
+const DOW = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+const FULL= { Mon:"Monday",Tue:"Tuesday",Wed:"Wednesday",Thu:"Thursday",Fri:"Friday",Sat:"Saturday",Sun:"Sunday" };
+const MONF= ["January","February","March","April","May","June","July",
+             "August","September","October","November","December"];
+const MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+/* ============ PORTFOLIO: four stores, three currencies ============
+   Figures are generated in a USD base and converted for display, so the
+   reporting currency can change without any panel disagreeing with another. */
+const FX  = { USD:1, EUR:1.08, GBP:1.26 };          /* USD per 1 unit */
+const SYM = { USD:"$", EUR:"\u20ac", GBP:"\u00a3" };
+
+const STORES = [
+  { id:"nv", name:"Northvale Home",  cur:"EUR", market:"Germany",        seed:31001, scale:1.00, mar:1.00, ref:1.00, ad:1.00, tgt:1250 },
+  { id:"hc", name:"Harbour & Cole",  cur:"GBP", market:"United Kingdom", seed:31002, scale:0.62, mar:1.15, ref:0.80, ad:0.88, tgt: 800 },
+  { id:"ok", name:"Oakfield Supply", cur:"USD", market:"United States",  seed:31003, scale:0.86, mar:0.93, ref:1.30, ad:1.10, tgt: 900 },
+  { id:"lm", name:"Lumen Living",    cur:"EUR", market:"Netherlands",    seed:31004, scale:0.40, mar:1.06, ref:0.92, ad:0.95, tgt: 520 }
+];
+const SID  = STORES.map(x => x.id);
+const SDEF = Object.fromEntries(STORES.map(x => [x.id, x]));
+
+/* Two events, each owned by ONE store, so the portfolio view shows the swing
+   and the store view shows where it came from. */
+const EVENTS = {
+  ok: { 84:{ why:"the bestseller was out of stock and the ads kept running", s:0.30, cvr:0.55, ad:3.1 } },
+  nv: { 86:{ why:"a pin went viral and organic traffic tripled",             s:1.95, cvr:1.22, ad:0.55 } }
+};
+
+const N = 90, TODAY = new Date(2026, 7, 11);
+const SUMK = ["sessions","orders","gross","refunds","rev","cogs","fees","ship",
+              "meta","pinterest","google","software","ads","costs","profit"].concat(SID.map(k => "g_" + k));
+
+function buildStore(def) {
+  const rnd = mulberry32(def.seed), ev = EVENTS[def.id] || {}, out = [];
+  for (let i = 0; i < N; i++) {
+    const dow = (i + 3) % 7, e = ev[i] || null;
+    const s = 4200 * def.scale * WD[dow] * (0.90 + rnd() * 0.20) * (1 + i * 0.0042) * (e ? e.s : 1);
+    const sessions = Math.round(s);
+    const cvr = (2.15 + rnd() * 0.7) / 100 * (e ? e.cvr : 1);
+    const orders = Math.max(1, Math.round(sessions * cvr));
+    const aov = 68 + rnd() * 14;
+    const gross = Math.round(orders * aov);
+    const refunds = Math.round(gross * (0.045 + rnd() * 0.028) * def.ref);
+    const rev = gross - refunds;
+    const cogs = Math.round(rev * (0.345 + rnd() * 0.035) / def.mar);
+    const fees = Math.round(rev * (0.088 + rnd() * 0.012));
+    const ship = Math.round(rev * (0.108 + rnd() * 0.016));
+    const sc = (e ? e.ad : 1) * def.ad;
+    const meta      = Math.round(rev * (0.132 + rnd() * 0.020) * sc);
+    const pinterest = Math.round(rev * (0.088 + rnd() * 0.016) * sc);
+    const google    = Math.round(rev * (0.052 + rnd() * 0.012) * sc);
+    const software  = Math.round(112 * def.scale);
+    const d = new Date(TODAY); d.setDate(d.getDate() - (N - 1 - i));
+    const row = { i, dow, date:d, sessions, orders, aov, gross, refunds, rev, cogs, fees, ship,
+      meta, pinterest, google, software,
+      ads:meta + pinterest + google,
+      costs:cogs + fees + ship + meta + pinterest + google + software,
+      profit:rev - (cogs + fees + ship + meta + pinterest + google + software),
+      why:e ? e.why : null, whoWhy:e ? def.name : null };
+    SID.forEach(k => row["g_" + k] = 0);
+    row["g_" + def.id] = gross;
+    out.push(row);
+  }
+  return out;
+}
+
+const BOOK = Object.fromEntries(STORES.map(d => [d.id, buildStore(d)]));
+
+function aggregate(ids) {
+  const src = ids.map(id => BOOK[id]);
+  return Array.from({ length:N }, (_, i) => {
+    const rows = src.map(sr => sr[i]);
+    const o = { i, dow:rows[0].dow, date:rows[0].date };
+    SUMK.forEach(k => o[k] = rows.reduce((a, r) => a + r[k], 0));
+    o.aov = o.orders ? o.gross / o.orders : 0;
+    const hit = rows.find(r => r.why);
+    o.why = hit ? hit.why : null; o.whoWhy = hit ? hit.whoWhy : null;
+    return o;
+  });
+}
+
+let store = "all", disp = "USD", win = 1, mode = "ov";
+const shown = () => store === "all" ? SID : [store];
+let SERIES = aggregate(SID);
+const rebuild = () => { SERIES = aggregate(shown()); };
+const target1 = () => shown().reduce((a, id) => a + SDEF[id].tgt, 0);
+
+const $    = id => document.getElementById(id);
+const cv   = n => n / FX[disp];
+const usd  = n => { const v = cv(n); return (v < 0 ? "-" : "") + SYM[disp] + Math.abs(Math.round(v)).toLocaleString("en-US"); };
+const usdc = n => { const v = cv(n); return (v < 0 ? "-" : "") + SYM[disp] + Math.abs(v).toFixed(2); };
+const k$   = n => { const v = cv(n); return Math.abs(v) >= 1000 ? SYM[disp] + (v / 1000).toFixed(1) + "k" : SYM[disp] + Math.round(v); };
+const nat  = (n, cur) => { const v = n / FX[cur];
+  return (v < 0 ? "-" : "") + SYM[cur] + Math.abs(Math.round(v)).toLocaleString("en-US"); };
+const dstr = d => d.getDate() + " " + MON[d.getMonth()];
+
+const slice = (w = win) => SERIES.slice(N - w);
+const S = (arr, key) => arr.reduce((a, x) => a + x[key], 0);
+
+function roll(arr) {
+  const o = {};
+  SUMK.forEach(k => o[k] = S(arr, k));
+  return o;
+}
+
+/* one store's own roll-up over the current window, for the store table */
+function rollStore(id, w = win) {
+  return roll(BOOK[id].slice(N - w));
+}
+
+/* Today compares to the same weekday a week back; longer windows to the window before. */
+function prior() {
+  if (win === 1) return roll([SERIES[N - 8]]);
+  return roll(SERIES.slice(N - win * 2, N - win));
+}
+
+const move = (now, was) => {
+  if (!was) return { t:"\u2014", dn:false };
+  const d = now - was;
+  if (was < 0 || now < 0)
+    return d === 0 ? { t:"\u2014", dn:false }
+      : { t:(d >= 0 ? "up " : "down ") + usd(Math.abs(d)), dn:d < 0 };
+  const pc = Math.round(d / was * 100);
+  return { t:(pc >= 0 ? "up " : "down ") + Math.abs(pc) + "%", dn:pc < 0 };
+};
+
+/* daily profit target is the sum of the targets of the stores in view */
+const label = () => win === 1 ? "today"
+  : win === 7 ? "over 7 days" : win === 30 ? "over 30 days" : "over 90 days";
+const vsLabel = () => win === 1 ? "last " + FULL[DOW[SERIES[N - 1].dow]] : "the period before";
+
+/* ================= OVERVIEW ================= */
+const plRows = () => [
+  { g:shown().length > 1 ? "Money in \u00b7 by store" : "Money in" },
+  ...shown().map(id => ({ k:"g_" + id, l:SDEF[id].name, inflow:true, cur:SDEF[id].cur })),
+  { k:"refunds", l:"Refunds and returns", minus:true, cost:true },
+  { sub:"Net revenue" },
+  { g:"Money out" },
+  { k:"cogs",     l:"Cost of goods", minus:true, cost:true },
+  { k:"ads",      l:"Advertising", minus:true, cost:true, ads:true, drill:"p-channels" },
+  { k:"ship",     l:"Shipping and fulfilment", minus:true, cost:true },
+  { k:"fees",     l:"Platform and payment fees", minus:true, cost:true, minor:true },
+  { k:"software", l:"Software and contractors", minus:true, cost:true, minor:true },
+  { sub:"Total costs" },
+  { net:"Net profit" }
+];
+
+function weekdayPattern() {
+  const by = {};
+  SERIES.forEach(d => (by[DOW[d.dow]] = by[DOW[d.dow]] || []).push(d));
+  const seen = Object.entries(by).map(([kk, v]) => ({ k:kk,
+    margin:v.reduce((a, x) => a + x.profit / x.rev * 100, 0) / v.length,
+    ads:v.reduce((a, x) => a + x.ads / x.rev * 100, 0) / v.length }))
+    .sort((a, b) => a.margin - b.margin);
+  return { worst:seen[0], best:seen[seen.length - 1] };
+}
+
+function renderOverview() {
+  const arr = slice(), T = roll(arr), P = prior(), m = move(T.profit, P.profit);
+  const hasPrior = P.rev > 0;
+  const target = target1() * win;
+
+  $("cap1").textContent = "Profit " + label();
+  const big = $("big"); big.textContent = usd(T.profit); big.classList.toggle("bad", T.profit < 0);
+  const from = arr[0].date, to = arr[arr.length - 1].date;
+  $("cmp").innerHTML = (win === 1 ? "Tuesday, 11 August" : dstr(from) + " \u2013 " + dstr(to)) +
+    ' &middot; <b class="' + (m.dn ? "dn" : "up") + '">' + m.t + "</b> on " + vsLabel();
+
+  $("stats").innerHTML = [
+    ["Net revenue", usd(T.rev)],
+    ["Margin kept", (T.profit / T.rev * 100).toFixed(1) + "%"],
+    ["Orders", T.orders.toLocaleString("en-US")],
+    ["Profit per order", usdc(T.profit / T.orders)]
+  ].map(([l, v]) => '<div class="stat"><span class="sl">' + l + '</span><span class="sv n">' + v + "</span></div>").join("");
+
+  const span = Math.max(target, T.profit, 1) * 1.12, pc = v => Math.max(0, Math.min(100, v / span * 100)).toFixed(1);
+  const short = T.profit < target;
+  $("track").innerHTML = '<div class="fill' + (short ? " bad" : "") + '" style="width:' + pc(T.profit) +
+    '%"></div><div class="pin" style="left:' + pc(target) + '%"></div>';
+  $("goalTxt").innerHTML = short
+    ? '<b style="color:var(--bad)">' + usd(target - T.profit) + " short</b> of the " + usd(target) + " target"
+    : '<b style="color:var(--good)">' + usd(T.profit - target) + " ahead</b> of the " + usd(target) + " target";
+
+  /* seven-day strip is fixed — it is context for the headline, not a view of the window */
+  const w7 = SERIES.slice(N - 7);
+  const vals = w7.map(d => d.profit), hi = Math.max(...vals, 0), lo = Math.min(...vals, 0), rng = (hi - lo) || 1;
+  const bestMar = Math.max(...w7.map(d => d.profit / d.rev * 100));
+  $("sbars").innerHTML = w7.map(d => {
+    const last = d.i === N - 1;
+    return '<div class="sday' + (d.profit < 0 ? " neg" : "") + (last ? " now" : "") + '" title="' +
+      DOW[d.dow] + " " + dstr(d.date) + " \u00b7 " + usd(d.profit) + " \u00b7 " +
+      (d.profit / d.rev * 100).toFixed(1) + "% margin" + (d.why ? " \u00b7 " + d.why : "") + '">' +
+      (d.why ? '<span class="sdot"></span>' : "") + '<div class="sbar" style="height:' +
+      Math.max(Math.abs(d.profit) / rng * 100, 5).toFixed(1) + '%"></div></div>';
+  }).join("");
+  $("sdays").innerHTML = w7.map(d => '<span class="' + (d.i === N - 1 ? "now" : "") + '">' + DOW[d.dow] + "</span>").join("");
+  $("smar").innerHTML = w7.map(d => { const v = d.profit / d.rev * 100;
+    return '<span class="' + (v < 0 ? "neg" : (v === bestMar ? "top" : "")) + '">' + v.toFixed(1) + "%</span>"; }).join("");
+
+  /* findings, always scanning the last seven days */
+  const notes = [];
+  let worst = w7[0], best = w7[0];
+  w7.forEach(d => { if (d.profit < worst.profit) worst = d; if (d.profit > best.profit) best = d; });
+
+  if (worst.profit < 0)
+    notes.push({ warn:true, jump:"p-trend", jt:"See it on the trend \u2192",
+      html:"<b>" + FULL[DOW[worst.dow]] + " lost " + usd(Math.abs(worst.profit)) + "</b>" +
+        (worst.why ? " \u2014 " + (worst.whoWhy && store === "all" ? worst.whoWhy + ": " : "") + worst.why : "") +
+        ". Advertising took " +
+        Math.round(worst.ads / worst.rev * 100) + "% of that day's revenue." });
+
+  if (best.why && best !== worst)
+    notes.push({ jump:"p-cohorts", jt:"Did those buyers come back? \u2192",
+      html:"<b>" + FULL[DOW[best.dow]] + " made " + usd(best.profit) + " at " +
+        (best.profit / best.rev * 100).toFixed(1) + "% margin</b> \u2014 " +
+        (best.whoWhy && store === "all" ? best.whoWhy + ": " : "") + best.why +
+        ". Free traffic pushed advertising to " + Math.round(best.ads / best.rev * 100) + "% of revenue." });
+
+  const adNow = T.ads / T.rev * 100, adWas = hasPrior ? P.ads / P.rev * 100 : null;
+  notes.push({ warn:hasPrior && adNow > adWas + 0.5, jump:"p-channels", jt:"Break it down by channel \u2192",
+    html:"<b>Advertising is " + adNow.toFixed(1) + "% of revenue</b>" +
+      (hasPrior ? ", against " + adWas.toFixed(1) + "% " + vsLabel() : ", with no earlier window of this length to compare against") +
+      ". Every dollar of ads returns " + (T.rev / T.ads).toFixed(2) + " of revenue." });
+
+  /* A losing day at one store can be fully masked by the others. Scan per store, not just the total. */
+  if (store === "all") {
+    let sw = null;
+    SID.forEach(id => BOOK[id].slice(N - 7).forEach(r => {
+      if (!sw || r.profit < sw.r.profit) sw = { r, name:SDEF[id].name };
+    }));
+    if (sw && sw.r.profit < 0) {
+      const day = SERIES[sw.r.i];
+      notes.unshift({ warn:true, jump:"p-stores", jt:"Compare the stores \u2192",
+        html:"<b>" + sw.name + " lost " + usd(Math.abs(sw.r.profit)) + " on " + FULL[DOW[sw.r.dow]] +
+          "</b>" + (sw.r.why ? " \u2014 " + sw.r.why : "") + ". The portfolio still closed that day at " +
+          usd(day.profit) + ", so it never shows up in the totals." });
+    }
+  }
+
+  $("find").innerHTML = notes.slice(0, 3).map(x =>
+    '<li class="' + (x.warn ? "warn" : "") + '">' + x.html +
+    '<br><button class="jump" data-go="' + x.jump + '">' + x.jt + "</button></li>").join("");
+
+  const W = weekdayPattern();
+  $("act").innerHTML = '<div class="act"><span class="h">Worth checking</span><b>' + FULL[W.worst.k] +
+    "s keep " + W.worst.margin.toFixed(1) + "% margin against " + W.best.margin.toFixed(1) + "% on " +
+    FULL[W.best.k] + "s.</b> Traffic falls on " + FULL[W.worst.k] + "s but the ad budget does not, so " +
+    "advertising eats " + W.worst.ads.toFixed(0) + "% of revenue instead of " + W.best.ads.toFixed(0) +
+    '%. <button class="jump" data-go="p-hours">See the hourly pattern \u2192</button></div>';
+
+  /* the P&L */
+  $("cap2").textContent = "Profit and loss \u2014 " + (win === 1 ? "Tuesday, 11 August" : dstr(from) + " to " + dstr(to));
+  $("chHead").textContent = !hasPrior ? "no prior window"
+    : win === 1 ? "vs. same day last week" : "vs. period before";
+
+  const bar = (share, kind) => '<div class="sharewrap"><div class="sharebar ' + kind + '"><i style="width:' +
+    Math.max(0, Math.min(100, share)).toFixed(1) + '%"></i></div><span class="sharenum">' + share.toFixed(1) + "%</span></div>";
+
+  $("pl").innerHTML = plRows().map(r => {
+    if (r.g) return '<tr class="head"><td class="l" colspan="4">' + r.g + "</td></tr>";
+    if (r.sub) { const v = r.sub === "Net revenue" ? T.rev : T.costs;
+      return '<tr class="sub"><td class="l lbl">' + r.sub + '</td><td class="amt">' +
+        (r.sub === "Total costs" ? "-" : "") + usd(v) + '</td><td class="share">' +
+        bar(v / T.rev * 100, r.sub === "Net revenue" ? "inflow" : "") + "</td><td></td></tr>"; }
+    if (r.net) return '<tr class="net"><td class="l lbl">' + r.net + '</td><td class="amt' +
+      (T.profit < 0 ? " bad" : "") + '">' + usd(T.profit) + '</td><td class="share">' +
+      bar(T.profit / T.rev * 100, "profit") + '</td><td class="pts ' + (m.dn ? "bad" : "") + '">' + m.t + "</td></tr>";
+
+    const v = T[r.k], pv = P[r.k];
+    const now = v / T.rev * 100, d = hasPrior ? now - pv / P.rev * 100 : null;
+    const worse = r.cost && d !== null && d > 0.3;
+    const name = (r.drill ? '<button class="drill" data-go="' + r.drill + '">' + r.l + "</button>" : r.l) +
+      (r.cur ? ' <span class="cur">' + r.cur + "</span>" : "");
+    return '<tr class="' + (r.minor ? "minor" : "") + '"><td class="l lbl">' + name + '</td><td class="amt">' +
+      (r.minus ? "-" : "") + usd(v) + '</td><td class="share">' + bar(now, r.inflow ? "inflow" : (r.ads ? "ads" : "")) +
+      '</td><td class="pts ' + (worse ? "bad" : "") + '">' +
+      (d === null ? "\u2014" : (d >= 0 ? "+" : "") + d.toFixed(1) + " pts") + "</td></tr>";
+  }).join("");
+}
+
+/* ================= ANALYSIS ================= */
+const delta = (a, b) => b ? (a - b) / b * 100 : 0;
+const dfmt  = v => (v >= 0 ? "+" : "") + v.toFixed(1) + "%";
+
+function renderKpis() {
+  const arr = slice(), T = roll(arr), P = prior();
+  const items = [
+    ["Net revenue", usd(T.rev), delta(T.rev, P.rev), arr.map(x => x.rev)],
+    ["Orders", T.orders.toLocaleString("en-US"), delta(T.orders, P.orders), arr.map(x => x.orders)],
+    ["Sessions", (T.sessions / 1000).toFixed(1) + "k", delta(T.sessions, P.sessions), arr.map(x => x.sessions)],
+    ["Conversion", (T.orders / T.sessions * 100).toFixed(2) + "%", delta(T.orders / T.sessions, P.orders / P.sessions), arr.map(x => x.orders / x.sessions * 100)],
+    ["AOV", "$" + (T.gross / T.orders).toFixed(2), delta(T.gross / T.orders, P.gross / P.orders), arr.map(x => x.aov)],
+    ["Blended ROAS", (T.rev / T.ads).toFixed(2) + "x", delta(T.rev / T.ads, P.rev / P.ads), arr.map(x => x.rev / x.ads)],
+    ["Net margin", (T.profit / T.rev * 100).toFixed(1) + "%", delta(T.profit / T.rev, P.profit / P.rev), arr.map(x => x.profit / x.rev * 100)],
+    ["Refund rate", (T.refunds / T.gross * 100).toFixed(2) + "%", delta(T.refunds / T.gross, P.refunds / P.gross), arr.map(x => x.refunds / x.gross * 100)]
+  ];
+  $("kpis").innerHTML = items.map(([lb, v, dl, ser]) => {
+    const s = ser.length > 1 ? ser : [ser[0], ser[0]];
+    const hi = Math.max(...s), lo = Math.min(...s), r = (hi - lo) || 1;
+    const pts = s.map((x, i) => (i / (s.length - 1) * 100).toFixed(2) + "," + (100 - (x - lo) / r * 100).toFixed(2)).join(" ");
+    const good = lb === "Refund rate" ? dl < 0 : dl >= 0;
+    return '<div class="kpi"><div class="k">' + lb + '</div><div class="v">' + v + '</div><div class="d ' +
+      (good ? "up" : "dn") + '">' + dfmt(dl) + '</div><svg viewBox="0 0 100 100" preserveAspectRatio="none">' +
+      '<polyline points="' + pts + '" fill="none" stroke="' + (good ? "var(--good)" : "var(--bad)") +
+      '" stroke-width="2.5" vector-effect="non-scaling-stroke" stroke-linejoin="round"/></svg></div>';
+  }).join("");
+}
+
+function renderTrend() {
+  const arr = SERIES.slice(N - Math.max(win, 14));
+  const W = 760, H = 250, PL_ = 52, PR = 46, PT = 12, PB = 26, iw = W - PL_ - PR, ih = H - PT - PB;
+  const rev = arr.map(x => x.rev), spd = arr.map(x => x.ads);
+  const rMax = Math.max(...rev) * 1.08, sMax = Math.max(...spd) * 1.6;
+  const X = i => PL_ + i / (arr.length - 1) * iw, Yr = v => PT + ih - v / rMax * ih, Ys = v => PT + ih - v / sMax * ih;
+  let g = "";
+  for (let i = 0; i <= 4; i++) { const y = PT + ih - i / 4 * ih;
+    g += '<line class="gl" x1="' + PL_ + '" y1="' + y.toFixed(1) + '" x2="' + (W - PR) + '" y2="' + y.toFixed(1) + '"/>' +
+      '<text class="ax" x="' + (PL_ - 8) + '" y="' + (y + 3.5).toFixed(1) + '" text-anchor="end">' + k$(rMax * i / 4) + "</text>" +
+      '<text class="ax" x="' + (W - PR + 8) + '" y="' + (y + 3.5).toFixed(1) + '">' + k$(sMax * i / 4) + "</text>"; }
+  const area = "M" + X(0) + "," + (PT + ih) + " " + rev.map((v, i) => X(i).toFixed(1) + "," + Yr(v).toFixed(1)).join(" L ") +
+    " L" + X(arr.length - 1) + "," + (PT + ih) + " Z";
+  const line = "M" + rev.map((v, i) => X(i).toFixed(1) + "," + Yr(v).toFixed(1)).join(" L ");
+  const sl = "M" + spd.map((v, i) => X(i).toFixed(1) + "," + Ys(v).toFixed(1)).join(" L ");
+  let marks = "";
+  arr.forEach((x, i) => { if (x.why) marks += '<line x1="' + X(i).toFixed(1) + '" y1="' + PT + '" x2="' + X(i).toFixed(1) +
+    '" y2="' + (PT + ih) + '" stroke="var(--s5)" stroke-width="1" stroke-dasharray="3 3"/><circle cx="' +
+    X(i).toFixed(1) + '" cy="' + Yr(x.rev).toFixed(1) + '" r="3.5" fill="var(--s5)"><title>' + dstr(x.date) +
+    " \u00b7 " + x.why + "</title></circle>"; });
+  let ticks = "";
+  for (let i = 0; i < arr.length; i += Math.ceil(arr.length / 8))
+    ticks += '<text class="ax" x="' + X(i).toFixed(1) + '" y="' + (H - 6) + '" text-anchor="middle">' + dstr(arr[i].date) + "</text>";
+  $("ts").innerHTML = '<defs><linearGradient id="ga" x1="0" x2="0" y1="0" y2="1">' +
+    '<stop offset="0%" stop-color="var(--s1)" stop-opacity="var(--grad)"/>' +
+    '<stop offset="100%" stop-color="var(--s1)" stop-opacity="0"/></linearGradient></defs>' + g +
+    '<path d="' + area + '" fill="url(#ga)"/><path d="' + line + '" fill="none" stroke="var(--s1)" stroke-width="2" stroke-linejoin="round"/>' +
+    '<path d="' + sl + '" fill="none" stroke="var(--s2)" stroke-width="1.6" stroke-dasharray="4 3"/>' + marks + ticks;
+  $("tsSub").textContent = dstr(arr[0].date) + " \u2013 " + dstr(arr[arr.length - 1].date) + " \u00b7 left revenue, right spend";
+}
+
+function renderFunnel() {
+  const T = roll(slice()), r = mulberry32(400 + win);
+  const rV = 0.42 + r() * 0.05, rC = 0.28 + r() * 0.05, rK = 0.43 + r() * 0.05;
+  const views = Math.round(T.sessions * rV), cart = Math.round(views * rC), chk = Math.round(cart * rK);
+  const st = [["Sessions", T.sessions, "var(--s1)"], ["Product views", views, "var(--s6)"],
+    ["Add to cart", cart, "var(--s3)"], ["Checkout started", chk, "var(--s2)"], ["Purchased", T.orders, "var(--s4)"]];
+  $("fn").innerHTML = st.map(([n, v, c], i) => {
+    const w = v / st[0][1] * 100, drop = i ? (v / st[i - 1][1] * 100).toFixed(1) : null;
+    return '<div><div class="fstage"><div class="fbar" style="width:' + Math.max(w, 18).toFixed(1) + "%;background:" + c +
+      '">' + n + '</div><span class="fnum">' + v.toLocaleString("en-US") + "</span></div>" +
+      (drop ? '<div class="fdrop">\u2514 <b>' + drop + "%</b> continue</div>" : "") + "</div>";
+  }).join("");
+  $("fnSub").textContent = (T.orders / T.sessions * 100).toFixed(2) + "% end to end";
+  $("fnNote").innerHTML = "Largest drop is <b>product view to cart</b>. One point there is worth about " +
+    usd(T.rev * 0.033) + " over this window.";
+}
+
+const CH = [["Meta","meta","var(--s1)",.288],["Pinterest","pinterest","var(--s3)",.212],["Google","google","var(--s2)",.146],
+            ["Email",null,"var(--s6)",.104],["Organic search",null,"var(--s4)",.152],["Direct",null,"var(--s5)",.098]];
+function renderChannels() {
+  const T = roll(slice());
+  const tot = CH.reduce((a, c) => a + c[3], 0);
+  $("ch").innerHTML = CH.map(([n, key, c, sh]) => {
+    const spend = key ? T[key] : (n === "Email" ? Math.round(T.software * 0.9) : 0);
+    const ar = T.rev * sh * 1.11, orders = T.orders * sh;
+    return "<tr><td class='l'><span class='tag' style='background:" + c + "'></span>" + n + "</td><td>" +
+      (spend ? usd(spend) : "\u2014") + "</td><td>" + usd(ar) + "</td><td class='" +
+      (spend && ar / spend < 2 ? "warnx" : "") + "'>" + (spend ? (ar / spend).toFixed(2) + "x" : "\u2014") + "</td><td>" +
+      (spend ? "$" + (spend / orders).toFixed(2) : "\u2014") + "</td><td>" + (sh / tot * 100).toFixed(1) +
+      "%<span class='mb'><i style='width:" + (sh / Math.max(...CH.map(x => x[3])) * 100).toFixed(0) +
+      "%;background:" + c + "'></i></span></td></tr>";
+  }).join("");
+  $("chNote").innerHTML = "Attributed revenue sums to <b>111% of actual</b> \u2014 platforms both claim the same order. " +
+    "Only the blended figure ties to the P&amp;L in Overview.";
+}
+
+function renderScatter() {
+  const arr = SERIES.slice(N - Math.max(win, 14));
+  const W = 520, H = 250, PL_ = 50, PR = 12, PT = 12, PB = 30, iw = W - PL_ - PR, ih = H - PT - PB;
+  const xs = arr.map(x => x.ads), ys = arr.map(x => x.rev);
+  const xMax = Math.max(...xs) * 1.08, yMax = Math.max(...ys) * 1.08;
+  const X = v => PL_ + v / xMax * iw, Y = v => PT + ih - v / yMax * ih;
+  let g = "";
+  for (let i = 0; i <= 4; i++) { const y = PT + ih - i / 4 * ih;
+    g += '<line class="gl" x1="' + PL_ + '" y1="' + y.toFixed(1) + '" x2="' + (W - PR) + '" y2="' + y.toFixed(1) + '"/>' +
+      '<text class="ax" x="' + (PL_ - 8) + '" y="' + (y + 3.5).toFixed(1) + '" text-anchor="end">' + k$(yMax * i / 4) + "</text>" +
+      '<text class="ax" x="' + (PL_ + i / 4 * iw).toFixed(1) + '" y="' + (H - 8) + '" text-anchor="middle">' + k$(xMax * i / 4) + "</text>"; }
+  const kf = ys.reduce((a, y, i) => a + y / Math.sqrt(xs[i] || 1), 0) / ys.length;
+  let curve = "M";
+  for (let i = 0; i <= 40; i++) { const sx = xMax * i / 40;
+    curve += X(sx).toFixed(1) + "," + Y(kf * Math.sqrt(sx)).toFixed(1) + (i < 40 ? " L" : ""); }
+  const dots = arr.map(d => '<circle cx="' + X(d.ads).toFixed(1) + '" cy="' + Y(d.rev).toFixed(1) + '" r="3.4" fill="' +
+    (d.why ? "var(--s5)" : "var(--s1)") + '" fill-opacity="' + (d.why ? 1 : .6) + '"><title>' + dstr(d.date) +
+    " \u00b7 spend " + usd(d.ads) + " \u00b7 revenue " + usd(d.rev) + (d.why ? " \u00b7 " + d.why : "") + "</title></circle>").join("");
+  $("sc").innerHTML = g + '<path d="' + curve + '" fill="none" stroke="var(--s2)" stroke-width="1.6" stroke-dasharray="5 4"/>' + dots;
+  $("scNote").innerHTML = "The curve flattens: past roughly <b>" + k$(xMax * 0.55) + " a day</b>, extra spend buys progressively less.";
+}
+
+function renderCohorts() {
+  const weeks = [];
+  for (let w = 0; (w + 1) * 7 <= N; w++) weeks.push(S(SERIES.slice(w * 7, w * 7 + 7), "orders"));
+  const rnd = mulberry32(77), R = [0.262,0.171,0.128,0.104,0.086,0.072,0.061], M = [];
+  weeks.forEach((total, w) => {
+    let rep = 0; const owed = [];
+    for (let c = 0; c < w; c++) { const lag = w - c;
+      const v = lag <= R.length ? Math.round(M[c][0] * R[lag - 1] * (0.88 + rnd() * 0.24)) : 0;
+      owed.push(v); rep += v; }
+    M.push([Math.max(1, total - rep)]);
+    owed.forEach((v, c) => { M[c][w - c] = v; });
+  });
+  const n = 8, first = Math.max(0, M.length - n), cols = 8;
+  let html = '<div class="hlab"></div>';
+  for (let p = 0; p < cols; p++) html += '<div class="hlab c">W' + p + "</div>";
+  for (let i = 0; i < n; i++) {
+    const c = first + i, size = M[c][0];
+    html += '<div class="hlab">' + dstr(SERIES[c * 7].date) + "</div>";
+    for (let p = 0; p < cols; p++) {
+      const v = M[c][p];
+      if (v === undefined) { html += '<div class="ccell" style="background:var(--tile-2)"></div>'; continue; }
+      const pv = v / size * 100, a = p === 0 ? 1 : Math.min(1, pv / 30);
+      html += '<div class="ccell" style="background:rgba(var(--heat-a),' + (0.10 + a * 0.9).toFixed(2) + ');color:' +
+        (a > 0.55 ? "var(--on-strong)" : "var(--tx-2)") + '" title="' + dstr(SERIES[c * 7].date) + " cohort \u00b7 week " +
+        p + " \u00b7 " + v.toLocaleString("en-US") + ' orders">' + pv.toFixed(0) + "</div>";
+    }
+  }
+  const co = $("co"); co.style.gridTemplateColumns = "58px repeat(" + cols + ",1fr)"; co.innerHTML = html;
+  const cells = M.reduce((a, r) => a + r.reduce((x, y) => x + (y || 0), 0), 0);
+  const wk = weeks.reduce((a, b) => a + b, 0);
+  $("coNote").innerHTML = "Solved from " + wk.toLocaleString("en-US") + " orders across " + M.length +
+    " weeks, so every cell traces to an order" + (cells === wk ? "" : " (residual " + (wk - cells) + ")") +
+    ". Fixed 90-day lookback \u2014 retention over a short window would mean nothing.";
+}
+
+function renderHours() {
+  const rnd = mulberry32(31), shape = [];
+  for (let d = 0; d < 7; d++) for (let h = 0; h < 24; h++)
+    shape.push((Math.exp(-Math.pow(h - 12.5, 2) / 12) * 0.85 + Math.exp(-Math.pow(h - 20.5, 2) / 7)) * WD[d] * (0.7 + rnd() * 0.6));
+  const orders = roll(slice()).orders, tot = shape.reduce((a, b) => a + b, 0);
+  const cells = shape.map(v => v / tot * orders), hi = Math.max(...cells);
+  let peak = { v:0, d:0, h:0 };
+  cells.forEach((v, i) => { if (v > peak.v) peak = { v, d:Math.floor(i / 24), h:i % 24 }; });
+  let html = '<div class="hlab"></div>';
+  for (let h = 0; h < 24; h++) html += '<div class="hlab c">' + (h % 6 === 0 ? h : "") + "</div>";
+  for (let d = 0; d < 7; d++) { html += '<div class="hlab">' + DOW[d] + "</div>";
+    for (let h = 0; h < 24; h++) { const v = cells[d * 24 + h], a = v / hi;
+      html += '<div class="hcell" style="background:rgba(var(--heat-b),' + (0.06 + a * 0.94).toFixed(2) + ')" title="' +
+        DOW[d] + " " + h + ":00 \u00b7 " + Math.round(v).toLocaleString("en-US") + ' orders"></div>'; } }
+  const hm = $("hm"); hm.style.gridTemplateColumns = "34px repeat(24,1fr)"; hm.innerHTML = html;
+  const eve = cells.filter((_, i) => (i % 24) >= 18 && (i % 24) <= 22).reduce((a, b) => a + b, 0);
+  $("hmNote").innerHTML = "Heaviest hour is <b>" + DOW[peak.d] + " " + peak.h + ":00</b>. The 18:00\u201322:00 block carries <b>" +
+    (eve / orders * 100).toFixed(0) + "%</b> of orders, but paid budgets run flat across the day.";
+}
+
+const SKU = [["Ember Candle 220g",.24,.62,2,"var(--s2)"],["Slate Diffuser",.18,.58,34,"var(--s1)"],
+  ["Linen Throw",.15,.44,21,"var(--s3)"],["Ceramic Mug Set",.12,.51,47,"var(--s6)"],
+  ["Nordic Wool Runner",.11,.39,63,"var(--s4)"],["Amber Glass Vase",.09,.55,12,"var(--s5)"],
+  ["Cedar Room Spray",.07,.66,29,"var(--s2)"],["Brass Wick Trimmer",.04,.71,88,"var(--s1)"]];
+function renderProducts() {
+  const T = roll(slice()), rnd = mulberry32(9);
+  $("sk").innerHTML = SKU.map(([n, sh, mg, cov, c]) => {
+    const ser = Array.from({ length:14 }, () => 0.45 + rnd() * 0.55), hi = Math.max(...ser);
+    const bars = ser.map(v => '<span style="display:inline-block;width:3px;height:' + (v / hi * 18).toFixed(0) +
+      'px;background:' + c + ';opacity:.8;border-radius:1px;margin-right:1px;vertical-align:bottom"></span>').join("");
+    return "<tr><td class='l'><span class='tag' style='background:" + c + "'></span>" + n + "</td><td>" +
+      Math.round(T.orders * sh).toLocaleString("en-US") + "</td><td>" + usd(T.rev * sh) + "</td><td>" +
+      (mg * 100).toFixed(0) + "%</td><td style='line-height:0'>" + bars + "</td><td class='" +
+      (cov < 7 ? "warnx" : cov > 60 ? "dim" : "") + "'>" + cov + "d" + (cov < 7 ? " \u26a0" : "") + "</td></tr>";
+  }).join("");
+}
+
+const GEO = [["United States",.42,"var(--s1)"],["United Kingdom",.18,"var(--s6)"],["Germany",.11,"var(--s3)"],
+             ["Canada",.09,"var(--s4)"],["Australia",.07,"var(--s2)"],["Rest of world",.13,"var(--s5)"]];
+const RR = [["Damaged in transit",.34,"var(--s5)"],["Wrong item sent",.22,"var(--s2)"],["Changed mind",.19,"var(--s3)"],
+            ["Arrived late",.14,"var(--s1)"],["Quality below expectation",.11,"var(--s6)"]];
+function allocate(defs, pick, seed) {
+  const rnd = mulberry32(seed), acc = defs.map(() => 0);
+  slice().forEach(d => { const w = defs.map(x => x[1] * (0.80 + rnd() * 0.40));
+    const t = w.reduce((a, b) => a + b, 0); w.forEach((v, i) => acc[i] += pick(d) * v / t); });
+  return acc;
+}
+function renderLists() {
+  const g = allocate(GEO, d => d.rev, 51), gT = g.reduce((a, b) => a + b, 0), gM = Math.max(...g);
+  $("geo").innerHTML = GEO.map(([n, , c], i) => '<div class="row"><span>' + n + '</span><span class="nv">' +
+    usd(g[i]) + " \u00b7 " + (g[i] / gT * 100).toFixed(0) + '%</span><span class="bar2"><i style="width:' +
+    (g[i] / gM * 100).toFixed(0) + '%;background:' + c + '"></i></span></div>').join("");
+  const r = allocate(RR, d => d.refunds, 63), rT = r.reduce((a, b) => a + b, 0), rM = Math.max(...r);
+  $("rr").innerHTML = RR.map(([n, , c], i) => '<div class="row"><span>' + n + '</span><span class="nv">' +
+    usd(r[i]) + '</span><span class="bar2"><i style="width:' + (r[i] / rM * 100).toFixed(0) + '%;background:' +
+    c + '"></i></span></div>').join("");
+  $("rrSub").textContent = usd(rT) + " total";
+}
+
+/* ================= wiring ================= */
+/* ================= SLACK DIGEST ================= */
+function renderSlack() {
+  const d = SERIES[N - 1], wk = SERIES[N - 8];
+  const m = move(d.profit, wk.profit);
+  const marg = d.profit / d.rev * 100, adSh = d.ads / d.rev * 100;
+
+  /* the weakest store on the day, so the post carries a finding and not just figures */
+  let worst = null;
+  if (store === "all") {
+    SID.forEach(id => {
+      const r = BOOK[id][N - 1], mg = r.profit / r.rev * 100;
+      if (!worst || mg < worst.mg) worst = { id, mg, r };
+    });
+  }
+  const port = marg;
+
+  const lines = [
+    "<span class='ln'><b>Daily P&amp;L \u00b7 " + FULL[DOW[d.dow]] + ", " + d.date.getDate() + " " + MONF[d.date.getMonth()] + "</b></span>",
+    "<span class='ln'>Profit <b>" + usd(d.profit) + "</b> \u00b7 <span class='" + (m.dn ? "flag" : "ok") + "'>" +
+      m.t + "</span> on last " + FULL[DOW[d.dow]] + "</span>",
+    "<span class='ln'>Net revenue " + usd(d.rev) + " \u00b7 margin " + marg.toFixed(1) +
+      "% \u00b7 " + d.orders.toLocaleString("en-US") + " orders</span>",
+    "<span class='ln'>Ad spend " + usd(d.ads) + " \u00b7 " + adSh.toFixed(1) + "% of revenue</span>"
+  ];
+  if (worst && worst.mg < port - 1.5)
+    lines.push("<span class='ln flag'>\u26a0 " + SDEF[worst.id].name + " kept " + worst.mg.toFixed(1) +
+      "% against " + port.toFixed(1) + "% across the portfolio. Advertising there took " +
+      (worst.r.ads / worst.r.rev * 100).toFixed(0) + "% of revenue.</span>");
+  else if (d.why)
+    lines.push("<span class='ln flag'>\u26a0 " + (d.whoWhy ? d.whoWhy + ": " : "") + d.why + ".</span>");
+  else {
+    const t30 = roll(SERIES.slice(N - 30)), avg = t30.rev ? t30.profit / t30.rev * 100 : 0;
+    if (marg < avg - 2)
+      lines.push("<span class='ln flag'>\u26a0 Margin " + marg.toFixed(1) + "% against a 30-day average of " +
+        avg.toFixed(1) + "%. Advertising took " + adSh.toFixed(0) + "% of revenue.</span>");
+    else
+      lines.push("<span class='ln ok'>\u2713 Nothing outside its normal range. 30-day average margin " +
+        avg.toFixed(1) + "%.</span>");
+  }
+
+  $("slackMsg").innerHTML = lines.join("");
+  $("slackFoot").textContent = "Next weekly roll-up posts Monday 08:00 \u00b7 " +
+    (store === "all" ? STORES.length + " stores" : SDEF[store].name) + " \u00b7 reported in " + disp;
+}
+
+/* ================= STORES ================= */
+function renderStores() {
+  const ids = shown(), rows = ids.map(id => ({ d:SDEF[id], t:rollStore(id) }));
+  const totProfit = rows.reduce((a, r) => a + r.t.profit, 0);
+  const best = Math.max(...rows.map(r => Math.abs(r.t.profit))) || 1;
+
+  $("st").innerHTML = rows.map(({ d, t }) => {
+    const mg = t.rev ? t.profit / t.rev * 100 : 0;
+    const share = totProfit ? t.profit / totProfit * 100 : 0;
+    return "<tr><td class='l'>" + d.name + "<span class='cur'>" + d.cur + "</span></td>" +
+      "<td class='l'>" + d.market + "</td>" +
+      "<td>" + usd(t.rev) + "</td>" +
+      "<td class='" + (t.rev && t.ads / t.rev > 0.33 ? "warnx" : "") + "'>" + usd(t.ads) + "</td>" +
+      "<td>" + usd(t.cogs) + "</td>" +
+      "<td class='" + (t.profit < 0 ? "warnx" : "") + "'>" + usd(t.profit) + "</td>" +
+      "<td class='" + (mg < 8 ? "warnx" : "") + "'>" + mg.toFixed(1) + "%</td>" +
+      "<td>" + share.toFixed(1) + "%<span class='mb'><i style='width:" +
+      Math.max(0, Math.abs(t.profit) / best * 100).toFixed(0) + "%;background:" +
+      (t.profit < 0 ? "var(--bad)" : "var(--s1)") + "'></i></span></td></tr>";
+  }).join("");
+
+  $("stSub").textContent = ids.length + (ids.length === 1 ? " store \u00b7 " : " stores \u00b7 ") + label();
+
+  const others = [...new Set(STORES.map(x => x.cur))].filter(c => c !== disp);
+  $("fxNote").innerHTML = "Every figure is converted to <b>" + disp + "</b> so the stores can be compared and summed. " +
+    (others.length
+      ? "Rates used: " + others.map(c => "1 " + c + " = " + (FX[c] / FX[disp]).toFixed(3) + " " + disp).join(" \u00b7 ") +
+        ". A store's own books stay in its native currency, tagged beside its name."
+      : "All stores in view already trade in " + disp + ".");
+}
+
+function render() {
+  if (mode === "ov") { renderOverview(); renderSlack(); }
+  else { renderKpis(); renderStores(); renderTrend(); renderFunnel(); renderChannels(); renderScatter();
+         renderCohorts(); renderHours(); renderProducts(); renderLists(); }
+  $("foot").innerHTML = "<b>Sample data.</b> Four fictional stores across three currencies, built to show the " +
+    "structure of the reporting, not the numbers of any real business. \u00b7 Updated 06:12, 12 August 2026 \u00b7 " +
+    "the last three days are provisional, since roughly a fifth of refunds arrive more than 72 hours after the " +
+    "sale \u00b7 Every panel, and the Slack post, is computed from one 90-day series, so no two of them can disagree.";
+}
+
+function setMode(m) {
+  mode = m;
+  $("ov").hidden = m !== "ov"; $("an").hidden = m !== "an";
+  document.querySelectorAll('[data-m]').forEach(b => b.setAttribute("aria-selected", String(b.dataset.m === m)));
+  render();
+}
+
+document.querySelectorAll("[data-m]").forEach(b => b.addEventListener("click", () => setMode(b.dataset.m)));
+
+$("periods").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  document.querySelectorAll("#periods button").forEach(x => x.setAttribute("aria-pressed", "false"));
+  b.setAttribute("aria-pressed", "true"); win = +b.dataset.w; render();
+});
+
+/* a finding in Overview should be able to hand you its evidence in Analysis */
+document.addEventListener("click", e => {
+  const j = e.target.closest("[data-go]"); if (!j) return;
+  setMode("an");
+  requestAnimationFrame(() => {
+    const t = $(j.dataset.go); if (!t) return;
+    t.scrollIntoView({ behavior:"smooth", block:"center" });
+    t.classList.remove("flash"); void t.offsetWidth; t.classList.add("flash");
+  });
+});
+
+/* store + reporting currency */
+$("storeSel").innerHTML = '<option value="all">All stores (' + STORES.length + ')</option>' +
+  STORES.map(x => '<option value="' + x.id + '">' + x.name + " \u00b7 " + x.cur + "</option>").join("");
+$("storeSel").addEventListener("change", e => { store = e.target.value; rebuild(); render(); });
+$("curSel").addEventListener("change", e => { disp = e.target.value; render(); });
+
+const tb = $("theme");
+const labelTheme = () => { const dark = document.documentElement.dataset.theme !== "light";
+  tb.textContent = dark ? "Light" : "Dark";
+  tb.setAttribute("aria-label", "Switch to " + (dark ? "light" : "dark") + " theme"); };
+tb.addEventListener("click", () => { const el = document.documentElement;
+  el.dataset.theme = el.dataset.theme === "light" ? "dark" : "light"; labelTheme(); });
+labelTheme();
+
+render();
+</script>
+</body>
+</html>
