@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Quick Quiz — Find Your Fit</title>
+<style>
+  :root{
+    --ink:#0B3A47;
+    --brand:#1488A6;
+    --brand-bright:#18B5CE;
+    --lime:#7EC842;
+    --bg:#EDF2F3;
+    --card:#FFFFFF;
+    --muted:#5C7782;
+    --radius:16px;
+    --shadow:0 1px 2px rgba(11,58,71,.05), 0 14px 34px -20px rgba(11,58,71,.3);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Segoe UI",system-ui,-apple-system,sans-serif;
+    background:linear-gradient(160deg,#E4F0F2,#EDF2F3 60%);
+    color:var(--ink);
+    min-height:100vh;
+    display:flex;align-items:center;justify-content:center;
+    padding:20px;
+  }
+  .quiz{
+    background:var(--card);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:34px 30px;
+    width:100%;max-width:460px;
+  }
+  .logo{
+    width:44px;height:44px;border-radius:12px;
+    background:linear-gradient(150deg,var(--brand-bright),var(--brand));
+    display:grid;place-items:center;margin-bottom:14px;
+    color:#fff;font-weight:800;font-size:20px;
+    box-shadow:0 6px 16px -6px rgba(24,181,206,.6);
+  }
+  .bar{height:6px;background:#E1ECEE;border-radius:6px;margin:16px 0 20px;overflow:hidden}
+  .bar span{display:block;height:100%;background:linear-gradient(90deg,var(--brand-bright),var(--brand));border-radius:6px;transition:width .3s}
+  h1{font-size:22px;letter-spacing:-.02em}
+  .sub{color:var(--muted);font-size:14px;margin-top:4px}
+  .q{font-size:17px;font-weight:700;margin:18px 0 12px}
+  .opt{
+    display:block;width:100%;text-align:left;padding:13px 15px;
+    border:1.5px solid #DCE8EB;border-radius:11px;background:#FBFDFD;
+    font-family:inherit;font-size:15px;color:var(--ink);cursor:pointer;
+    margin-bottom:9px;transition:border-color .12s,background .12s;
+  }
+  .opt:hover{border-color:var(--brand);background:#F2F9FA}
+  .opt.selected{border-color:var(--brand);background:#E4F4F7}
+  .next{
+    width:100%;margin-top:14px;padding:14px;
+    background:linear-gradient(150deg,var(--brand-bright),var(--brand));
+    color:#fff;border:none;border-radius:11px;font-size:15px;font-weight:700;
+    font-family:inherit;cursor:pointer;box-shadow:0 8px 18px -10px rgba(11,58,71,.5);
+  }
+  .next:disabled{opacity:.45;cursor:not-allowed}
+  .next.ghost{background:#E1ECEE;color:var(--ink);box-shadow:none}
+  input[type=email]{
+    width:100%;padding:13px 15px;border-radius:11px;border:1.5px solid #DCE8EB;
+    background:#FBFDFD;font-size:15px;font-family:inherit;color:var(--ink);outline:none;
+  }
+  input[type=email]:focus{border-color:var(--brand)}
+  .done{text-align:center;padding:10px 0}
+  .done .big{font-size:40px;margin-bottom:10px}
+  .done h2{font-size:20px;margin-bottom:8px}
+  .done p{color:var(--muted);font-size:14px;line-height:1.5}
+  .note{color:var(--muted);font-size:12px;margin-top:16px;text-align:center}
+</style>
+</head>
+<body>
+  <div class="quiz">
+    <div class="logo">✦</div>
+    <div class="bar"><span id="bar" style="width:33%"></span></div>
+    <div id="wrap"></div>
+    <div class="note">Sample quiz · placeholder content</div>
+  </div>
+
+<script>
+const QUESTIONS = [
+  {
+    q: "What is your main goal right now?",
+    options: ["Grow my business", "Save time on manual work", "Improve my online presence", "Not sure yet"]
+  },
+  {
+    q: "How did you hear about us?",
+    options: ["Social media", "A friend or colleague", "Online search", "Another way"]
+  },
+  {
+    q: "What matters most to you?",
+    options: ["Speed and efficiency", "Quality and polish", "Affordable pricing", "A partner I can trust"]
+  }
+];
+
+let step = 0;
+let answers = [];
+let email = "";
+
+const wrap = document.getElementById("wrap");
+const bar = document.getElementById("bar");
+
+function render() {
+  if (step < QUESTIONS.length) {
+    const item = QUESTIONS[step];
+    const selected = answers[step] || "";
+    wrap.innerHTML = `
+      <h1>Quick Quiz</h1>
+      <p class="sub">Answer ${step + 1} of ${QUESTIONS.length}</p>
+      <div class="q">${item.q}</div>
+      ${item.options.map(o =>
+        `<button class="opt${selected === o ? " selected" : ""}" onclick="pick(this,'${o.replace(/'/g, "\\'")}')">${o}</button>`
+      ).join("")}
+      <button class="next" id="next" ${selected ? "" : "disabled"} onclick="goNext()">Continue</button>
+    `;
+  } else if (step === QUESTIONS.length) {
+    wrap.innerHTML = `
+      <h1>Almost there</h1>
+      <p class="sub">Drop your email and we'll send your personalized result.</p>
+      <div style="margin-top:18px">
+        <input type="email" id="email" placeholder="you@example.com" autocomplete="email" />
+      </div>
+      <button class="next" id="next" disabled onclick="submit()">Get my result</button>
+      <button class="next ghost" style="margin-top:8px" onclick="back()">Back</button>
+    `;
+    document.getElementById("email").addEventListener("input", e => {
+      document.getElementById("next").disabled = !e.target.value.includes("@");
+    });
+  } else {
+    wrap.innerHTML = `
+      <div class="done">
+        <div class="big">🎉</div>
+        <h2>You're all set!</h2>
+        <p>Thanks ${email || "friend"}! Your result is on its way.</p>
+        <button class="next ghost" style="margin-top:16px" onclick="resetAll()">Take it again</button>
+      </div>
+    `;
+  }
+}
+
+function pick(btn, val) {
+  answers[step] = val;
+  document.querySelectorAll(".opt").forEach(b => b.classList.remove("selected"));
+  btn.classList.add("selected");
+  document.getElementById("next").disabled = false;
+}
+
+function goNext() {
+  step++;
+  bar.style.width = ((step + 1) / (QUESTIONS.length + 1) * 100) + "%";
+  render();
+}
+
+function back() {
+  step--;
+  bar.style.width = ((step + 1) / (QUESTIONS.length + 1) * 100) + "%";
+  render();
+}
+
+function submit() {
+  email = document.getElementById("email").value.trim();
+  step++;
+  bar.style.width = "100%";
+  render();
+}
+
+function resetAll() {
+  step = 0; answers = []; email = "";
+  bar.style.width = "33%";
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
