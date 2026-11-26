@@ -1233,7 +1233,6 @@
             .client-project__preview img { display: block; width: 100%; height: auto; }
             .client-project p { color: var(--text-secondary); line-height: 1.65; }
             .client-project__tech { margin: 0.8rem 0; font: 12px/1.55 var(--font-mono); }
-            .client-project__tools { grid-column: 1 / -1; }
             .client-project__demo {
                 display: inline-flex;
                 align-items: center;
@@ -1819,11 +1818,11 @@
             <section class="hero" id="hero">
                 <p class="hero__greeting">AI Specialist and Systems Developer</p>
                 <h1 class="hero__name big-heading">Chanryle Jay Cagara.</h1>
-                <h2 class="hero__tagline big-heading">I build hiring and scheduling tools.</h2>
+                <h2 class="hero__tagline big-heading">I turn operations into systems.</h2>
                 <p class="hero__description">
-                    At Evolution Skilled Solution (ESS), I built the recruitment workspace and reconciled
-                    <strong>3,927&nbsp;records</strong> between monday.com and PostgreSQL. For Devoted Care Services,
-                    I built a scheduling app that helps staff find caregivers for open shifts.
+                    At Evolution Skilled Solution (ESS), I built the platform recruiters use to track
+                    applicants and schedule inductions. For a US home-care agency, I built a scheduling
+                    app that helps staff find caregivers for open shifts.
                 </p>
                 <div class="hero__actions">
                     <a href="./ess-recruitment-demo/" class="hero__cta">ESS Recruitment</a>
@@ -2160,38 +2159,12 @@
                         </a>
                         <div>
                             <h3 class="project-featured__title"><a href="./ess-recruitment-demo/">ESS recruitment workspace</a></h3>
-                            <p>Recruiters used to open separate monday.com boards to check an application and its induction.
-                                I linked the records so staff can check references, schedule an induction and record attendance
-                                from one profile. The ESS induction board showed 37 records with session dates from 27 October
-                                to 25 November 2026, including 17 marked attended. The demo uses fictional applicants.</p>
+                            <p>ESS tracked applications, inductions and placements on separate monday.com boards.
+                                A recruiter following up on an induction had to look up the application and booking separately.
+                                I linked those records so staff can check an applicant’s stage, review outstanding references
+                                and book an induction from one profile. Try it with a fictional applicant in the demo.</p>
                             <a class="client-project__demo" href="./ess-recruitment-demo/">Explore the recruitment demo</a>
                         </div>
-                        <dl class="tool-list client-project__tools" aria-label="Tools used on the ESS project">
-                            <div>
-                                <dt>Web app &amp; database</dt>
-                                <dd>Next.js, React, TypeScript and Tailwind CSS, with PostgreSQL on Neon.</dd>
-                            </div>
-                            <div>
-                                <dt>Recruitment platforms</dt>
-                                <dd>monday.com, JobAdder and Jotform connect to the workspace. Staff shortcuts open Xero and Connecteam.</dd>
-                            </div>
-                            <div>
-                                <dt>AI assistants</dt>
-                                <dd>I started with a custom GPT in ChatGPT. The chatbot inside the staff site uses the DeepSeek API.</dd>
-                            </div>
-                            <div>
-                                <dt>Hosting &amp; storage</dt>
-                                <dd>Hostinger and Vercel for hosting, Cloudflare Workers and the Cloudflare API for integrations, and Cloudflare R2 for applicant files.</dd>
-                            </div>
-                            <div>
-                                <dt>Google Workspace</dt>
-                                <dd>Gmail API for email, Google Drive API for files and Google Sheets API for recruitment spreadsheets.</dd>
-                            </div>
-                            <div>
-                                <dt>Lead sourcing &amp; alerts</dt>
-                                <dd>Apify and Google Apps Script support lead sourcing. WhatsApp delivers shift alerts and applicant updates.</dd>
-                            </div>
-                        </dl>
                     </article>
                     <article class="client-project fade-in">
                         <a class="client-project__preview" href="./devoted-shift-demo/index.html">
@@ -2593,9 +2566,9 @@
                         <div>
                             <p class="system-card__title">n8n diagnostic AI</p>
                             <p class="system-card__desc">
-                                My assistant gave the wrong diagnosis for an OpenAI workflow after it overlooked pinned test data.
-                                I changed it to inspect the saved input and trace it through the workflow before suggesting a fix.
-                                The case earned a qualified pass on retest.
+                                AI-powered workflow diagnostician with Universal Evidence Gate,
+                                LangChain diagnostic mode, version-locked knowledge base, and 60+
+                                shadow test validations. Live on Upwork.
                             </p>
                         </div>
                         <span class="system-card__stat system-card__stat--blue"
