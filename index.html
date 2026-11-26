@@ -3,24 +3,24 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Chanryle Jay Cagara | AI-Native Systems Developer</title>
+        <title>Chanryle Jay Cagara | AI Specialist and Systems Developer</title>
         <meta
             name="description"
-            content="AI-native systems developer — sole developer of a live scheduling platform for a US home-care agency. Full-stack, AI pipelines, CRM integration, automation."
+            content="Chanryle Jay Cagara builds recruitment software, AI assistants and workflow automation. Explore his work at ESS and try the Care scheduling app."
         />
         <meta
             name="keywords"
-            content="Systems Developer, AI Engineer, Automation, n8n, Next.js, TypeScript, Supabase, Portfolio"
+            content="AI Specialist, Systems Developer, Workflow Automation, API Integration, PostgreSQL, Next.js, n8n"
         />
         <meta name="author" content="Chanryle Jay Cagara" />
         <meta name="theme-color" content="#D97757" />
         <meta
             property="og:title"
-            content="Chanryle Jay Cagara | AI-Native Systems Developer"
+            content="Chanryle Jay Cagara | AI Specialist and Systems Developer"
         />
         <meta
             property="og:description"
-            content="AI-native systems developer — sole developer of a live scheduling platform for a US home-care agency. Full-stack, AI pipelines, CRM integration, automation."
+            content="Chanryle Jay Cagara builds recruitment software, AI assistants and workflow automation. Explore his work at ESS and try the Care scheduling app."
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://chanryle-cagara.vercel.app/" />
@@ -31,11 +31,11 @@
         <meta name="twitter:card" content="summary_large_image" />
         <meta
             name="twitter:title"
-            content="Chanryle Jay Cagara | AI-Native Systems Developer"
+            content="Chanryle Jay Cagara | AI Specialist and Systems Developer"
         />
         <meta
             name="twitter:description"
-            content="AI-native systems developer — sole developer of a live scheduling platform for a US home-care agency. Full-stack, AI pipelines, CRM integration, automation."
+            content="Chanryle Jay Cagara builds recruitment software, AI assistants and workflow automation. Explore his work at ESS and try the Care scheduling app."
         />
         <meta
             name="twitter:image"
@@ -733,31 +733,6 @@
                 align-items: center;
             }
 
-            .typewriter {
-                display: inline-block;
-                overflow: hidden;
-                white-space: nowrap;
-                border-right: 3px solid var(--accent-primary);
-                animation: blink-caret 0.75s step-end infinite;
-            }
-
-            @keyframes blink-caret {
-                from,
-                to {
-                    border-color: transparent;
-                }
-                50% {
-                    border-color: var(--accent-primary);
-                }
-            }
-
-            @media (max-width: 600px) {
-                .typewriter {
-                    white-space: normal;
-                    border-right: none;
-                }
-            }
-
             .hero__description {
                 margin: 15px 0 0;
                 max-width: 500px; /* Reduced from 540px for higher content density */
@@ -766,23 +741,40 @@
                 color: var(--text-secondary);
             }
 
-            .hero__cta {
-                display: inline-flex !important;
-                margin-top: 40px; /* Reduced from 50px */
-                padding: 1.1rem 1.6rem;
-                border: 1.5px solid var(--accent-primary);
-                border-radius: 4px;
-                font-family: var(--font-mono);
-                font-weight: 500;
-                font-size: var(--fz-sm);
-                color: var(--accent-primary);
-                transition: all var(--transition-fast);
-                line-height: 1;
+            .hero__actions {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 14px 24px;
+                margin-block-start: clamp(20px, 4vh, 32px);
             }
 
-            .hero__cta:hover {
-                background-color: var(--accent-subtle);
-                color: var(--accent-primary);
+            .hero__cta, .hero__contact {
+                display: inline-flex;
+                align-items: center;
+                min-height: 44px;
+                font-family: var(--font-mono);
+                font-size: var(--fz-sm);
+            }
+
+            .hero__cta {
+                padding: 0.85rem 1.25rem;
+                color: var(--bg-primary);
+                background: var(--accent-secondary);
+                border: 1px solid var(--accent-secondary);
+                border-radius: 4px;
+                font-weight: 600;
+            }
+
+            .hero__cta:hover, .hero__cta:focus-visible {
+                background: var(--text-primary);
+                color: var(--bg-primary);
+            }
+
+            .hero__contact {
+                color: var(--text-secondary);
+                text-decoration: underline;
+                text-underline-offset: 0.3em;
             }
 
             /* ========================================
@@ -1212,6 +1204,33 @@
             }
 
             /* Grid Projects (Muted Warm Aesthetics) */
+            .client-project {
+                display: grid;
+                grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+                align-items: center;
+                gap: clamp(1.5rem, 4vw, 3rem);
+            }
+            .client-project__preview {
+                display: block;
+                border: 1px solid var(--border-hover);
+                border-radius: 6px;
+                overflow: clip;
+            }
+            .client-project__preview img { display: block; width: 100%; height: auto; }
+            .client-project p { color: var(--text-secondary); line-height: 1.65; }
+            .client-project__tech { margin: 0.8rem 0; font: 12px/1.55 var(--font-mono); }
+            .client-project__demo {
+                display: inline-flex;
+                align-items: center;
+                min-height: 44px;
+                color: var(--accent-secondary);
+                font-family: var(--font-sans);
+                text-decoration: underline;
+                text-underline-offset: 0.25em;
+            }
+            @media (max-width: 700px) {
+                .client-project { grid-template-columns: minmax(0, 1fr); gap: 1rem; }
+            }
             .projects__other-heading {
                 text-align: center;
                 font-family: var(--font-sans);
@@ -1512,54 +1531,6 @@
                 color: var(--accent-primary);
             }
 
-            /* ========================================
-       LOADER
-       ======================================== */
-            .loader {
-                position: fixed;
-                inset: 0;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background-color: var(--bg-primary);
-                z-index: 9999;
-                transition:
-                    opacity 0.5s ease-out,
-                    visibility 0.5s ease-out;
-            }
-
-            .loader.hidden {
-                opacity: 0;
-                visibility: hidden;
-            }
-
-            .loader__logo {
-                width: 80px;
-                height: 80px;
-                border: 3px solid var(--accent-primary);
-                border-radius: 12px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-family: var(--font-mono);
-                font-size: 36px;
-                font-weight: 600;
-                color: var(--accent-primary);
-                animation: pulse 1s ease-in-out infinite;
-            }
-
-            @keyframes pulse {
-                0%,
-                100% {
-                    transform: scale(1);
-                    opacity: 1;
-                }
-                50% {
-                    transform: scale(1.05);
-                    opacity: 0.8;
-                }
-            }
-
             .contact__ctas {
                 display: flex;
                 gap: 20px;
@@ -1677,11 +1648,6 @@
         </style>
     </head>
     <body>
-        <!-- Loader -->
-        <div class="loader" id="loader">
-            <div class="loader__logo">C</div>
-        </div>
-
         <!-- Navigation -->
         <a href="#hero" class="skip-link">Skip to main content</a>
 
@@ -1836,17 +1802,18 @@
         <main>
             <!-- Hero Section -->
             <section class="hero" id="hero">
-                <p class="hero__greeting fade-in">Hi, my name is</p>
-                <h1 class="hero__name big-heading fade-in">Chanryle Jay Cagara.</h1>
-                <h2 class="hero__tagline big-heading fade-in">
-                    <span class="typewriter" id="typewriter"></span>
-                </h2>
-                <p class="hero__description fade-in">
-                    I'm an AI-native systems developer. On a recent freelance contract I was the sole developer of a live
-                    scheduling-intelligence platform that a US home-care agency runs its daily
-                    operations on. I design, build, ship, and verify production systems end to end.
+                <p class="hero__greeting">AI Specialist and Systems Developer</p>
+                <h1 class="hero__name big-heading">Chanryle Jay Cagara.</h1>
+                <h2 class="hero__tagline big-heading">I turn operations into systems.</h2>
+                <p class="hero__description">
+                    At Evolution Skilled Solution (ESS), I built the platform recruiters use to track
+                    applicants and schedule inductions. For a US home-care agency, I built a scheduling
+                    app that helps staff find caregivers for open shifts.
                 </p>
-                <a href="#contact" class="hero__cta fade-in">Get In Touch</a>
+                <div class="hero__actions">
+                    <a href="./devoted-shift-demo/find-coverage.html" class="hero__cta">Try the scheduling demo</a>
+                    <a href="#contact" class="hero__contact">Get in touch</a>
+                </div>
             </section>
 
             <!-- About Section -->
@@ -1855,32 +1822,18 @@
                 <div class="about__content">
                     <div class="about__text fade-in">
                         <p>
-                            I'm
-                            <strong style="color: var(--text-primary)">Chanryle Jay Cagara</strong>,
-                            an AI-native systems developer. On a freelance contract I was the sole developer of a
-                            production scheduling-intelligence platform for a US home-care agency —
-                            a full-stack system its schedulers run their day on, from coverage
-                            dashboards and a caregiver-matching engine to AI care-note triage and
-                            SMS automation. In a year I went from operations work to shipping
-                            production software for a paying client, end to end.
+                            I came to software development through recruitment, customer support and quality review.
+                            That experience shapes what I build. A recruiter should be able to see where an
+                            application stands, and a scheduler should be able to find someone to cover a shift.
                         </p>
                         <p>
-                            My work spans <strong>full-stack development</strong> (Next.js,
-                            TypeScript, Supabase, PostgreSQL), <strong>API integration</strong>
-                            (a healthcare CRM integrated end-to-end from a 12,500-line OpenAPI spec
-                            — including sanctioned production writes — plus SMS with 10DLC and
-                            webhooks), <strong>AI engineering</strong> (grounded agents with output
-                            validators, DeepSeek triage pipelines, Claude multi-agent workflows),
-                            and <strong>workflow automation</strong> (n8n systems like
-                            <strong>Shiny Gmail</strong> and <strong>Supervisor V1 Lean</strong>).
-                            Everything I list here is deployed and running — not tutorial work.
+                            As an <strong>AI Specialist at ESS</strong>, I connect the tools recruiters use
+                            every day. I reconciled 3,927 records between monday.com and PostgreSQL and built
+                            a DeepSeek assistant that answers staff questions about candidates and inductions.
                         </p>
                         <p>
-                            I excel at turning messy operations into systems people actually use —
-                            with the discipline to match: adversarial code review before every
-                            release, Playwright-verified deploys, audit trails, and honest data
-                            handling (no fabricated values, ever). I'm looking for a team where I
-                            can apply these skills to solve bigger problems.
+                            Previously, I designed, built and handed over a Care scheduling app as
+                            the sole developer for Devoted Care Services.
                         </p>
                         <p>Here are some technologies I work with:</p>
                         <ul class="about__skills">
@@ -1912,13 +1865,23 @@
             <section id="experience">
                 <h2 class="section-heading fade-in">Where I've Worked</h2>
                 <div class="experience__tabs fade-in">
-                    <div class="experience__tab-list" role="tablist">
+                    <div class="experience__tab-list" role="tablist" aria-label="Employers">
                         <button
                             class="experience__tab-btn active"
                             role="tab"
+                            id="tab-ess"
+                            aria-controls="panel-ess"
+                            aria-selected="true"
+                            data-tab="ess"
+                        >
+                            ESS
+                        </button>
+                        <button
+                            class="experience__tab-btn"
+                            role="tab"
                             id="tab-0"
                             aria-controls="panel-0"
-                            aria-selected="true"
+                            aria-selected="false"
                             data-tab="0"
                         >
                             Devoted Care
@@ -1968,36 +1931,46 @@
                         <div
                             class="experience__panel active"
                             role="tabpanel"
+                            id="panel-ess"
+                            aria-labelledby="tab-ess"
+                            data-panel="ess"
+                        >
+                            <h3 class="experience__title">
+                                AI Specialist <span>@ Evolution Skilled Solution (ESS)</span>
+                            </h3>
+                            <p class="experience__date">August 2026 – Present · Remote</p>
+                            <ul class="experience__duties">
+                                <li class="experience__duty">Built a Next.js recruitment platform from application to placement using Hostinger, PostgreSQL and Cloudflare Workers.</li>
+                                <li class="experience__duty">Reconciled 3,927 records between monday.com and PostgreSQL. Recruiters can track candidates, schedule inductions and follow up from one record.</li>
+                                <li class="experience__duty">Developed a custom ChatGPT assistant, then built a DeepSeek-powered version into the staff website for questions about applicants and inductions.</li>
+                                <li class="experience__duty">Automated lead sourcing and verification across five job platforms, with an estimated capacity of 10 to 30 leads per day.</li>
+                                <li class="experience__duty">Built WhatsApp shift alerts and applicant updates, and launched three marketing websites on Vercel for ESS, Synergy Connect and SP Recruitment.</li>
+                            </ul>
+                        </div>
+                        <div
+                            class="experience__panel"
+                            role="tabpanel"
                             id="panel-0"
                             aria-labelledby="tab-0"
                             data-panel="0"
                         >
                             <h3 class="experience__title">
-                                Systems Developer
-                                <span>@ Devoted Care Services (California, US) · Freelance Contract</span>
+                                AI Systems Developer
+                                <span>@ Devoted Care Services LLC</span>
                             </h3>
-                            <p class="experience__date">Jun 2026 – Jul 2026</p>
+                            <p class="experience__date">June 2026 – August 2026 · Freelance contract · California, US (remote)</p>
                             <ul class="experience__duties">
                                 <li class="experience__duty">
-                                    Sole developer of the agency's production scheduling-intelligence
-                                    platform — coverage command center, caregiver-client matching
-                                    engine, availability calendars, reports, and printable care forms,
-                                    used daily by real schedulers
+                                    Designed, built and handed over a Care scheduling app as the sole developer.
+                                    It ranked about 50 caregivers for each open shift using availability,
+                                    skills and client history.
                                 </li>
                                 <li class="experience__duty">
-                                    Integrated the agency's CRM end-to-end from a 12,500-line OpenAPI
-                                    spec, including its first sanctioned production writes — shipped
-                                    behind fail-closed kill switches with full audit logging
+                                    Connected AxisCare and OpenPhone so schedulers could send shift offers
+                                    by text and track replies.
                                 </li>
                                 <li class="experience__duty">
-                                    Built production AI pipelines: automated care-note risk triage on
-                                    a 30-minute cron and a grounded AI assistant with tool-sourced
-                                    facts and output validators (zero-fabrication design)
-                                </li>
-                                <li class="experience__duty">
-                                    Shipped SMS automation (OpenPhone, 10DLC-registered): automated
-                                    shift offers by text with inbound reply webhooks, plus per-user
-                                    auth (Supabase + RLS) and a system-wide audit trail
+                                    Used DeepSeek to screen care notes every 30 minutes and flag entries for staff review.
                                 </li>
                             </ul>
                         </div>
@@ -2134,90 +2107,31 @@
 
                 <!-- Featured Projects -->
                 <div class="projects__featured">
-                    <!-- Featured Project 0: Devoted Care -->
-                    <div class="project-featured fade-in">
-                        <a
-                            href="./devoted-shift-demo/index.html"
-                            class="project-featured__image"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            <img
-                                src="./images/devoted-shift-demo.png"
-                                alt="Devoted Care Scheduling Intelligence Platform — interactive demo"
-                                loading="lazy"
-                                width="800"
-                                height="500"
-                            />
+                    <article class="client-project fade-in">
+                        <a class="client-project__preview" href="./ess-recruitment-demo/">
+                            <img src="./ess-recruitment-demo/preview.jpg" alt="ESS candidate list with job roles and recruitment stages" width="1200" height="700" loading="lazy">
                         </a>
-                        <div class="project-featured__content">
-                            <p class="project-featured__overline">Featured Project · Client Work</p>
-                            <h3 class="project-featured__title">
-                                <a href="./devoted-shift-demo/index.html" target="_blank" rel="noopener noreferrer"
-                                    >Devoted Care — Scheduling Intelligence Platform</a
-                                >
-                            </h3>
-                            <p
-                                style="
-                                    font-family: var(--font-sans);
-                                    font-size: 13px;
-                                    color: var(--accent-primary);
-                                    margin-bottom: 10px;
-                                    font-weight: 500;
-                                "
-                            >
-                                Production system for a US home-care agency — built solo
-                            </p>
-                            <div class="project-featured__description">
-                                <p>
-                                    The platform I build and run as sole developer: schedulers use it
-                                    daily for coverage dashboards, a caregiver-client matching engine,
-                                    availability calendars, AI care-note triage on a 30-minute cron,
-                                    and SMS shift offers with inbound webhooks. Integrates the
-                                    agency's CRM end-to-end — including its first sanctioned
-                                    production writes behind fail-closed kill switches — with
-                                    per-user auth and full audit trails. The real system is
-                                    private (client data) — click through the interactive demo of
-                                    the caregiver module, a working copy with fictional data.
-                                </p>
-                            </div>
-                            <ul class="project-featured__tech">
-                                <li>Next.js 14</li>
-                                <li>TypeScript</li>
-                                <li>Supabase</li>
-                                <li>AxisCare API</li>
-                                <li>OpenPhone SMS</li>
-                                <li>DeepSeek AI</li>
-                                <li>Netlify</li>
-                            </ul>
-                            <div class="project-featured__links">
-                                <a
-                                    href="./devoted-shift-demo/index.html"
-                                    class="project-featured__link"
-                                    aria-label="Interactive Demo"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    >
-                                        <title>Interactive Demo</title>
-                                        <path
-                                            d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
-                                        ></path>
-                                        <polyline points="15 3 21 3 21 9"></polyline>
-                                        <line x1="10" y1="14" x2="21" y2="3"></line>
-                                    </svg>
-                                </a>
-                            </div>
+                        <div>
+                            <h3 class="project-featured__title"><a href="./ess-recruitment-demo/">ESS recruitment workspace</a></h3>
+                            <p>I built the staff platform that brings applications, inductions and placements into one place.
+                                In this demo, open a fictional applicant, check their progress or book an induction.</p>
+                            <p class="client-project__tech">Next.js · PostgreSQL · monday.com · DeepSeek API</p>
+                            <a class="client-project__demo" href="./ess-recruitment-demo/">Explore the recruitment demo</a>
                         </div>
-                    </div>
+                    </article>
+                    <article class="client-project fade-in">
+                        <a class="client-project__preview" href="./devoted-shift-demo/index.html">
+                            <img src="./images/devoted-shift-demo.png" alt="Care scheduling demo with the scheduler's daily overview" width="1200" height="640" loading="lazy">
+                        </a>
+                        <div>
+                            <h3 class="project-featured__title"><a href="./devoted-shift-demo/index.html">Devoted Care scheduling app</a></h3>
+                            <p>I designed, built and handed over this Care scheduling app as the sole developer.
+                                It ranked about 50 caregivers for each open shift using availability, skills and client history.
+                                Try finding overnight cover with fictional staff records.</p>
+                            <p class="client-project__tech">Next.js · Supabase · AxisCare · OpenPhone · DeepSeek API</p>
+                            <a class="client-project__demo" href="./devoted-shift-demo/find-coverage.html">Find cover for a sample shift</a>
+                        </div>
+                    </article>
 
                     <!-- Featured Project 1: Ano Ulam -->
                     <div class="project-featured fade-in">
@@ -2852,45 +2766,6 @@
                 }
             });
 
-            // ========================================
-            // LOADER
-            // ========================================
-            function hideLoader() {
-                const loader = document.getElementById("loader");
-                if (loader) {
-                    loader.classList.add("hidden");
-                }
-            }
-
-            window.addEventListener("load", () => {
-                setTimeout(hideLoader, 800);
-            });
-
-            setTimeout(hideLoader, 3000); // Safety fallback
-
-            // ========================================
-            // TYPEWRITER EFFECT
-            // ========================================
-            function startTypewriter() {
-                const typewriterElement = document.getElementById("typewriter");
-                if (!typewriterElement) return;
-
-                const typewriterText = "I turn operations into systems.";
-                let charIndex = 0;
-
-                function typeWriter() {
-                    if (charIndex < typewriterText.length) {
-                        typewriterElement.textContent += typewriterText.charAt(charIndex);
-                        charIndex++;
-                        setTimeout(typeWriter, 40);
-                    }
-                }
-
-                typeWriter();
-            }
-
-            setTimeout(startTypewriter, 1200);
-
             // =========================================================================
             // STICKY NAVBAR BEHAVIOR (FIX: Always visible on scroll down, subtle on scroll)
             // =========================================================================
@@ -3057,10 +2932,6 @@
             // ========================================
             document.querySelectorAll(".project-card").forEach((card, index) => {
                 card.style.transitionDelay = `${index * 80}ms`;
-            });
-
-            document.querySelectorAll(".hero .fade-in").forEach((el, index) => {
-                el.style.transitionDelay = `${1200 + index * 80}ms`;
             });
 
             // ========================================
